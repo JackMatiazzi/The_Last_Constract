@@ -1,0 +1,58 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/prototype.gd" id="1_prototype"]
+[ext_resource type="PackedScene" path="res://scenes/maps/grid_sandbox.tscn" id="2_map"]
+[ext_resource type="PackedScene" path="res://scenes/characters/adventurers/knight.tscn" id="3_knight"]
+[ext_resource type="PackedScene" path="res://scenes/props/crate.tscn" id="4_crate"]
+[ext_resource type="PackedScene" path="res://scenes/props/big_crate.tscn" id="5_big_crate"]
+[ext_resource type="PackedScene" path="res://scenes/props/barrel.tscn" id="6_barrel"]
+[ext_resource type="PackedScene" path="res://scenes/characters/enemies/skeleton.tscn" id="7_skeleton"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+
+[sub_resource type="Sky" id="Sky_sky"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_env"]
+background_mode = 2
+sky = SubResource("Sky_sky")
+tonemap_mode = 2
+
+[node name="Prototype" type="Node3D" node_paths=PackedStringArray("player")]
+script = ExtResource("1_prototype")
+player = NodePath("Knight")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_env")
+
+[node name="Map" parent="." instance=ExtResource("2_map")]
+
+[node name="Knight" parent="." instance=ExtResource("3_knight")]
+position = Vector3(11.5, 0.2, 11.5)
+
+[node name="Skeleton" parent="." instance=ExtResource("7_skeleton")]
+position = Vector3(10, 0.2, 5.5)
+
+[node name="Props" type="Node3D" parent="."]
+
+[node name="Crate" parent="Props" instance=ExtResource("4_crate")]
+position = Vector3(11, 0.05, 8)
+
+[node name="Crate2" parent="Props" instance=ExtResource("4_crate")]
+position = Vector3(12.1, 0.05, 8)
+
+[node name="Crate3" parent="Props" instance=ExtResource("4_crate")]
+position = Vector3(11.55, 1.06, 8)
+
+[node name="BigCrate" parent="Props" instance=ExtResource("5_big_crate")]
+position = Vector3(13, 0.05, 4)
+rotation = Vector3(0, 0.4, 0)
+
+[node name="Barrel" parent="Props" instance=ExtResource("6_barrel")]
+position = Vector3(9.5, 0.05, 9.5)
+
+[node name="Barrel2" parent="Props" instance=ExtResource("6_barrel")]
+position = Vector3(13.5, 0.05, 9.8)
+
+[node name="Barrel3" parent="Props" instance=ExtResource("6_barrel")]
+position = Vector3(14, 0.05, 6)

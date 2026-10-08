@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/adventurers/adventurer.tscn" id="1_adventurer"]
+[ext_resource type="PackedScene" path="res://scenes/characters/adventurers/models/knight_model.tscn" id="2_model"]
+[ext_resource type="Script" path="res://scripts/combat/melee_attack.gd" id="3_attack"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hitbox"]
+size = Vector3(1.6, 1.8, 1.6)
+
+[node name="Knight" node_paths=PackedStringArray("animation_player", "attack") instance=ExtResource("1_adventurer")]
+animation_player = NodePath("Model/Knight/AnimationPlayer")
+attack = NodePath("Model/MeleeAttack")
+
+[node name="Knight" parent="Model" instance=ExtResource("2_model")]
+
+[node name="MeleeAttack" type="Node3D" parent="Model" node_paths=PackedStringArray("hitbox")]
+script = ExtResource("3_attack")
+cooldown = 0.6
+animations = PackedStringArray("1H_Melee_Attack_Chop", "1H_Melee_Attack_Slice_Diagonal", "1H_Melee_Attack_Slice_Horizontal")
+animation_speed = 1.25
+impact_delay = 0.32
+hitbox = NodePath("Hitbox")
+
+[node name="Hitbox" type="Area3D" parent="Model/MeleeAttack"]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Model/MeleeAttack/Hitbox"]
+position = Vector3(0, 1.1, 1.1)
+shape = SubResource("BoxShape3D_hitbox")

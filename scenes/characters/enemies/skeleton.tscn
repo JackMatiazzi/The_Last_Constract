@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/character.tscn" id="1_character"]
+[ext_resource type="Script" path="res://scripts/characters/enemies/enemy.gd" id="2_enemy"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_skeletons/characters/Skeleton_Minion.glb" id="3_model"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_skeletons/accessories/Skeleton_Blade.gltf" id="4_weapon"]
+
+[node name="Skeleton" node_paths=PackedStringArray("animation_player") instance=ExtResource("1_character")]
+collision_layer = 4
+script = ExtResource("2_enemy")
+max_health = 5.0
+animation_player = NodePath("Model/Skeleton_Minion/AnimationPlayer")
+
+[node name="Skeleton_Minion" parent="Model" instance=ExtResource("3_model")]
+
+[node name="handslot_r" type="BoneAttachment3D" parent="Model/Skeleton_Minion/Rig/Skeleton3D"]
+bone_name = "handslot.r"
+
+[node name="Skeleton_Blade" parent="Model/Skeleton_Minion/Rig/Skeleton3D/handslot_r" instance=ExtResource("4_weapon")]
+
+[editable path="Model/Skeleton_Minion"]
