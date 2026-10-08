@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     container: barichello/godot-ci:4.7.2
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: |
           mkdir -p ~/.local/share/godot/export_templates
           mv /root/.local/share/godot/export_templates/4.7.2.stable ~/.local/share/godot/export_templates/
