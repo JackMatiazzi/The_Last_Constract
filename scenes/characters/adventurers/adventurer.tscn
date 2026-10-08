@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/character.tscn" id="1_character"]
+[ext_resource type="Script" path="res://scripts/characters/adventurers/adventurer.gd" id="2_adventurer"]
+
+[node name="Adventurer" instance=ExtResource("1_character")]
+collision_layer = 2
+script = ExtResource("2_adventurer")
+
+[node name="CameraPivot" type="Node3D" parent="."]
+physics_interpolation_mode = 2
+top_level = true
+position = Vector3(0, 1.5, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot"]
+rotation = Vector3(-0.14, 0, 0)
+spring_length = 4.5
+margin = 0.2
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D"]
+h_offset = 0.8
+current = true

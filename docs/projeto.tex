@@ -1,0 +1,135 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\usetikzlibrary{arrows.meta,positioning}
+\geometry{margin=2.3cm, headheight=14pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.6em}
+\setlist[itemize]{leftmargin=1.5em,itemsep=0.2em}
+
+\newcommand{\jogo}{The Last Contract}
+\definecolor{Destaque}{HTML}{7A2E2E}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{Destaque}{\jogo}}
+\fancyhead[R]{Projeto}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=Destaque, pdftitle={\jogo{} - Projeto}}
+
+\title{\textbf{\jogo} \\ \large Projeto de jogo}
+\author{André Bartzen Araujo \and Jackson Matiazzi \and José Maciel Camargo}
+\date{Programação de Jogos --- Avaliação Grau 2}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\section{Conceito}
+
+Jogo de ação 3D em terceira pessoa ambientado em uma vila medieval tomada por mortos-vivos. O jogador escolhe um entre quatro aventureiros e aceita o contrato de um Lorde: eliminar os mortos-vivos e derrotar o responsável pela infestação.
+
+Cada tentativa tem uma vida só. A proposta é explorar a vila livremente, enfrentar grupos de inimigos e decidir, a cada derrota, se vale a pena continuar.
+
+\section{História}
+
+Uma vila medieval foi completamente dominada por mortos-vivos. Diante da ameaça, um Lorde convoca aventureiros para eliminar a infestação e derrotar a criatura que a provocou: um necromante escondido na vila.
+
+O contrato tem uma cláusula dura. Se o aventureiro morrer, pode aceitar uma nova tentativa. Se desistir, o Lorde considera o abandono uma falha grave e ordena sua execução em praça pública.
+
+\section{Gameplay}
+
+O jogador explora a vila e enfrenta grupos de mortos-vivos espalhados pelo mapa. A cada tentativa, o ponto de partida do jogador e as posições dos grupos são sorteados, então o caminho e os encontros mudam.
+
+Ao morrer, o jogador escolhe entre \textbf{reviver} ou \textbf{desistir}. Ao reviver, todos os inimigos voltam e o jogador escolhe uma entre duas bênçãos aleatórias. A bênção vale para o aventureiro e também para os mortos-vivos nas tentativas seguintes, o que transforma cada escolha numa aposta.
+
+\begin{center}
+\begin{tikzpicture}[
+    node distance=0.9cm and 1.2cm,
+    etapa/.style={draw=Destaque, rounded corners, thick, minimum width=3.4cm,
+                  minimum height=0.9cm, align=center, font=\small},
+    fim/.style={etapa, fill=Destaque!12},
+    seta/.style={-{Stealth[length=2.5mm]}, thick, Destaque},
+    rotulo/.style={font=\footnotesize, midway}
+]
+    \node[etapa] (contrato) {Aceitar o contrato\\do Lorde};
+    \node[etapa, below=of contrato] (sorteio) {Sortear posições do\\jogador e dos inimigos};
+    \node[etapa, below=of sorteio] (combate) {Explorar a vila e\\enfrentar os grupos};
+    \node[etapa, below=of combate] (boss) {Derrotar o boss};
+    \node[fim, below=of boss] (vitoria) {Vitória};
+
+    \node[etapa, right=2.2cm of combate] (morte) {Morte};
+    \node[etapa, above=of morte] (buff) {Escolher 1 entre\\2 bênçãos};
+    \node[fim, below=of morte] (execucao) {Desistir:\\execução};
+
+    \draw[seta] (contrato) -- (sorteio);
+    \draw[seta] (sorteio) -- (combate);
+    \draw[seta] (combate) -- (boss);
+    \draw[seta] (boss) -- (vitoria);
+    \draw[seta] (combate) -- (morte);
+    \draw[seta] (boss.east) -- (morte.south west);
+    \draw[seta] (morte) -- node[rotulo, right] {Reviver} (buff);
+    \draw[seta] (buff) |- (sorteio);
+    \draw[seta] (morte) -- (execucao);
+\end{tikzpicture}
+\end{center}
+
+\section{Mecânicas}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\textbf{Mecânica} & \textbf{Descrição} \\
+\midrule
+Movimentação & Terceira pessoa, com andar, correr e pular. A câmera segue o personagem por trás do ombro. \\
+Combate & Corpo a corpo ou à distância, conforme o aventureiro. Cada um tem um ataque principal e uma habilidade própria. \\
+Vida única & Uma vida por tentativa. Ao morrer, reviver ou desistir. \\
+Bênçãos & Ao reviver, o jogador escolhe uma entre duas bênçãos; elas se acumulam e valem também para os inimigos. \\
+Grupos de inimigos & Mortos-vivos organizados em grupos. Ao derrotar um grupo inteiro, os restos podem se juntar num inimigo mais forte. \\
+Posições aleatórias & Jogador e grupos nascem em pontos sorteados a cada tentativa. \\
+Objetos interativos & Baús espalhados pela vila guardam itens de cura. \\
+Boss & O necromante surge depois que os grupos da vila caem. \\
+Vitória & Derrotar todos os grupos e o boss. \\
+\bottomrule
+\end{tabularx}
+
+\section{Personagens}
+
+\textbf{Aventureiros jogáveis.} Cada um tem um estilo de combate:
+
+\begin{tabularx}{\textwidth}{@{}llX@{}}
+\toprule
+\textbf{Aventureiro} & \textbf{Alcance} & \textbf{Estilo} \\
+\midrule
+Knight & Corpo a corpo & Espada e escudo; combo de golpes e defesa com o escudo. \\
+Barbarian & Corpo a corpo & Dois machados; giro que acerta todos em volta. \\
+Mage & Longo alcance & Projétil mágico que atravessa inimigos em linha. \\
+Rogue & Longo alcance & Besta precisa, de longo alcance. \\
+\bottomrule
+\end{tabularx}
+
+\textbf{Lorde.} Contrata o aventureiro e julga o abandono do contrato.
+
+\textbf{Mortos-vivos.} Esqueletos que patrulham, dormem no chão e despertam com o jogador por perto, perseguem quem veem ou ouvem e procuram por ele onde foi visto pela última vez.
+
+\textbf{Necromante.} O boss: um mago cercado de mortos-vivos, responsável pela infestação.
+
+\section{Mundo}
+
+Toda a missão acontece num único mapa: uma vila medieval com ruas, casas, praça e um campo aberto, explorada à noite. Não há fases separadas; a variação entre tentativas vem do sorteio das posições do jogador e dos grupos de inimigos.
+
+\end{document}

@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PhysicsMaterial" path="res://resources/physics/prop_material.tres" id="2_material"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_dungeon/models/box_large.gltf" id="1_model"]
+
+[sub_resource type="BoxShape3D" id="Shape_prop"]
+size = Vector3(1.5, 1.5, 1.5)
+
+[node name="BigCrate" type="RigidBody3D"]
+mass = 25.0
+physics_material_override = ExtResource("2_material")
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("Shape_prop")
