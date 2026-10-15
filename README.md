@@ -40,25 +40,32 @@ Para rodar, abrir a pasta no Godot 4.7.2 e apertar F5. O mapa do protótipo cont
 
 ## Testes e builds
 
-Usamos o gdUnit4 (em `addons/`). Os testes ficam em `tests/` e rodam pela aba gdUnit do editor ou
-automaticamente no GitHub Actions a cada push e pull request.
+Usamos o gdUnit4 (em `addons/`). Os testes ficam em `tests/` e rodam pela aba gdUnit do editor.
 
-Também pelo GitHub Actions:
+No GitHub Actions, a cada push e pull request:
 
-- **Build Linux**: exporta o jogo a cada push no `main` ou manualmente.
-- **Build Windows**: manual, pela aba Actions.
+- **Testes** (`test`): roda toda a suíte do gdUnit4.
+- **Smoke** (`smoke`): abre a cena principal sem tela por 300 quadros e falha se aparecer qualquer erro no log.
 - **Documento**: compila `docs/projeto.tex` quando algo em `docs/` muda.
 
-Os arquivos gerados ficam nos artefatos de cada execução.
+Antes de uma entrega, o pull request para o `main` também roda o **Build Linux**, que confere se o jogo exporta.
+O Dependabot abre um pull request por semana na `desenvolvimento` quando alguma action do CI tem versão nova.
 
-Cada entrega vira uma release: ao criar a tag `entrega-AAAA-MM-DD` no `main`, o workflow **Release da entrega**
-publica o build de Linux e o PDF do documento na página de Releases.
+### Release de cada entrega
+
+Todo merge no `main` gera a release sozinho: o workflow **Release da entrega** cria a tag
+`entrega-AAAA-MM-DD` (data de Brasília), exporta o jogo para Linux, compila o documento e publica os dois na
+página de Releases. Um segundo merge no mesmo dia move a tag e atualiza a mesma release.
 
 ## Como trabalhamos
 
-- `main` recebe só as entregas: um merge de `desenvolvimento` por semana, com uma tag `entrega-AAAA-MM-DD`.
-- `desenvolvimento` é onde o jogo cresce. Cada tarefa sai numa branch própria a partir dela e volta por pull request.
-- Nada vai direto para `main` ou `desenvolvimento`: sempre por pull request com os testes passando.
+- Cada tarefa sai numa branch própria a partir da `desenvolvimento` e volta por pull request.
+- Na `desenvolvimento`, o pull request precisa dos testes verdes e da aprovação dos outros dois integrantes.
+  O Jackson pode fazer o merge dos próprios pull requests sem aprovação.
+- A entrega da semana é um pull request da `desenvolvimento` para o `main`, e só o Jackson faz o merge.
+- Ninguém faz push direto, force-push ou apaga `main`, `desenvolvimento` e `referencia`.
+- `referencia` guarda o jogo completo de onde as partes de cada entrega são trazidas. Só o Jackson atualiza.
+- Tags `entrega-*` são criadas pela release; ninguém cria nem apaga à mão.
 - Todos usam o Godot 4.7.2. Outra versão regrava as cenas e gera diferenças falsas.
 - Antes de mexer numa cena usada por todos (mapa, personagem base, `project.godot`), avisar no grupo.
 - Subir junto os arquivos `.uid` e `.import` que o Godot cria.
