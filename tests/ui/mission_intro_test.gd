@@ -23,8 +23,11 @@ func _cut_time() -> float:
 	return animation.track_get_key_time(animation.find_track(^"EntranceCamera:current", Animation.TYPE_VALUE), 0)
 
 
+# pausada, a cutscene nao anda sozinha no quadro seguinte (no CI um quadro passa de 0.1 s)
 func _jump_to(time: float) -> void:
+	cutscene.timeline.play()
 	cutscene.timeline.advance(time - cutscene.timeline.current_animation_position)
+	cutscene.timeline.pause()
 	await await_idle_frame()
 
 
