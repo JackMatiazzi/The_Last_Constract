@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/kaykit_adventurers/characters/Knight.glb" id="1_model"]
+
+[node name="Knight" instance=ExtResource("1_model")]
+
+[node name="1H_Sword_Offhand" parent="Rig/Skeleton3D/handslot_l"]
+visible = false
+
+[node name="Rectangle_Shield" parent="Rig/Skeleton3D/handslot_l"]
+visible = false
+
+[node name="Round_Shield" parent="Rig/Skeleton3D/handslot_l"]
+visible = false
+
+[node name="Spike_Shield" parent="Rig/Skeleton3D/handslot_l"]
+visible = false
+
+[node name="2H_Sword" parent="Rig/Skeleton3D/handslot_r"]
+visible = false

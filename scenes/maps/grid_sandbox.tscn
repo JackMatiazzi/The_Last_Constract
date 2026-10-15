@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bygjiq4u2pkds"]
+
+[ext_resource type="PackedScene" path="res://scenes/maps/grid_sandbox/ground.tscn" id="grid_ground"]
+[ext_resource type="PackedScene" path="res://scenes/maps/grid_sandbox/structure.tscn" id="grid_structure"]
+
+[node name="GridSandbox" type="Node3D" unique_id=1528379621]
+
+[node name="Chao" parent="." unique_id=397327407 instance=ExtResource("grid_ground")]
+
+[node name="Estrutura" parent="." unique_id=192713179 instance=ExtResource("grid_structure")]
+
+[node name="Sol" type="DirectionalLight3D" parent="." unique_id=1146309988]
+transform = Transform3D(0.81915206, 0.43938506, -0.36868784, 0, 0.64278764, 0.76604444, 0.57357645, -0.62750685, 0.5265408, 0, 0, 0)
+shadow_enabled = true

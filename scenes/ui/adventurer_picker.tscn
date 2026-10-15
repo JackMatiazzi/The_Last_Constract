@@ -1,0 +1,122 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/adventurer_picker.gd" id="1_picker"]
+[ext_resource type="Script" path="res://scripts/ui/device_hint.gd" id="hint_script"]
+
+[node name="AdventurerPicker" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_picker")
+
+[node name="Header" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 20.0
+offset_bottom = 64.0
+theme_type_variation = &"HeadingLabel"
+text = "Escolha quem aceita o contrato"
+horizontal_alignment = 1
+
+[node name="InfoPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -370.0
+offset_top = 84.0
+offset_right = -28.0
+offset_bottom = -108.0
+
+[node name="Info" type="VBoxContainer" parent="InfoPanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="InfoPanel/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+theme_override_font_sizes/font_size = 44
+text = "Knight"
+
+[node name="RoleLabel" type="Label" parent="InfoPanel/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 18
+text = "Corpo a corpo"
+
+[node name="Divider" type="ColorRect" parent="InfoPanel/Info"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+color = Color(0.55, 0.42, 0.24, 0.6)
+
+[node name="AttackLabel" type="Label" parent="InfoPanel/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+theme_override_font_sizes/font_size = 22
+text = "Ataque"
+autowrap_mode = 3
+
+[node name="DescriptionLabel" type="Label" parent="InfoPanel/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 18
+text = "Descricao"
+autowrap_mode = 3
+
+[node name="KeyHint" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = -110.0
+offset_right = 760.0
+offset_bottom = -88.0
+theme_type_variation = &"MutedLabel"
+theme_override_colors/font_color = Color(0.92, 0.86, 0.76, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+script = ExtResource("hint_script")
+text = "Teclas 1 a 4 ou setas para trocar"
+keyboard_text = "Teclas 1 a 4 ou setas para trocar"
+gamepad_text = "Direcional ou LB/RB para trocar   ·   A aceita   ·   B volta"
+
+[node name="BottomBar" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = -84.0
+offset_right = -28.0
+offset_bottom = -28.0
+theme_override_constants/separation = 8
+
+[node name="Cards" type="HBoxContainer" parent="BottomBar"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Spacer" type="Control" parent="BottomBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BackButton" type="Button" parent="BottomBar"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Voltar"
+
+[node name="AcceptButton" type="Button" parent="BottomBar"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "Aceitar contrato"

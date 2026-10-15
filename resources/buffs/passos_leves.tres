@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Buff" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/stat_modifier.gd" id="1_juphn"]
+[ext_resource type="Script" path="res://scripts/combat/buff.gd" id="2_1pae5"]
+
+[sub_resource type="Resource" id="Resource_oc2ax"]
+script = ExtResource("1_juphn")
+stat = 2
+amount = 0.2
+
+[resource]
+script = ExtResource("2_1pae5")
+title = "Passos Leves"
+flavor = "Botas de um mensageiro que não voltou."
+modifiers = Array[ExtResource("1_juphn")]([SubResource("Resource_oc2ax")])

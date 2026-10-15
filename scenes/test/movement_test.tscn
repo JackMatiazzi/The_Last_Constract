@@ -1,0 +1,65 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://scripts/test/movement_test.gd" id="1_test"]
+[ext_resource type="PackedScene" path="res://scenes/maps/grid_sandbox.tscn" id="2_map"]
+[ext_resource type="PackedScene" path="res://scenes/characters/enemies/skeleton_minion.tscn" id="3_skeleton"]
+[ext_resource type="PackedScene" path="res://scenes/ui/death_screen.tscn" id="4_death"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="5_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="6_pause"]
+[ext_resource type="Script" path="res://scripts/game/game_session.gd" id="7_session"]
+[ext_resource type="NavigationMesh" path="res://resources/navigation/sandbox_navmesh.res" id="8_navmesh"]
+[ext_resource type="Script" path="res://scripts/characters/enemies/enemy_group.gd" id="9_group"]
+[ext_resource type="PackedScene" path="res://scenes/characters/enemies/skeleton_elite.tscn" id="10_elite"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
+
+[sub_resource type="Sky" id="Sky_sky"]
+sky_material = SubResource("ProceduralSkyMaterial_sky")
+
+[sub_resource type="Environment" id="Environment_env"]
+background_mode = 2
+sky = SubResource("Sky_sky")
+tonemap_mode = 2
+
+[node name="MovementTest" type="Node3D"]
+script = ExtResource("1_test")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_env")
+
+[node name="Navigation" type="NavigationRegion3D" parent="."]
+navigation_mesh = ExtResource("8_navmesh")
+
+[node name="Map" parent="Navigation" instance=ExtResource("2_map")]
+
+[node name="PlayerSpawn" type="Marker3D" parent="."]
+position = Vector3(12, 0.2, 12)
+
+[node name="TestDummy" parent="." instance=ExtResource("3_skeleton")]
+position = Vector3(12, 0.2, 8)
+ai_enabled = false
+
+[node name="Graveyard" type="Node3D" parent="."]
+position = Vector3(8, 0, 7)
+script = ExtResource("9_group")
+elite_scene = ExtResource("10_elite")
+
+[node name="Skeleton" parent="Graveyard" instance=ExtResource("3_skeleton")]
+position = Vector3(5, 0.2, -5)
+
+[node name="SkeletonDormant" parent="Graveyard" instance=ExtResource("3_skeleton")]
+position = Vector3(-5, 0.2, 5)
+start_dormant = true
+
+[node name="DeathScreen" parent="." instance=ExtResource("4_death")]
+
+[node name="Hud" parent="." instance=ExtResource("5_hud")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("6_pause")]
+
+[node name="GameSession" type="Node" parent="." node_paths=PackedStringArray("player_spawn", "pause_menu", "death_screen", "hud")]
+script = ExtResource("7_session")
+player_spawn = NodePath("../PlayerSpawn")
+pause_menu = NodePath("../PauseMenu")
+death_screen = NodePath("../DeathScreen")
+hud = NodePath("../Hud")

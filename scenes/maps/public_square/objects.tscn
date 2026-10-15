@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="MeshLibrary" path="res://resources/mesh_libraries/props.res" id="props_lib"]
+
+[node name="Objetos" type="GridMap"]
+position = Vector3(-16, 0, -16)
+mesh_library = ExtResource("props_lib")
+cell_size = Vector3(1, 0.5, 1)
+cell_center_x = false
+cell_center_y = false
+cell_center_z = false
+data = {
+"cells": PackedInt32Array(6, 18, 1, 7, 8, 11, 25, 8, 11, 26, 17, 8)
+}

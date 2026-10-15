@@ -1,0 +1,66 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/adventurers/adventurer.tscn" id="1_adventurer"]
+[ext_resource type="PackedScene" path="res://scenes/characters/adventurers/models/barbarian_model.tscn" id="2_model"]
+[ext_resource type="Script" path="res://scripts/combat/melee_attack.gd" id="3_attack"]
+[ext_resource type="AudioStream" path="res://resources/audio/swing.tres" id="snd_swing"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_chop"]
+size = Vector3(1.6, 1.8, 1.6)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_spin"]
+height = 2.2
+radius = 2.1
+
+[node name="Barbarian" node_paths=PackedStringArray("animation_player", "attack", "secondary_attack") instance=ExtResource("1_adventurer")]
+animation_player = NodePath("Model/Barbarian/AnimationPlayer")
+attack = NodePath("Model/SpinAttack")
+secondary_attack = NodePath("Model/OffhandChop")
+
+[node name="Barbarian" parent="Model" instance=ExtResource("2_model")]
+
+[node name="SpinAttack" type="Node3D" parent="Model" node_paths=PackedStringArray("sound")]
+script = ExtResource("3_attack")
+sound = NodePath("Sound")
+cooldown = 1.6
+animations = PackedStringArray("2H_Melee_Attack_Spin")
+animation_speed = 1.6
+impact_delay = 0.45
+
+[node name="Hitbox" type="Area3D" parent="Model/SpinAttack"]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Model/SpinAttack/Hitbox"]
+position = Vector3(0, 1.1, 0)
+shape = SubResource("CylinderShape3D_spin")
+
+[node name="OffhandChop" type="Node3D" parent="Model" node_paths=PackedStringArray("sound")]
+script = ExtResource("3_attack")
+sound = NodePath("Sound")
+cooldown = 0.5
+animations = PackedStringArray("Dualwield_Melee_Attack_Chop")
+animation_speed = 1.2
+impact_delay = 0.32
+
+[node name="Hitbox" type="Area3D" parent="Model/OffhandChop"]
+collision_layer = 0
+collision_mask = 4
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Model/OffhandChop/Hitbox"]
+position = Vector3(0, 1.1, 1.1)
+shape = SubResource("BoxShape3D_chop")
+
+[node name="Sound" type="AudioStreamPlayer3D" parent="Model/SpinAttack"]
+stream = ExtResource("snd_swing")
+pitch_scale = 0.85
+max_distance = 30.0
+bus = &"SFX"
+
+[node name="Sound" type="AudioStreamPlayer3D" parent="Model/OffhandChop"]
+stream = ExtResource("snd_swing")
+pitch_scale = 1.1
+max_distance = 30.0
+bus = &"SFX"

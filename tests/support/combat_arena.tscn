@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_arena"]
+geometry_parsed_geometry_type = 1
+cell_size = 0.25
+cell_height = 0.25
+agent_radius = 0.5
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
+size = Vector3(80, 1, 80)
+
+[node name="CombatArena" type="Node3D"]
+
+[node name="Navigation" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_arena")
+
+[node name="Floor" type="StaticBody3D" parent="Navigation"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Navigation/Floor"]
+position = Vector3(0, -0.5, 0)
+shape = SubResource("BoxShape3D_floor")

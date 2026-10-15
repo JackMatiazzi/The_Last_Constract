@@ -1,0 +1,90 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/tools/gamepad_tester.gd" id="1_tester"]
+
+[node name="GamepadTester" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_tester")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.08, 0.07, 0.06, 1)
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 40
+
+[node name="Content" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Margin/Content"]
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "Teste do controle"
+
+[node name="DeviceLabel" type="Label" parent="Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Nenhum controle conectado"
+
+[node name="SticksLabel" type="Label" parent="Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Triggers" type="GridContainer" parent="Margin/Content"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+columns = 2
+
+[node name="LeftTriggerLabel" type="Label" parent="Margin/Content/Triggers"]
+layout_mode = 2
+text = "LT (habilidade)"
+
+[node name="LeftTrigger" type="ProgressBar" parent="Margin/Content/Triggers"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 22)
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+
+[node name="RightTriggerLabel" type="Label" parent="Margin/Content/Triggers"]
+layout_mode = 2
+text = "RT (ataque)"
+
+[node name="RightTrigger" type="ProgressBar" parent="Margin/Content/Triggers"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 22)
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+
+[node name="ButtonsLabel" type="Label" parent="Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ActionsLabel" type="Label" parent="Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="LogTitle" type="Label" parent="Margin/Content"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "Últimos eventos recebidos:"
+
+[node name="LogLabel" type="Label" parent="Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"

@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="MeshLibrary" path="res://resources/mesh_libraries/village_structure.res" id="2_oriay"]
+
+[node name="Estrutura" type="GridMap"]
+mesh_library = ExtResource("2_oriay")
+cell_size = Vector3(1, 1, 1)
+cell_center_x = false
+cell_center_y = false
+cell_center_z = false
+data = {
+"cells": PackedInt32Array(5, 5, 12, 5, 7, 12, 7, 5, 12, 7, 7, 12, 5, 4, 69, 7, 4, 74, 5, 8, 655426, 7, 8, 655429, 4, 5, 1048645, 8, 5, 1441861, 4, 7, 1048645, 8, 7, 1441861, 4, 4, 9, 8, 4, 9, 4, 8, 9, 8, 8, 9)
+}

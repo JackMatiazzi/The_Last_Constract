@@ -1,0 +1,94 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/pause_menu.gd" id="1_pause"]
+[ext_resource type="PackedScene" path="res://scenes/ui/settings_menu.tscn" id="2_settings"]
+
+[node name="PauseMenu" type="CanvasLayer"]
+process_mode = 3
+layer = 20
+script = ExtResource("1_pause")
+
+[node name="Dim" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.015, 0.01, 0.65)
+
+[node name="Center" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="MainPanel" type="PanelContainer" parent="Center"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+
+[node name="Content" type="VBoxContainer" parent="Center/MainPanel"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Center/MainPanel/Content"]
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "Pausa"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="Center/MainPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "Continuar"
+
+[node name="SettingsButton" type="Button" parent="Center/MainPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Configurações"
+
+[node name="AbandonButton" type="Button" parent="Center/MainPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"DangerButton"
+text = "Abandonar contrato"
+
+[node name="ConfirmPanel" type="PanelContainer" parent="Center"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+
+[node name="Content" type="VBoxContainer" parent="Center/ConfirmPanel"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Center/ConfirmPanel/Content"]
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "Abandonar o contrato?"
+horizontal_alignment = 1
+
+[node name="Warning" type="Label" parent="Center/ConfirmPanel/Content"]
+layout_mode = 2
+theme_type_variation = &"DangerLabel"
+text = "Você volta ao menu principal. Tentativas e bênçãos acumuladas serão perdidas."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Buttons" type="HBoxContainer" parent="Center/ConfirmPanel/Content"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 18
+
+[node name="CancelAbandonButton" type="Button" parent="Center/ConfirmPanel/Content/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Voltar"
+
+[node name="ConfirmAbandonButton" type="Button" parent="Center/ConfirmPanel/Content/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"DangerButton"
+text = "Abandonar"
+
+[node name="SettingsMenu" parent="." instance=ExtResource("2_settings")]
+unique_name_in_owner = true

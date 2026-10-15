@@ -1,0 +1,20 @@
+# Godot
+.godot/
+*.translation
+
+# Builds (gerados pelo GitHub Actions)
+build/
+
+# Temporarios de teste
+_tmp_test/
+reports/
+
+# LaTeX (o PDF sai pelo GitHub Actions)
+docs/*.pdf
+docs/*.aux
+docs/*.log
+docs/*.out
+docs/*.toc
+docs/*.fls
+docs/*.fdb_latexmk
+docs/*.synctex.gz

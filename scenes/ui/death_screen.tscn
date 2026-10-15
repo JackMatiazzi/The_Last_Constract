@@ -1,0 +1,156 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/death_screen.gd" id="1_screen"]
+[ext_resource type="PackedScene" path="res://scenes/ui/buff_card.tscn" id="2_card"]
+[ext_resource type="Script" path="res://scripts/ui/device_hint.gd" id="hint_script"]
+
+[node name="DeathScreen" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_screen")
+buff_card_scene = ExtResource("2_card")
+
+[node name="Dim" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.03, 0.01, 0.01, 0.72)
+
+[node name="Center" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panels" type="Control" parent="Center"]
+custom_minimum_size = Vector2(760, 440)
+layout_mode = 2
+
+[node name="DeathPanel" type="VBoxContainer" parent="Center/Panels"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+alignment = 1
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Center/Panels/DeathPanel"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+theme_override_colors/font_color = Color(0.86, 0.2, 0.16, 1)
+text = "Você caiu"
+horizontal_alignment = 1
+
+[node name="AttemptLabel" type="Label" parent="Center/Panels/DeathPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 20
+text = "Tentativa 1"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="Center/Panels/DeathPanel"]
+layout_mode = 2
+text = "O contrato ainda pode ser cumprido. Reviver traz uma bênção, e os mortos-vivos recebem a mesma."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ActiveBuffsLabel" type="Label" parent="Center/Panels/DeathPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "Nenhuma bênção acumulada."
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Buttons" type="HBoxContainer" parent="Center/Panels/DeathPanel"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 24
+
+[node name="ReviveButton" type="Button" parent="Center/Panels/DeathPanel/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "Reviver"
+
+[node name="GiveUpButton" type="Button" parent="Center/Panels/DeathPanel/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"DangerButton"
+text = "Desistir"
+
+[node name="ConfirmPanel" type="VBoxContainer" parent="Center/Panels"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+alignment = 1
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Center/Panels/ConfirmPanel"]
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "Desistir do contrato?"
+horizontal_alignment = 1
+
+[node name="Warning" type="Label" parent="Center/Panels/ConfirmPanel"]
+layout_mode = 2
+theme_type_variation = &"DangerLabel"
+text = "O Lorde considera o abandono uma falha grave. Não há volta."
+horizontal_alignment = 1
+
+[node name="Buttons" type="HBoxContainer" parent="Center/Panels/ConfirmPanel"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 24
+
+[node name="CancelGiveUpButton" type="Button" parent="Center/Panels/ConfirmPanel/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Voltar"
+
+[node name="ConfirmGiveUpButton" type="Button" parent="Center/Panels/ConfirmPanel/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"DangerButton"
+text = "Desistir mesmo assim"
+
+[node name="ChoicePanel" type="VBoxContainer" parent="Center/Panels"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+alignment = 1
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Center/Panels/ChoicePanel"]
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+theme_override_font_sizes/font_size = 40
+text = "Escolha uma bênção"
+horizontal_alignment = 1
+
+[node name="Warning" type="Label" parent="Center/Panels/ChoicePanel"]
+layout_mode = 2
+theme_type_variation = &"DangerLabel"
+text = "Os mortos-vivos receberão a mesma bênção."
+horizontal_alignment = 1
+
+[node name="Cards" type="HBoxContainer" parent="Center/Panels/ChoicePanel"]
+unique_name_in_owner = true
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 28
+
+[node name="KeyHint" type="Label" parent="Center/Panels/ChoicePanel"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+script = ExtResource("hint_script")
+text = "Clique em uma carta ou use as teclas 1 e 2"
+keyboard_text = "Clique em uma carta ou use as teclas 1 e 2"
+gamepad_text = "Escolha com o direcional e confirme com A"
+horizontal_alignment = 1
