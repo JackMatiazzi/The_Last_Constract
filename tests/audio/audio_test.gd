@@ -96,7 +96,8 @@ func test_music_cue_switches_the_track() -> void:
 	cue.track = track
 
 	add_child(auto_free(cue))
-	await await_millis(100)
+	# com outra faixa tocando, a troca so acontece no meio do fade
+	await await_millis(roundi(MusicPlayer.FADE_TIME * 1000) + 100)
 
 	assert_object(Music.stream).is_same(track)
 	assert_bool(Music.playing).is_true()
