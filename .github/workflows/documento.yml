@@ -1,0 +1,25 @@
+name: Documento
+
+on:
+  push:
+    branches: [main, desenvolvimento]
+    paths: ['docs/**', '.github/workflows/documento.yml']
+  pull_request:
+    paths: ['docs/**', '.github/workflows/documento.yml']
+  workflow_dispatch:
+
+jobs:
+  pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: xu-cheng/latex-action@v4
+        with:
+          root_file: projeto.tex
+          working_directory: docs
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: projeto
+          path: docs/projeto.pdf

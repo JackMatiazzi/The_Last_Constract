@@ -1,0 +1,125 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/maps/village/ground.tscn" id="grid_ground"]
+
+[ext_resource type="PackedScene" path="res://scenes/maps/village/structure.tscn" id="grid_structure"]
+
+[ext_resource type="PackedScene" path="res://scenes/maps/village/objects.tscn" id="grid_objects"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_edge_x"]
+size = Vector3(50, 6, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_edge_z"]
+size = Vector3(1, 6, 50)
+
+[node name="Village" type="Node3D"]
+
+[node name="Chao" parent="." instance=ExtResource("grid_ground")]
+
+[node name="Estrutura" parent="." instance=ExtResource("grid_structure")]
+
+[node name="Objetos" parent="." instance=ExtResource("grid_objects")]
+
+[node name="Luzes" type="Node3D" parent="."]
+
+[node name="Tocha1" type="OmniLight3D" parent="Luzes"]
+position = Vector3(-14.5, 2.9, -11)
+light_color = Color(1, 0.6, 0.3, 1)
+light_energy = 1.8
+shadow_enabled = true
+omni_range = 9.0
+
+[node name="Tocha2" type="OmniLight3D" parent="Luzes"]
+position = Vector3(14.5, 2.9, -11)
+light_color = Color(1, 0.6, 0.3, 1)
+light_energy = 1.8
+shadow_enabled = true
+omni_range = 9.0
+
+[node name="Tocha3" type="OmniLight3D" parent="Luzes"]
+position = Vector3(-2.5, 2.9, -19)
+light_color = Color(1, 0.6, 0.3, 1)
+light_energy = 1.8
+shadow_enabled = true
+omni_range = 9.0
+
+[node name="Tocha4" type="OmniLight3D" parent="Luzes"]
+position = Vector3(2.5, 2.9, -19)
+light_color = Color(1, 0.6, 0.3, 1)
+light_energy = 1.8
+shadow_enabled = true
+omni_range = 9.0
+
+[node name="Tocha5" type="OmniLight3D" parent="Luzes"]
+position = Vector3(-13.5, 2.9, -4)
+light_color = Color(1, 0.6, 0.3, 1)
+light_energy = 1.8
+shadow_enabled = true
+omni_range = 9.0
+
+[node name="Tocha6" type="OmniLight3D" parent="Luzes"]
+position = Vector3(13.5, 2.9, -4)
+light_color = Color(1, 0.6, 0.3, 1)
+light_energy = 1.8
+shadow_enabled = true
+omni_range = 9.0
+
+[node name="Tocha7" type="OmniLight3D" parent="Luzes"]
+position = Vector3(-13.5, 2.9, 7)
+light_color = Color(1, 0.6, 0.3, 1)
+light_energy = 1.8
+shadow_enabled = true
+omni_range = 9.0
+
+[node name="Tocha8" type="OmniLight3D" parent="Luzes"]
+position = Vector3(13.5, 2.9, 7)
+light_color = Color(1, 0.6, 0.3, 1)
+light_energy = 1.8
+shadow_enabled = true
+omni_range = 9.0
+
+[node name="Tocha9" type="OmniLight3D" parent="Luzes"]
+position = Vector3(-18, 2.9, 12.5)
+light_color = Color(1, 0.6, 0.3, 1)
+light_energy = 1.8
+shadow_enabled = true
+omni_range = 9.0
+
+[node name="Tocha10" type="OmniLight3D" parent="Luzes"]
+position = Vector3(18, 2.9, 12.5)
+light_color = Color(1, 0.6, 0.3, 1)
+light_energy = 1.8
+shadow_enabled = true
+omni_range = 9.0
+
+[node name="Tocha11" type="OmniLight3D" parent="Luzes"]
+position = Vector3(-5, 2.9, -13.5)
+light_color = Color(1, 0.6, 0.3, 1)
+light_energy = 1.8
+shadow_enabled = true
+omni_range = 9.0
+
+[node name="Tocha12" type="OmniLight3D" parent="Luzes"]
+position = Vector3(5, 2.9, -13.5)
+light_color = Color(1, 0.6, 0.3, 1)
+light_energy = 1.8
+shadow_enabled = true
+omni_range = 9.0
+
+[node name="Limites" type="StaticBody3D" parent="."]
+
+[node name="Norte" type="CollisionShape3D" parent="Limites"]
+position = Vector3(0, 3, -24.5)
+shape = SubResource("BoxShape3D_edge_x")
+
+[node name="Sul" type="CollisionShape3D" parent="Limites"]
+position = Vector3(0, 3, 24.5)
+shape = SubResource("BoxShape3D_edge_x")
+
+[node name="Oeste" type="CollisionShape3D" parent="Limites"]
+position = Vector3(-24.5, 3, 0)
+shape = SubResource("BoxShape3D_edge_z")
+
+[node name="Leste" type="CollisionShape3D" parent="Limites"]
+position = Vector3(24.5, 3, 0)
+shape = SubResource("BoxShape3D_edge_z")
