@@ -1,7 +1,8 @@
 name: Build Linux
 
+# confere se o jogo exporta antes de uma entrega; o build publicado sai pela release
 on:
-  push:
+  pull_request:
     branches: [main]
   workflow_dispatch:
 
@@ -22,6 +23,7 @@ jobs:
           mkdir -p build/linux
           godot --headless --import
           godot --headless --export-release "Linux" build/linux/TheLastContract.x86_64
+          test -s build/linux/TheLastContract.x86_64
           tar -czf TheLastContract-linux.tar.gz -C build/linux .
 
       - uses: actions/upload-artifact@v4
