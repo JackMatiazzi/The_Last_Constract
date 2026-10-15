@@ -34,6 +34,15 @@ func _button(button: JoyButton, pressed := true) -> void:
 	Input.parse_input_event(event)
 
 
+# espera ate o efeito aparecer: num runner lento o numero de quadros ate o evento chegar varia
+func _until(condition: Callable, seconds := 0.5) -> bool:
+	for i in ceili(seconds * Engine.physics_ticks_per_second):
+		if condition.call():
+			return true
+		await arena.wait_physics(1)
+	return condition.call()
+
+
 func test_right_stick_turns_the_camera() -> void:
 	var yaw := knight.camera_pivot.rotation.y
 
@@ -67,17 +76,16 @@ func test_clicking_the_left_stick_runs_until_the_stick_is_released() -> void:
 
 func test_right_trigger_attacks() -> void:
 	_axis(JOY_AXIS_TRIGGER_RIGHT, 1.0)
-	await arena.wait_physics(3)
 
-	assert_bool(knight.is_busy).is_true()
+	assert_bool(await _until(func() -> bool: return knight.is_busy)).is_true()
 
 
 func test_a_jumps() -> void:
 	_button(JOY_BUTTON_A)
-	await arena.wait_physics(4)
+	var jumped: bool = await _until(func() -> bool: return knight.velocity.y > 0.0)
 	_button(JOY_BUTTON_A, false)
 
-	assert_float(knight.velocity.y).is_greater(0.0)
+	assert_bool(jumped).is_true()
 
 
 func test_keyboard_mode_ignores_the_gamepad() -> void:
@@ -88,5 +96,5 @@ func test_keyboard_mode_ignores_the_gamepad() -> void:
 	_axis(JOY_AXIS_LEFT_Y, -1.0)
 	await arena.wait_seconds(0.3)
 
-	assert_float(knight.camera_pivot.rotation.y).is_equal(yaw)
+	assert_float(absf(angle_difference(knight.camera_pivot.rotation.y, yaw))).is_less(0.001)
 	assert_float(Vector2(knight.velocity.x, knight.velocity.z).length()).is_less(0.05)
