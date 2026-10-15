@@ -10,7 +10,7 @@ permissions:
   checks: write
 
 jobs:
-  gdunit4:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -21,3 +21,20 @@ jobs:
           paths: 'res://tests'
           timeout: 15
           report-name: relatorio-testes.xml
+
+  # abre a cena principal sem tela por 300 quadros; o Godot sai com 0 mesmo com erro, entao o log decide.
+  # A musica do menu tocando no autoload vaza no encerramento sem tela; essas duas mensagens de saida sao ignoradas.
+  smoke:
+    runs-on: ubuntu-latest
+    container: barichello/godot-ci:4.7.2
+    steps:
+      - uses: actions/checkout@v5
+      - name: Fontes do sistema
+        run: apt-get update -qq && apt-get install -y -qq fontconfig > /dev/null
+      - run: godot --headless --import
+      - run: |
+          godot --headless --quit-after 300 2>&1 | tee jogo.log
+          if grep -E "ERROR|SCRIPT ERROR" jogo.log | grep -v "resources still in use at exit"; then
+            echo "A cena principal gerou erros"
+            exit 1
+          fi
