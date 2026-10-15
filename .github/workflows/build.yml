@@ -1,20 +1,53 @@
 name: Build
 
-on: workflow_dispatch
+# exporta Linux e Windows; roda nos PRs para o main, manualmente e dentro da release
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
 
 jobs:
-  windows:
+  exportar:
+    strategy:
+      matrix:
+        include:
+          - preset: Linux
+            pasta: build/linux
+            arquivo: TheLastContract.x86_64
+            pacote: TheLastContract-linux.tar.gz
+          - preset: Windows Desktop
+            pasta: build/windows
+            arquivo: TheLastContract.exe
+            pacote: TheLastContract-windows.zip
     runs-on: ubuntu-latest
     container: barichello/godot-ci:4.7.2
     steps:
-      - uses: actions/checkout@v5
-      - run: |
+      - uses: actions/checkout@v4
+
+      - name: Modelos de exportacao
+        run: |
           mkdir -p ~/.local/share/godot/export_templates
           mv /root/.local/share/godot/export_templates/4.7.2.stable ~/.local/share/godot/export_templates/
-          mkdir -p build
+
+      - name: Exportar ${{ matrix.preset }}
+        run: |
+          mkdir -p ${{ matrix.pasta }}
           godot --headless --import
-          godot --headless --export-release "Windows Desktop" build/TheLastContract.exe
+          godot --headless --export-release "${{ matrix.preset }}" "${{ matrix.pasta }}/${{ matrix.arquivo }}"
+          test -s "${{ matrix.pasta }}/${{ matrix.arquivo }}"
+
+      # o tar guarda a permissao de execucao do Linux; o zip e o formato que o Windows abre sem programa extra
+      - name: Empacotar
+        run: |
+          if [ "${{ matrix.preset }}" = "Linux" ]; then
+            tar -czf ${{ matrix.pacote }} -C ${{ matrix.pasta }} .
+          else
+            apt-get update -qq && apt-get install -y -qq zip > /dev/null
+            (cd ${{ matrix.pasta }} && zip -q "$GITHUB_WORKSPACE/${{ matrix.pacote }}" ${{ matrix.arquivo }})
+          fi
+
       - uses: actions/upload-artifact@v4
         with:
-          name: the-last-contract-windows
-          path: build
+          name: ${{ matrix.pacote }}
+          path: ${{ matrix.pacote }}

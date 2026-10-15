@@ -48,14 +48,14 @@ No GitHub Actions, a cada push e pull request:
 - **Smoke** (`smoke`): abre a cena principal sem tela por 300 quadros e falha se aparecer qualquer erro no log.
 - **Documento**: compila `docs/projeto.tex` quando algo em `docs/` muda.
 
-Antes de uma entrega, o pull request para o `main` também roda o **Build Linux**, que confere se o jogo exporta.
+Antes de uma entrega, o pull request para o `main` também roda o **Build**, que exporta o jogo para Linux e Windows.
 O Dependabot abre um pull request por semana na `desenvolvimento` quando alguma action do CI tem versão nova.
 
 ### Release de cada entrega
 
 Todo merge no `main` gera a release sozinho: o workflow **Release da entrega** cria a tag
-`entrega-AAAA-MM-DD` (data de Brasília), exporta o jogo para Linux, compila o documento e publica os dois na
-página de Releases. Um segundo merge no mesmo dia move a tag e atualiza a mesma release.
+`entrega-AAAA-MM-DD` (data de Brasília), exporta o jogo para Linux e Windows, compila o documento e publica
+tudo na página de Releases. Um segundo merge no mesmo dia move a tag e atualiza a mesma release.
 
 ## Como trabalhamos
 
