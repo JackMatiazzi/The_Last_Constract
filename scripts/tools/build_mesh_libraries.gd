@@ -18,6 +18,12 @@ const LIBRARIES := {
 				"Balcony", "Overhang_", "Prop_ExteriorBorder"]},
 		{"dir": VILLAGE, "prefixes": ["Roof_RoundTiles_6x8", "Roof_RoundTiles_8x8", "Roof_Front_Brick6", "Roof_Front_Brick8"]},
 	],
+	"props": [
+		{"dir": VILLAGE, "prefixes": ["Prop_Wagon", "Prop_WoodenFence", "Prop_Crate"]},
+		{"dir": DUNGEON, "prefixes": ["torch_mounted", "keg"]},
+		{"dir": DUNGEON, "prefixes": ["crates_stacked"], "scale": 0.6},
+		{"dir": DUNGEON, "prefixes": ["barrel_large", "barrel_small_stack"], "scale": 0.55},
+	],
 }
 
 
