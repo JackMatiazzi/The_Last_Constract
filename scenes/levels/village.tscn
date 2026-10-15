@@ -1,0 +1,63 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/level.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://scenes/maps/village.tscn" id="2_map"]
+[ext_resource type="PackedScene" path="res://scenes/characters/adventurers/knight.tscn" id="3_knight"]
+[ext_resource type="PackedScene" path="res://scenes/characters/enemies/skeleton.tscn" id="4_skeleton"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/village_night_ambient.ogg" id="5_ambience"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_night"]
+sky_top_color = Color(0.03, 0.04, 0.09, 1)
+sky_horizon_color = Color(0.14, 0.18, 0.28, 1)
+ground_horizon_color = Color(0.1, 0.12, 0.16, 1)
+ground_bottom_color = Color(0.03, 0.03, 0.04, 1)
+
+[sub_resource type="Sky" id="Sky_night"]
+sky_material = SubResource("ProceduralSkyMaterial_night")
+
+[sub_resource type="Environment" id="Environment_night"]
+background_mode = 2
+sky = SubResource("Sky_night")
+ambient_light_source = 3
+ambient_light_color = Color(0.45, 0.5, 0.65, 1)
+ambient_light_energy = 0.9
+tonemap_mode = 2
+fog_enabled = true
+fog_light_color = Color(0.14, 0.17, 0.26, 1)
+fog_density = 0.015
+
+[node name="Village" type="Node3D" node_paths=PackedStringArray("player")]
+script = ExtResource("1_level")
+player = NodePath("Knight")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_night")
+
+[node name="Moonlight" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.85, 0.6, 0)
+light_color = Color(0.62, 0.7, 1, 1)
+light_energy = 0.7
+shadow_enabled = true
+
+[node name="Map" parent="." instance=ExtResource("2_map")]
+
+[node name="Knight" parent="." instance=ExtResource("3_knight")]
+position = Vector3(0, 0.2, 22)
+
+[node name="Skeletons" type="Node3D" parent="."]
+
+[node name="Skeleton" parent="Skeletons" instance=ExtResource("4_skeleton")]
+position = Vector3(1.5, 0.1, 15)
+
+[node name="Skeleton2" parent="Skeletons" instance=ExtResource("4_skeleton")]
+position = Vector3(5, 0.1, 4)
+rotation = Vector3(0, 1.37, 0)
+
+[node name="Skeleton3" parent="Skeletons" instance=ExtResource("4_skeleton")]
+position = Vector3(0, 0.1, -5)
+
+[node name="Ambience" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_ambience")
+volume_db = -6.0
+autoplay = true
+bus = &"Music"

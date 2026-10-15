@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3]
 
-[ext_resource type="Script" path="res://scripts/levels/prototype.gd" id="1_prototype"]
+[ext_resource type="Script" path="res://scripts/levels/level.gd" id="1_level"]
 [ext_resource type="PackedScene" path="res://scenes/maps/grid_sandbox.tscn" id="2_map"]
 [ext_resource type="PackedScene" path="res://scenes/characters/adventurers/knight.tscn" id="3_knight"]
 [ext_resource type="PackedScene" path="res://scenes/props/crate.tscn" id="4_crate"]
@@ -19,7 +19,7 @@ sky = SubResource("Sky_sky")
 tonemap_mode = 2
 
 [node name="Prototype" type="Node3D" node_paths=PackedStringArray("player")]
-script = ExtResource("1_prototype")
+script = ExtResource("1_level")
 player = NodePath("Knight")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
