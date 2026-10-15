@@ -2,6 +2,7 @@ name: GDD
 
 on:
   push:
+    branches: [referencia]
     paths: ['docs/**', '.github/workflows/gdd.yml']
   pull_request:
     paths: ['docs/**', '.github/workflows/gdd.yml']
