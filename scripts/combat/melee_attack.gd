@@ -8,6 +8,7 @@ extends Node3D
 ## Segundos entre o inicio da animacao e o momento em que o golpe acerta.
 @export var impact_delay := 0.3
 @export var hitbox: Area3D
+@export var sound: AudioStreamPlayer3D
 
 var _ready_at := 0.0
 var _next_animation := 0
@@ -27,6 +28,8 @@ func _hit_after_delay(attacker: Character) -> void:
 	await get_tree().create_timer(impact_delay).timeout
 	if not is_instance_valid(attacker) or attacker.is_dead:
 		return
+	if sound:
+		sound.play()
 	for body in hitbox.get_overlapping_bodies():
 		if body != attacker and body is Character:
 			body.take_damage(damage)

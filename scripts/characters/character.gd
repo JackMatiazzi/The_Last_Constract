@@ -24,6 +24,12 @@ const ANIM_BLEND := 0.2
 @export var model: Node3D
 @export var animation_player: AnimationPlayer
 
+@export_group("Sons")
+@export var footstep_sound: AudioStreamPlayer3D
+@export var hurt_sound: AudioStreamPlayer3D
+@export var death_sound: AudioStreamPlayer3D
+@export var step_length := 1.7
+
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var health: float
 var is_dead := false
@@ -31,6 +37,7 @@ var is_busy := false
 
 var _coyote_left := 0.0
 var _jump_buffer_left := 0.0
+var _stride := 0.0
 
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
 
@@ -58,6 +65,7 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 	_update_animation(direction)
+	_count_steps(delta)
 
 
 func take_damage(amount: float) -> void:
@@ -67,6 +75,7 @@ func take_damage(amount: float) -> void:
 	if health == 0.0:
 		die()
 	else:
+		_play(hurt_sound)
 		play_action(ANIM_HIT)
 
 
@@ -75,6 +84,7 @@ func die() -> void:
 	collision_shape.set_deferred("disabled", true)
 	animation_player.speed_scale = 1.0
 	animation_player.play(ANIM_DEATH, ANIM_BLEND)
+	_play(death_sound)
 	died.emit()
 
 
@@ -119,6 +129,21 @@ func _try_jump(delta: float) -> void:
 		velocity.y = jump_velocity
 		_jump_buffer_left = 0.0
 		_coyote_left = 0.0
+
+
+# um passo a cada step_length metros andados no chao, assim o ritmo acompanha a velocidade
+func _count_steps(delta: float) -> void:
+	if not is_on_floor():
+		return
+	_stride += Vector2(velocity.x, velocity.z).length() * delta
+	if _stride >= step_length:
+		_stride = 0.0
+		_play(footstep_sound)
+
+
+func _play(sound: AudioStreamPlayer3D) -> void:
+	if sound:
+		sound.play()
 
 
 func _face(direction: Vector3, delta: float) -> void:
