@@ -45,11 +45,14 @@ automaticamente no GitHub Actions a cada push e pull request.
 
 Também pelo GitHub Actions:
 
-- **Build Linux**: exporta o jogo a cada push no `main`, em cada tag `entrega-*` ou manualmente.
+- **Build Linux**: exporta o jogo a cada push no `main` ou manualmente.
 - **Build Windows**: manual, pela aba Actions.
 - **Documento**: compila `docs/projeto.tex` quando algo em `docs/` muda.
 
 Os arquivos gerados ficam nos artefatos de cada execução.
+
+Cada entrega vira uma release: ao criar a tag `entrega-AAAA-MM-DD` no `main`, o workflow **Release da entrega**
+publica o build de Linux e o PDF do documento na página de Releases.
 
 ## Como trabalhamos
 

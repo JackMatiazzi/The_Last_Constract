@@ -2,6 +2,7 @@ name: Documento
 
 on:
   push:
+    branches: [main, desenvolvimento]
     paths: ['docs/**', '.github/workflows/documento.yml']
   pull_request:
     paths: ['docs/**', '.github/workflows/documento.yml']
