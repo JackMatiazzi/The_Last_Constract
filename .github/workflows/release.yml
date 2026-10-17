@@ -3,6 +3,8 @@ name: Release da entrega
 on:
   push:
     branches: [main]
+    # merge que so mexe no CI nao vira entrega
+    paths-ignore: ['.github/**']
   workflow_dispatch:
 
 permissions:
