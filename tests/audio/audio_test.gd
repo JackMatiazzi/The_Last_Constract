@@ -90,6 +90,16 @@ func test_dormant_skeleton_creaks_when_it_rises() -> void:
 	assert_bool(skeleton.rise_sound.playing).is_true()
 
 
+# espera a condicao com limite de tempo: no CI os quadros atrasam e uma espera fixa nao basta
+func _until(condition: Callable, seconds: float) -> bool:
+	var limit := Time.get_ticks_msec() + roundi(seconds * 1000)
+	while Time.get_ticks_msec() < limit:
+		if condition.call():
+			return true
+		await await_idle_frame()
+	return condition.call()
+
+
 func test_music_cue_switches_the_track() -> void:
 	var track := load("res://assets/audio/music/menu_medieval_fair.ogg") as AudioStream
 	var cue := MusicCue.new()
@@ -97,9 +107,7 @@ func test_music_cue_switches_the_track() -> void:
 
 	add_child(auto_free(cue))
 	# com outra faixa tocando, a troca so acontece no meio do fade
-	await await_millis(roundi(MusicPlayer.FADE_TIME * 1000) + 100)
-
-	assert_object(Music.stream).is_same(track)
+	assert_bool(await _until(func() -> bool: return Music.stream == track, MusicPlayer.FADE_TIME + 3.0)).is_true()
 	assert_bool(Music.playing).is_true()
 
 
