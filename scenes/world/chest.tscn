@@ -1,0 +1,118 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/chest.gd" id="1_chest"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_dungeon/models/chest.gltf" id="2_model"]
+[ext_resource type="PackedScene" path="res://scenes/world/health_potion.tscn" id="3_potion"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/world/chest_open.ogg" id="4_open"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_body"]
+size = Vector3(1.6, 1.1, 1.3)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_reach"]
+radius = 2.0
+
+[sub_resource type="Animation" id="Animation_reset"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Model/chest/chest_lid:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_open"]
+resource_name = "open"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Model/chest/chest_lid:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-1.9, 0, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("OpenSound")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{"args": [0.0], "method": &"play"}]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.45),
+"transitions": PackedFloat32Array(1),
+"values": [{"args": [], "method": &"drop_loot"}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_chest"]
+_data = {
+&"RESET": SubResource("Animation_reset"),
+&"open": SubResource("Animation_open")
+}
+
+[node name="Chest" type="StaticBody3D" node_paths=PackedStringArray("loot_spot", "interact_area", "prompt", "animation_player")]
+script = ExtResource("1_chest")
+loot_scene = ExtResource("3_potion")
+loot_spot = NodePath("LootSpot")
+interact_area = NodePath("InteractArea")
+prompt = NodePath("Prompt")
+animation_player = NodePath("AnimationPlayer")
+
+[node name="Model" parent="." instance=ExtResource("2_model")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.55, 0)
+shape = SubResource("BoxShape3D_body")
+
+[node name="InteractArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractArea"]
+position = Vector3(0, 0.8, 0.6)
+shape = SubResource("SphereShape3D_reach")
+
+[node name="Prompt" type="Label3D" parent="."]
+position = Vector3(0, 1.9, 0)
+billboard = 1
+no_depth_test = true
+modulate = Color(1, 0.88, 0.6, 1)
+outline_modulate = Color(0, 0, 0, 1)
+text = "E  Abrir"
+font_size = 48
+outline_size = 12
+
+[node name="LootSpot" type="Marker3D" parent="."]
+position = Vector3(0, 0.1, 1.6)
+
+[node name="OpenSound" type="AudioStreamPlayer3D" parent="."]
+position = Vector3(0, 0.6, 0)
+stream = ExtResource("4_open")
+max_distance = 30.0
+bus = &"SFX"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_chest")
+}

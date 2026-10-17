@@ -1,0 +1,413 @@
+[gd_scene load_steps=17 format=3]
+
+[ext_resource type="Script" path="res://scripts/cutscenes/adventurer_cutscene.gd" id="1_cutscene"]
+[ext_resource type="PackedScene" path="res://scenes/maps/public_square.tscn" id="2_square"]
+[ext_resource type="PackedScene" path="res://scenes/maps/village_road.tscn" id="3_road"]
+[ext_resource type="PackedScene" path="res://scenes/cutscenes/crowd/villager_barbarian.tscn" id="4_barbarian"]
+[ext_resource type="PackedScene" path="res://scenes/cutscenes/crowd/villager_hooded.tscn" id="5_hooded"]
+[ext_resource type="PackedScene" path="res://scenes/cutscenes/crowd/villager_mage.tscn" id="6_mage"]
+[ext_resource type="PackedScene" path="res://scenes/cutscenes/crowd/villager_rogue.tscn" id="7_rogue"]
+[ext_resource type="PackedScene" path="res://scenes/cutscenes/crowd/villager_knight.tscn" id="8_knight"]
+[ext_resource type="Script" path="res://scripts/ui/device_hint.gd" id="hint_script"]
+[ext_resource type="Script" path="res://scripts/audio/music_cue.gd" id="cue_script"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/village_night_ambient.ogg" id="cue_track"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_blood"]
+sky_top_color = Color(0.06, 0.04, 0.07, 1)
+sky_horizon_color = Color(0.42, 0.12, 0.08, 1)
+ground_horizon_color = Color(0.25, 0.1, 0.08, 1)
+ground_bottom_color = Color(0.04, 0.03, 0.03, 1)
+
+[sub_resource type="Sky" id="Sky_blood"]
+sky_material = SubResource("ProceduralSkyMaterial_blood")
+
+[sub_resource type="Environment" id="Environment_execution"]
+background_mode = 2
+sky = SubResource("Sky_blood")
+ambient_light_energy = 0.5
+tonemap_mode = 2
+fog_enabled = true
+fog_light_color = Color(0.3, 0.1, 0.08, 1)
+fog_density = 0.035
+
+[sub_resource type="Animation" id="Animation_execution"]
+resource_name = "execution"
+length = 11.45
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("UI/Fade:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8, 4.0, 4.5, 5.0, 10.45, 11.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(0, 0, 0, 0), Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("UI/Caption:text")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 4.5, 10.45),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": ["Ele deu as costas ao contrato.", "Por abandonar o contrato, o Lorde ordena a execução.", "Contrato encerrado."]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("UI/Caption:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.8, 4.0, 4.5, 5.0, 7.4, 8.2, 10.45, 10.95),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LeavingSpot:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 4.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(120, 0, 1.5), Vector3(120, 0, -3)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("RoadCamera:current")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SquareCamera:current")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(4.5),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SquareCamera:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(4.5, 7.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1.8, 5.2, 10.5), Vector3(1.35, 4.16, 7.475)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("CloseCamera:current")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(7.4),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("UI/Flash:color")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(8.64, 8.65, 9.15),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.7, 0.05, 0.03, 0), Color(0.7, 0.05, 0.03, 0.7), Color(0.7, 0.05, 0.03, 0)]
+}
+tracks/9/type = "animation"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("PublicSquare/Scaffold/Executioner/AnimationPlayer")
+tracks/9/keys = {
+"clips": PackedStringArray("2H_Melee_Attack_Chop"),
+"times": PackedFloat32Array(8.2)
+}
+tracks/10/type = "method"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath(".")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(8.65),
+"transitions": PackedFloat32Array(1),
+"values": [{"args": [1, "Death_B_Pose", 0.45], "method": &"play_actor"}]
+}
+tracks/11/type = "animation"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Crowd/Villager/AnimationPlayer")
+tracks/11/keys = {
+"clips": PackedStringArray("Cheer"),
+"times": PackedFloat32Array(8.75)
+}
+tracks/12/type = "animation"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("Crowd/Villager2/AnimationPlayer")
+tracks/12/keys = {
+"clips": PackedStringArray("Cheer"),
+"times": PackedFloat32Array(8.83)
+}
+tracks/13/type = "animation"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Crowd/Villager3/AnimationPlayer")
+tracks/13/keys = {
+"clips": PackedStringArray("Cheer"),
+"times": PackedFloat32Array(8.91)
+}
+tracks/14/type = "animation"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("Crowd/Villager4/AnimationPlayer")
+tracks/14/keys = {
+"clips": PackedStringArray("Cheer"),
+"times": PackedFloat32Array(8.99)
+}
+tracks/15/type = "animation"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("Crowd/Villager5/AnimationPlayer")
+tracks/15/keys = {
+"clips": PackedStringArray("Cheer"),
+"times": PackedFloat32Array(9.07)
+}
+tracks/16/type = "animation"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("Crowd/Villager6/AnimationPlayer")
+tracks/16/keys = {
+"clips": PackedStringArray("Cheer"),
+"times": PackedFloat32Array(9.15)
+}
+tracks/17/type = "animation"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("Crowd/Villager7/AnimationPlayer")
+tracks/17/keys = {
+"clips": PackedStringArray("Cheer"),
+"times": PackedFloat32Array(9.23)
+}
+tracks/18/type = "animation"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("Crowd/Villager8/AnimationPlayer")
+tracks/18/keys = {
+"clips": PackedStringArray("Cheer"),
+"times": PackedFloat32Array(9.31)
+}
+tracks/19/type = "animation"
+tracks/19/imported = false
+tracks/19/enabled = true
+tracks/19/path = NodePath("Crowd/Villager9/AnimationPlayer")
+tracks/19/keys = {
+"clips": PackedStringArray("Cheer"),
+"times": PackedFloat32Array(9.39)
+}
+tracks/20/type = "animation"
+tracks/20/imported = false
+tracks/20/enabled = true
+tracks/20/path = NodePath("Crowd/Villager10/AnimationPlayer")
+tracks/20/keys = {
+"clips": PackedStringArray("Cheer"),
+"times": PackedFloat32Array(9.47)
+}
+tracks/21/type = "animation"
+tracks/21/imported = false
+tracks/21/enabled = true
+tracks/21/path = NodePath("Crowd/Villager11/AnimationPlayer")
+tracks/21/keys = {
+"clips": PackedStringArray("Cheer"),
+"times": PackedFloat32Array(9.55)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cutscene"]
+_data = {
+&"execution": SubResource("Animation_execution")
+}
+
+[node name="Execution" type="Node3D" node_paths=PackedStringArray("timeline", "actor_spots")]
+script = ExtResource("1_cutscene")
+next_scene = "res://scenes/ui/main_menu.tscn"
+timeline = NodePath("Timeline")
+actor_spots = [NodePath("LeavingSpot"), NodePath("PublicSquare/Scaffold/CondemnedSpot")]
+actor_animations = PackedStringArray("Walking_A", "Sit_Floor_Down")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_execution")
+
+[node name="Sunset" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.3, 3.1416, 0)
+light_color = Color(1, 0.55, 0.35, 1)
+light_energy = 0.9
+shadow_enabled = true
+
+[node name="PublicSquare" parent="." instance=ExtResource("2_square")]
+
+[node name="VillageRoad" parent="." instance=ExtResource("3_road")]
+position = Vector3(120, 0, 0)
+
+[node name="LeavingSpot" type="Marker3D" parent="."]
+position = Vector3(120, 0, 1.5)
+rotation = Vector3(0, 3.1416, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+
+[node name="Crowd" type="Node3D" parent="."]
+
+[node name="Villager" parent="Crowd" instance=ExtResource("4_barbarian")]
+position = Vector3(-3.2, 0, 1.8)
+rotation = Vector3(0, 2.4417, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+
+[node name="Villager2" parent="Crowd" instance=ExtResource("5_hooded")]
+position = Vector3(-1.2, 0, 2.4)
+rotation = Vector3(0, 2.8753, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+
+[node name="Villager3" parent="Crowd" instance=ExtResource("6_mage")]
+position = Vector3(1, 0, 2.2)
+rotation = Vector3(0, -2.9078, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+
+[node name="Villager4" parent="Crowd" instance=ExtResource("7_rogue")]
+position = Vector3(3.1, 0, 1.7)
+rotation = Vector3(0, -2.4442, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+
+[node name="Villager5" parent="Crowd" instance=ExtResource("8_knight")]
+position = Vector3(-4.4, 0, 3.6)
+rotation = Vector3(0, 2.4756, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+
+[node name="Villager6" parent="Crowd" instance=ExtResource("4_barbarian")]
+position = Vector3(-2.2, 0, 4)
+rotation = Vector3(0, 2.7901, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+
+[node name="Villager7" parent="Crowd" instance=ExtResource("5_hooded")]
+position = Vector3(0.1, 0, 4.3)
+rotation = Vector3(0, -3.1257, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+
+[node name="Villager8" parent="Crowd" instance=ExtResource("6_mage")]
+position = Vector3(2.2, 0, 3.9)
+rotation = Vector3(0, -2.7847, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+
+[node name="Villager9" parent="Crowd" instance=ExtResource("7_rogue")]
+position = Vector3(4.3, 0, 3.4)
+rotation = Vector3(0, -2.4691, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+
+[node name="Villager10" parent="Crowd" instance=ExtResource("8_knight")]
+position = Vector3(-1.1, 0, 5.8)
+rotation = Vector3(0, 3.0015, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+
+[node name="Villager11" parent="Crowd" instance=ExtResource("4_barbarian")]
+position = Vector3(1.4, 0, 5.9)
+rotation = Vector3(0, -2.9662, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+
+[node name="RoadCamera" type="Camera3D" parent="."]
+position = Vector3(120.7, 1.7, 7)
+rotation = Vector3(-0.06137, 0.05379, 0)
+fov = 50.0
+current = true
+
+[node name="SquareCamera" type="Camera3D" parent="."]
+position = Vector3(1.8, 5.2, 10.5)
+rotation = Vector3(-0.2709, 0.1477, 0)
+fov = 50.0
+
+[node name="CloseCamera" type="Camera3D" parent="."]
+position = Vector3(-1.9, 2.2, 1.8)
+rotation = Vector3(-0.1212, -0.5947, 0)
+fov = 45.0
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Flash" type="ColorRect" parent="UI"]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.7, 0.05, 0.03, 0)
+
+[node name="Fade" type="ColorRect" parent="UI"]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Caption" type="Label" parent="UI"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 60.0
+offset_bottom = 140.0
+theme_type_variation = &"HeadingLabel"
+theme_override_colors/font_color = Color(0.92, 0.82, 0.7, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="SkipHint" type="Label" parent="UI"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -340.0
+offset_top = -48.0
+offset_right = -24.0
+offset_bottom = -20.0
+theme_type_variation = &"MutedLabel"
+script = ExtResource("hint_script")
+text = "Qualquer tecla para pular"
+keyboard_text = "Qualquer tecla para pular"
+gamepad_text = "Qualquer botão para pular"
+horizontal_alignment = 2
+
+[node name="Timeline" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_cutscene")
+}
+autoplay = &"execution"
+
+[node name="MusicCue" type="Node" parent="."]
+script = ExtResource("cue_script")
+track = ExtResource("cue_track")

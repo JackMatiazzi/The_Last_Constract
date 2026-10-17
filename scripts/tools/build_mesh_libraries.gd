@@ -1,7 +1,8 @@
 @tool
 extends EditorScript
 
-# Gera as MeshLibraries do GridMap. Rodar no Script Editor com File > Run (Ctrl+Shift+X).
+# Rodar pelo Script Editor (File > Run) sempre que mudar uma regra ou um asset.
+# Telhados ficam por ultimo para nao mudar os ids das paredes ja pintadas no mapa.
 
 const VILLAGE := "res://assets/quaternius_village/models"
 const DUNGEON := "res://assets/kaykit_dungeon/models"
@@ -40,6 +41,7 @@ func _run() -> void:
 		print("%s: %d pecas" % [path, library.get_item_list().size()])
 
 
+# sem preview a paleta do GridMap mostra so os nomes
 func _add_previews(library: MeshLibrary) -> void:
 	var ids := library.get_item_list()
 	var meshes: Array[Mesh] = []

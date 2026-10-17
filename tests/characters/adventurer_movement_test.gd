@@ -5,13 +5,14 @@ var knight: Adventurer
 
 
 func before_test() -> void:
+	RunState.reset()
 	arena = TestArena.new(self)
-	knight = arena.spawn(TestArena.KNIGHT, Vector3.ZERO) as Adventurer
+	knight = arena.spawn(TestArena.KNIGHT, Vector3.ZERO)
 	await arena.wait_physics(5)
 
 
 func after_test() -> void:
-	for action in ["move_forward", "move_back", "jump"]:
+	for action in ["move_forward", "move_back", "jump", "attack"]:
 		Input.action_release(action)
 
 
@@ -124,3 +125,31 @@ func test_jump_right_after_leaving_ground_is_forgiven() -> void:
 	await arena.wait_physics(2)
 
 	assert_float(knight.velocity.y).is_greater(0.0)
+
+
+func test_cannot_jump_before_attack_impact() -> void:
+	knight.attack.try_attack(knight)
+
+	await arena.send_action("jump")
+	await arena.wait_physics(5)
+
+	assert_bool(knight.is_on_floor()).is_true()
+
+
+func test_attack_turns_to_where_the_camera_looks() -> void:
+	knight.camera_pivot.rotation.y = deg_to_rad(90.0)
+
+	knight.attack_toward_camera()
+
+	var facing := Vector3(sin(knight.model.rotation.y), 0, cos(knight.model.rotation.y))
+	var camera_forward := -knight.camera_pivot.global_basis.z
+	assert_float(facing.dot(camera_forward)).is_equal_approx(1.0, 0.001)
+
+
+func test_hit_reaction_can_be_cancelled_by_moving() -> void:
+	knight.take_damage(1.0)
+	await arena.send_action("move_forward")
+	await arena.wait_seconds(Character.HIT_RECOVERY + 0.1)
+
+	assert_bool(knight.is_busy).is_false()
+	assert_float(_horizontal_speed()).is_greater(0.0)

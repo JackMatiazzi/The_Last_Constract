@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/props/scaffold.tscn" id="3_r"]
+
+[ext_resource type="PackedScene" path="res://scenes/maps/public_square/ground.tscn" id="grid_ground"]
+
+[ext_resource type="PackedScene" path="res://scenes/maps/public_square/structure.tscn" id="grid_structure"]
+
+[ext_resource type="PackedScene" path="res://scenes/maps/public_square/objects.tscn" id="grid_objects"]
+
+[node name="PublicSquare" type="Node3D"]
+
+[node name="Chao" parent="." instance=ExtResource("grid_ground")]
+
+[node name="Estrutura" parent="." instance=ExtResource("grid_structure")]
+
+[node name="Objetos" parent="." instance=ExtResource("grid_objects")]
+
+[node name="Scaffold" parent="." instance=ExtResource("3_r")]
+position = Vector3(0, 0, -2)

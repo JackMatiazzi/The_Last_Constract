@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="Buff" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/stat_modifier.gd" id="1_ylhdv"]
+[ext_resource type="Script" path="res://scripts/combat/buff.gd" id="2_cgt1d"]
+
+[sub_resource type="Resource" id="Resource_4dbj2"]
+script = ExtResource("1_ylhdv")
+stat = 3
+amount = -0.25
+
+[sub_resource type="Resource" id="Resource_m0m3v"]
+script = ExtResource("1_ylhdv")
+stat = 1
+amount = -2.0
+
+[resource]
+script = ExtResource("2_cgt1d")
+title = "Frenesi"
+flavor = "Golpes rápidos, guarda aberta."
+modifiers = Array[ExtResource("1_ylhdv")]([SubResource("Resource_4dbj2"), SubResource("Resource_m0m3v")])

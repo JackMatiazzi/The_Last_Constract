@@ -1,75 +1,97 @@
 extends GdUnitTestSuite
 
-const SKELETON := "res://scenes/characters/enemies/skeleton.tscn"
-
 var arena: TestArena
-var knight: Adventurer
 
 
 func before_test() -> void:
+	RunState.reset()
 	arena = TestArena.new(self)
-	knight = arena.spawn(TestArena.KNIGHT, Vector3.ZERO) as Adventurer
 
 
-func _wait_impact() -> void:
-	await arena.wait_seconds(knight.attack.impact_delay + 0.1)
+func after_test() -> void:
+	RunState.reset()
 
 
-func test_hits_the_enemy_in_front() -> void:
-	var skeleton := arena.spawn(SKELETON, Vector3(0, 0, 1.3)) as Enemy
-	await arena.wait_physics(3)
-
-	knight.attack.try_attack(knight)
-	await _wait_impact()
-
-	assert_float(skeleton.health).is_equal(skeleton.max_health - knight.attack.damage)
-
-
-func test_misses_the_enemy_behind() -> void:
-	var skeleton := arena.spawn(SKELETON, Vector3(0, 0, -1.3)) as Enemy
-	await arena.wait_physics(3)
-
-	knight.attack.try_attack(knight)
-	await _wait_impact()
-
-	assert_float(skeleton.health).is_equal(skeleton.max_health)
-
-
-func test_second_attack_waits_for_the_cooldown() -> void:
-	await arena.wait_physics(3)
+func test_knight_hits_enemy_in_front() -> void:
+	var knight := arena.spawn(TestArena.KNIGHT, Vector3.ZERO)
+	var skeleton := arena.spawn(TestArena.SKELETON, Vector3(0, 0, 1.2))
+	await arena.wait_physics(5)
 
 	assert_bool(knight.attack.try_attack(knight)).is_true()
+	await arena.wait_seconds(0.6)
+
+	assert_float(skeleton.health).is_equal(4.0)
+
+
+func test_knight_misses_enemy_behind() -> void:
+	var knight := arena.spawn(TestArena.KNIGHT, Vector3.ZERO)
+	var skeleton := arena.spawn(TestArena.SKELETON, Vector3(0, 0, -1.2))
+	await arena.wait_physics(5)
+
+	knight.attack.try_attack(knight)
+	await arena.wait_seconds(0.6)
+
+	assert_float(skeleton.health).is_equal(5.0)
+
+
+func test_wall_between_blocks_the_hit() -> void:
+	var knight := arena.spawn(TestArena.KNIGHT, Vector3.ZERO)
+	var skeleton := arena.spawn(TestArena.SKELETON, Vector3(0, 0, 1.4))
+	arena.add_wall(Vector3(0, 1.5, 0.7), Vector3(3, 3, 0.15))
+	await arena.wait_physics(5)
+
+	knight.attack.try_attack(knight)
+	await arena.wait_seconds(knight.attack.impact_delay + 0.1)
+
+	assert_float(skeleton.health).is_equal(5.0)
+
+
+func test_knight_does_not_hit_other_adventurers() -> void:
+	var knight := arena.spawn(TestArena.KNIGHT, Vector3.ZERO)
+	var ally := arena.spawn(TestArena.ROGUE, Vector3(0, 0, 1.2))
+	await arena.wait_physics(5)
+
+	knight.attack.try_attack(knight)
+	await arena.wait_seconds(0.6)
+
+	assert_float(ally.health).is_equal(10.0)
+
+
+func test_second_attack_inside_cooldown_is_refused() -> void:
+	var knight := arena.spawn(TestArena.KNIGHT, Vector3.ZERO)
+	await arena.wait_physics(5)
+
+	assert_bool(knight.attack.try_attack(knight)).is_true()
+	assert_bool(knight.attack.can_attack(knight)).is_false()
 	assert_bool(knight.attack.try_attack(knight)).is_false()
 
 
-func test_knight_stands_still_while_swinging() -> void:
-	await arena.wait_physics(3)
+func test_dead_attacker_cannot_attack() -> void:
+	var knight := arena.spawn(TestArena.KNIGHT, Vector3.ZERO)
+	await arena.wait_physics(5)
+	knight.take_damage(99.0)
+
+	assert_bool(knight.attack.try_attack(knight)).is_false()
+
+
+func test_damage_buff_adds_to_hit() -> void:
+	RunState.buffs.append(load("res://resources/buffs/lamina_afiada.tres"))
+	var knight := arena.spawn(TestArena.KNIGHT, Vector3.ZERO)
+	var skeleton := arena.spawn(TestArena.SKELETON, Vector3(0, 0, 1.2))
+	await arena.wait_physics(5)
+
 	knight.attack.try_attack(knight)
+	await arena.wait_seconds(0.6)
 
-	await arena.send_action("move_forward")
-	await arena.wait_seconds(0.2)
-	await arena.send_action("move_forward", false)
-
-	assert_float(Vector2(knight.velocity.x, knight.velocity.z).length()).is_less(0.1)
+	assert_float(skeleton.health).is_equal(3.0)
 
 
-func test_attack_turns_to_where_the_camera_looks() -> void:
-	knight.camera_pivot.rotation.y = deg_to_rad(90.0)
-	await arena.wait_physics(3)
+func test_cooldown_buff_shortens_recharge() -> void:
+	var plain := arena.spawn(TestArena.KNIGHT, Vector3.ZERO)
+	await arena.wait_physics(2)
+	var plain_cooldown: float = plain.attack.effective_cooldown(plain)
+	RunState.buffs.append(load("res://resources/buffs/frenesi.tres"))
+	var frenzied := arena.spawn(TestArena.KNIGHT, Vector3(5, 0, 0))
+	await arena.wait_physics(2)
 
-	knight.attack_toward_camera()
-
-	var facing := knight.model.global_basis.z.normalized()
-	assert_float(facing.dot(-knight.camera_pivot.global_basis.z)).is_equal_approx(1.0, 0.01)
-
-
-func test_enemy_falls_after_enough_hits_and_disappears() -> void:
-	var skeleton := arena.spawn(SKELETON, Vector3(0, 0, 1.3)) as Enemy
-	await arena.wait_physics(3)
-
-	for i in skeleton.max_health:
-		skeleton.take_damage(1.0)
-	assert_bool(skeleton.is_dead).is_true()
-
-	await arena.wait_seconds(skeleton.corpse_time + 0.2)
-	assert_bool(is_instance_valid(skeleton)).is_false()
+	assert_float(frenzied.attack.effective_cooldown(frenzied)).is_equal_approx(plain_cooldown * 0.75, 0.001)

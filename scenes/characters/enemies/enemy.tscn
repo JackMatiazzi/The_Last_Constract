@@ -1,0 +1,71 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/character.tscn" id="1_character"]
+[ext_resource type="Script" path="res://scripts/characters/enemies/enemy.gd" id="2_enemy"]
+[ext_resource type="Script" path="res://scripts/characters/enemies/perception.gd" id="3_perception"]
+[ext_resource type="Script" path="res://scripts/characters/enemies/enemy_brain.gd" id="4_brain"]
+[ext_resource type="Script" path="res://scripts/characters/enemies/states/dormant_state.gd" id="5_dormant"]
+[ext_resource type="Script" path="res://scripts/characters/enemies/states/awaken_state.gd" id="6_awaken"]
+[ext_resource type="Script" path="res://scripts/characters/enemies/states/idle_state.gd" id="7_idle"]
+[ext_resource type="Script" path="res://scripts/characters/enemies/states/chase_state.gd" id="8_chase"]
+[ext_resource type="Script" path="res://scripts/characters/enemies/states/attack_state.gd" id="9_attack"]
+[ext_resource type="Script" path="res://scripts/characters/enemies/states/investigate_state.gd" id="10_investigate"]
+[ext_resource type="Script" path="res://scripts/characters/enemies/states/dead_state.gd" id="11_dead"]
+[ext_resource type="PackedScene" path="res://scenes/characters/enemies/remains.tscn" id="12_remains"]
+[ext_resource type="AudioStream" path="res://resources/audio/hit.tres" id="13_hit"]
+[ext_resource type="AudioStream" path="res://resources/audio/bones_fall.tres" id="14_bones"]
+[ext_resource type="AudioStream" path="res://resources/audio/rise.tres" id="15_rise"]
+
+[node name="Enemy" node_paths=PackedStringArray("rise_sound") instance=ExtResource("1_character")]
+collision_layer = 4
+max_health = 5.0
+walk_speed = 2.8
+run_speed = 5.0
+script = ExtResource("2_enemy")
+remains_scene = ExtResource("12_remains")
+rise_sound = NodePath("Sounds/Rise")
+
+[node name="Perception" type="Node3D" parent="."]
+script = ExtResource("3_perception")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.5
+target_desired_distance = 0.4
+path_height_offset = 0.5
+radius = 0.4
+
+[node name="EnemyBrain" type="Node" parent="."]
+script = ExtResource("4_brain")
+
+[node name="Dormant" type="Node" parent="EnemyBrain"]
+script = ExtResource("5_dormant")
+
+[node name="Awaken" type="Node" parent="EnemyBrain"]
+script = ExtResource("6_awaken")
+
+[node name="Idle" type="Node" parent="EnemyBrain"]
+script = ExtResource("7_idle")
+
+[node name="Chase" type="Node" parent="EnemyBrain"]
+script = ExtResource("8_chase")
+
+[node name="Attack" type="Node" parent="EnemyBrain"]
+script = ExtResource("9_attack")
+
+[node name="Investigate" type="Node" parent="EnemyBrain"]
+script = ExtResource("10_investigate")
+
+[node name="Dead" type="Node" parent="EnemyBrain"]
+script = ExtResource("11_dead")
+
+[node name="Hurt" parent="Sounds"]
+stream = ExtResource("13_hit")
+
+[node name="Death" parent="Sounds"]
+stream = ExtResource("14_bones")
+
+[node name="Rise" type="AudioStreamPlayer3D" parent="Sounds"]
+position = Vector3(0, 0.5, 0)
+stream = ExtResource("15_rise")
+max_distance = 30.0
+bus = &"SFX"

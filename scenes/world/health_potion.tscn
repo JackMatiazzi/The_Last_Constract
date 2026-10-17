@@ -1,0 +1,77 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/health_potion.gd" id="1_potion"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_dungeon/models/bottle_A_labeled_green.gltf" id="2_bottle"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/world/potion.ogg" id="3_sound"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_pickup"]
+radius = 0.7
+
+[sub_resource type="Animation" id="Animation_float"]
+resource_name = "float"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Model:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0.3, 0), Vector3(0, 0.5, 0), Vector3(0, 0.3, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Model:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 6.2832, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_potion"]
+_data = {
+&"float": SubResource("Animation_float")
+}
+
+[node name="HealthPotion" type="Area3D" node_paths=PackedStringArray("model", "pickup_sound")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_potion")
+model = NodePath("Model")
+pickup_sound = NodePath("PickupSound")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.5, 0)
+shape = SubResource("SphereShape3D_pickup")
+
+[node name="Model" type="Node3D" parent="."]
+position = Vector3(0, 0.3, 0)
+
+[node name="Bottle" parent="Model" instance=ExtResource("2_bottle")]
+scale = Vector3(0.7, 0.7, 0.7)
+
+[node name="Glow" type="OmniLight3D" parent="Model"]
+position = Vector3(0, 0.4, 0)
+light_color = Color(0.4, 1, 0.5, 1)
+light_energy = 1.2
+omni_range = 2.5
+
+[node name="PickupSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_sound")
+max_distance = 30.0
+bus = &"SFX"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_potion")
+}
+autoplay = &"float"

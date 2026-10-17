@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AdventurerInfo" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/characters/adventurers/adventurer_info.gd" id="1_info"]
+[ext_resource type="PackedScene" path="res://scenes/characters/adventurers/barbarian.tscn" id="2_scene"]
+[ext_resource type="PackedScene" path="res://scenes/characters/adventurers/models/barbarian_model.tscn" id="3_model"]
+
+[resource]
+script = ExtResource("1_info")
+title = "Barbarian"
+role = "Corpo a corpo, em área"
+attack_name = "Giro do machado"
+description = "Dois machados. O giro acerta todos os mortos-vivos ao redor, mas demora para recarregar. Botão direito: golpe rápido com o segundo machado."
+scene = ExtResource("2_scene")
+model = ExtResource("3_model")
