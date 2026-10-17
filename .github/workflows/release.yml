@@ -9,28 +9,8 @@ permissions:
   contents: write
 
 jobs:
-  linux:
-    runs-on: ubuntu-latest
-    container: barichello/godot-ci:4.7.2
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Modelos de exportacao
-        run: |
-          mkdir -p ~/.local/share/godot/export_templates
-          mv /root/.local/share/godot/export_templates/4.7.2.stable ~/.local/share/godot/export_templates/
-
-      - name: Exportar
-        run: |
-          mkdir -p build/linux
-          godot --headless --import
-          godot --headless --export-release "Linux" build/linux/TheLastContract.x86_64
-          tar -czf TheLastContract-linux.tar.gz -C build/linux .
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: linux
-          path: TheLastContract-linux.tar.gz
+  exportar:
+    uses: ./.github/workflows/build.yml
 
   documento:
     runs-on: ubuntu-latest
@@ -48,7 +28,7 @@ jobs:
           path: docs/projeto.pdf
 
   release:
-    needs: [linux, documento]
+    needs: [exportar, documento]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -75,4 +55,5 @@ jobs:
           make_latest: true
           files: |
             TheLastContract-linux.tar.gz
+            TheLastContract-windows.zip
             projeto.pdf
