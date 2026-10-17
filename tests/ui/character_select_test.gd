@@ -11,9 +11,14 @@ func before_test() -> void:
 	await await_idle_frame()
 
 
+# espera as animacoes acabarem: no CI os quadros atrasam e o tempo de relogio nao basta
 func _choose(index: int) -> void:
 	screen.picker.select(index)
-	await await_millis(int(CharacterSelect.HIGHLIGHT_TIME * 1000) + 100)
+	var limit := Time.get_ticks_msec() + 3000
+	while Time.get_ticks_msec() < limit:
+		await await_idle_frame()
+		if not get_tree().get_processed_tweens().any(func(tween: Tween) -> bool: return tween.is_running()):
+			return
 
 
 func test_shows_one_model_per_adventurer() -> void:
