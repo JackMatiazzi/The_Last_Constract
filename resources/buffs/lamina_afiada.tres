@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Buff" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/stat_modifier.gd" id="1_vw3js"]
+[ext_resource type="Script" path="res://scripts/combat/buff.gd" id="2_blgkh"]
+
+[sub_resource type="Resource" id="Resource_bhnws"]
+script = ExtResource("1_vw3js")
+amount = 1.0
+
+[resource]
+script = ExtResource("2_blgkh")
+title = "Lâmina Afiada"
+flavor = "Pedra de amolar benzida pelo capelão do Lorde."
+modifiers = Array[ExtResource("1_vw3js")]([SubResource("Resource_bhnws")])

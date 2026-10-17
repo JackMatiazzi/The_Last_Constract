@@ -1,5 +1,12 @@
+# Godot
 .godot/
+*.translation
+
+# Builds (gerados pelo GitHub Actions)
 build/
+
+# Temporarios de teste
+_tmp_test/
 reports/
 
 # temporarios do LaTeX

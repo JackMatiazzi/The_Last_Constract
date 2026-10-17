@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/kaykit_adventurers/characters/Mage.glb" id="1_model"]
+
+[node name="MageVillager" instance=ExtResource("1_model")]
+
+[node name="Spellbook" parent="Rig/Skeleton3D/handslot_l"]
+visible = false
+
+[node name="Spellbook_open" parent="Rig/Skeleton3D/handslot_l"]
+visible = false
+
+[node name="1H_Wand" parent="Rig/Skeleton3D/handslot_r"]
+visible = false
+
+[node name="2H_Staff" parent="Rig/Skeleton3D/handslot_r"]
+visible = false
+
+[node name="AnimationPlayer" parent="."]
+autoplay = &"Idle"

@@ -19,6 +19,7 @@ jobs:
           godot-version: '4.7.2'
           version: 'installed'
           paths: 'res://tests'
+          timeout: 15
 
   # abre a cena principal sem tela por 300 quadros; o Godot sai com 0 mesmo com erro, entao o log decide.
   # Audio tocando no fechamento sem tela vaza a reproducao; essa mensagem de saida e ignorada.

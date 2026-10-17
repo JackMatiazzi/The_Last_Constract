@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://hinn3ngyew5j"]
+
+[ext_resource type="PackedScene" uid="uid://cnrpro6axreb4" path="res://assets/kaykit_adventurers/characters/Rogue_Hooded.glb" id="1_model"]
+[ext_resource type="PackedScene" uid="uid://cbugxnmp6n5v5" path="res://assets/kaykit_adventurers/accessories/axe_2handed.gltf" id="2_axe"]
+
+[node name="Executioner" unique_id=1484266243 instance=ExtResource("1_model")]
+
+[node name="Knife_Offhand" parent="Rig/Skeleton3D/handslot_l" parent_id_path=PackedInt32Array(506728318) index="0" unique_id=1966082449]
+visible = false
+
+[node name="1H_Crossbow" parent="Rig/Skeleton3D/handslot_r" parent_id_path=PackedInt32Array(66059620) index="0" unique_id=563169647]
+visible = false
+
+[node name="2H_Crossbow" parent="Rig/Skeleton3D/handslot_r" parent_id_path=PackedInt32Array(66059620) index="1" unique_id=1848359119]
+visible = false
+
+[node name="Knife" parent="Rig/Skeleton3D/handslot_r" parent_id_path=PackedInt32Array(66059620) index="2" unique_id=1983000260]
+visible = false
+
+[node name="Throwable" parent="Rig/Skeleton3D/handslot_r" parent_id_path=PackedInt32Array(66059620) index="3" unique_id=2000274270]
+visible = false
+
+[node name="Axe" parent="Rig/Skeleton3D/handslot_r" parent_id_path=PackedInt32Array(66059620) index="4" unique_id=1302008623 instance=ExtResource("2_axe")]
+
+[node name="AnimationPlayer" parent="." index="1" unique_id=161154731]
+autoplay = &"Idle"
