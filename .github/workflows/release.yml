@@ -43,7 +43,7 @@ jobs:
           git tag -f "$tag" "$GITHUB_SHA"
           git push -f origin "refs/tags/$tag"
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           merge-multiple: true
 
