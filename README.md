@@ -68,7 +68,7 @@ O Dependabot abre um pull request por semana na `desenvolvimento` quando alguma 
 
 ### Release de cada entrega
 
-Todo merge no `main` gera a release sozinho: o workflow **Release da entrega** cria a tag
+Todo merge no `main` que não mexa só no CI ou no README gera a release sozinho: o workflow **Release da entrega** cria a tag
 `entrega-AAAA-MM-DD` (data de Brasília), exporta o jogo para Linux e Windows, compila o documento e publica
 tudo na página de Releases. Um segundo merge no mesmo dia move a tag e atualiza a mesma release.
 
