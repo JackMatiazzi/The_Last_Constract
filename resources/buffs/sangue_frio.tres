@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="Buff" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/stat_modifier.gd" id="1_1bfjb"]
+[ext_resource type="Script" path="res://scripts/combat/buff.gd" id="2_qvdke"]
+
+[sub_resource type="Resource" id="Resource_12ten"]
+script = ExtResource("1_1bfjb")
+stat = 1
+amount = 2.0
+
+[sub_resource type="Resource" id="Resource_qyia3"]
+script = ExtResource("1_1bfjb")
+stat = 2
+amount = -0.1
+
+[resource]
+script = ExtResource("2_qvdke")
+title = "Sangue Frio"
+flavor = "Resistir antes de avançar."
+modifiers = Array[ExtResource("1_1bfjb")]([SubResource("Resource_12ten"), SubResource("Resource_qyia3")])

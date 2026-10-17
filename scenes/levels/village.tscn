@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/levels/level.gd" id="1_level"]
 [ext_resource type="PackedScene" path="res://scenes/maps/village.tscn" id="2_map"]
 [ext_resource type="PackedScene" path="res://scenes/characters/adventurers/knight.tscn" id="3_knight"]
-[ext_resource type="PackedScene" path="res://scenes/characters/enemies/skeleton.tscn" id="4_skeleton"]
+[ext_resource type="PackedScene" path="res://scenes/characters/enemies/skeleton_minion.tscn" id="4_skeleton"]
 [ext_resource type="AudioStream" path="res://assets/audio/music/village_night_ambient.ogg" id="5_ambience"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_night"]
@@ -47,13 +47,16 @@ position = Vector3(0, 0.2, 22)
 [node name="Skeletons" type="Node3D" parent="."]
 
 [node name="Skeleton" parent="Skeletons" instance=ExtResource("4_skeleton")]
+ai_enabled = false
 position = Vector3(1.5, 0.1, 15)
 
 [node name="Skeleton2" parent="Skeletons" instance=ExtResource("4_skeleton")]
+ai_enabled = false
 position = Vector3(5, 0.1, 4)
 rotation = Vector3(0, 1.37, 0)
 
 [node name="Skeleton3" parent="Skeletons" instance=ExtResource("4_skeleton")]
+ai_enabled = false
 position = Vector3(0, 0.1, -5)
 
 [node name="Ambience" type="AudioStreamPlayer" parent="."]

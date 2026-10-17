@@ -1,0 +1,25 @@
+name: GDD
+
+on:
+  push:
+    branches: [main, desenvolvimento, referencia]
+    paths: ['docs/**', '.github/workflows/gdd.yml']
+  pull_request:
+    paths: ['docs/**', '.github/workflows/gdd.yml']
+  workflow_dispatch:
+
+jobs:
+  pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: xu-cheng/latex-action@v4
+        with:
+          root_file: gdd.tex
+          working_directory: docs
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gdd
+          path: docs/gdd.pdf

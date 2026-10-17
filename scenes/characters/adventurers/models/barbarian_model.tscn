@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/kaykit_adventurers/characters/Barbarian.glb" id="1_model"]
+
+[node name="Barbarian" instance=ExtResource("1_model")]
+
+[node name="Barbarian_Round_Shield" parent="Rig/Skeleton3D/handslot_l"]
+visible = false
+
+[node name="Mug" parent="Rig/Skeleton3D/handslot_r"]
+visible = false
+
+[node name="2H_Axe" parent="Rig/Skeleton3D/handslot_r"]
+visible = false

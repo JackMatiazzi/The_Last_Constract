@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/audio/ui_sounds.gd" id="1_ui"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/ui/click.ogg" id="2_click"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/ui/focus.ogg" id="3_focus"]
+
+[node name="UiSounds" type="Node" node_paths=PackedStringArray("click", "focus")]
+script = ExtResource("1_ui")
+click = NodePath("Click")
+focus = NodePath("Focus")
+
+[node name="Click" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_click")
+bus = &"SFX"
+
+[node name="Focus" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_focus")
+volume_db = -6.0
+bus = &"SFX"

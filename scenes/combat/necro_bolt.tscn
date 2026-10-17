@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/combat/magic_bolt.tscn" id="1_bolt"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_necro"]
+shading_mode = 0
+albedo_color = Color(0.55, 1, 0.45, 1)
+emission_enabled = true
+emission = Color(0.3, 0.9, 0.25, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_necro"]
+material = SubResource("StandardMaterial3D_necro")
+radius = 0.22
+height = 0.44
+
+[node name="NecroBolt" instance=ExtResource("1_bolt")]
+speed = 11.0
+max_distance = 24.0
+pierce = false
+
+[node name="Mesh" parent="."]
+mesh = SubResource("SphereMesh_necro")
+
+[node name="Glow" parent="."]
+light_color = Color(0.45, 1, 0.4, 1)
