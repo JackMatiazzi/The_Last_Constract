@@ -15,9 +15,17 @@ func after_test() -> void:
 	Input.action_release("move_forward")
 
 
+func _spawn_prop(prop_path: String, position: Vector3) -> RigidBody3D:
+	var prop := (load(prop_path) as PackedScene).instantiate() as RigidBody3D
+	prop.position = position
+	arena.root.add_child(prop)
+	return prop
+
+
+# o aventureiro da arena nasce olhando para +Z, entao o objeto fica a frente dele
 func _walk_into(prop_path: String, seconds: float) -> float:
-	var knight := arena.spawn(TestArena.KNIGHT, Vector3.ZERO) as Adventurer
-	var prop := arena.spawn(prop_path, Vector3(0, 0.05, -2.0)) as RigidBody3D
+	arena.spawn(TestArena.KNIGHT, Vector3.ZERO)
+	var prop := _spawn_prop(prop_path, Vector3(0, 0.05, 2.0))
 	await arena.wait_physics(10)
 	var start := prop.global_position
 	await arena.send_action("move_forward")
@@ -26,7 +34,7 @@ func _walk_into(prop_path: String, seconds: float) -> float:
 
 
 func test_props_rest_on_the_floor() -> void:
-	var crate := arena.spawn(CRATE, Vector3(0, 0.05, 0)) as RigidBody3D
+	var crate := _spawn_prop(CRATE, Vector3(0, 0.05, 0))
 
 	await arena.wait_seconds(1.0)
 

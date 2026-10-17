@@ -1,1 +1,2 @@
 village_night_ambient.ogg: "Dark Cavern Ambient" (loop 002), Paul Wortmann, CC0 - https://opengameart.org/content/dark-cavern-ambient
+menu_medieval_fair.ogg: "Medieval fair [Loop]", Woli34, CC0 - https://opengameart.org/content/medieval-fair-loop

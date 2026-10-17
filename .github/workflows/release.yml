@@ -2,34 +2,15 @@ name: Release da entrega
 
 on:
   push:
-    tags: ['entrega-*']
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  linux:
-    runs-on: ubuntu-latest
-    container: barichello/godot-ci:4.7.2
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Modelos de exportacao
-        run: |
-          mkdir -p ~/.local/share/godot/export_templates
-          mv /root/.local/share/godot/export_templates/4.7.2.stable ~/.local/share/godot/export_templates/
-
-      - name: Exportar
-        run: |
-          mkdir -p build/linux
-          godot --headless --import
-          godot --headless --export-release "Linux" build/linux/TheLastContract.x86_64
-          tar -czf TheLastContract-linux.tar.gz -C build/linux .
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: linux
-          path: TheLastContract-linux.tar.gz
+  exportar:
+    uses: ./.github/workflows/build.yml
 
   documento:
     runs-on: ubuntu-latest
@@ -47,17 +28,32 @@ jobs:
           path: docs/projeto.pdf
 
   release:
-    needs: [linux, documento]
+    needs: [exportar, documento]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
+      # a tag leva a data do merge no horario de Brasilia; outro merge no mesmo dia atualiza a mesma release
+      - name: Tag da entrega
+        id: tag
+        run: |
+          tag="entrega-$(TZ=America/Sao_Paulo date +%Y-%m-%d)"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "data=$(TZ=America/Sao_Paulo date +%d/%m/%Y)" >> "$GITHUB_OUTPUT"
+          git tag -f "$tag" "$GITHUB_SHA"
+          git push -f origin "refs/tags/$tag"
+
       - uses: actions/download-artifact@v4
         with:
           merge-multiple: true
 
       - uses: softprops/action-gh-release@v2
         with:
-          name: Entrega ${{ github.ref_name }}
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: Entrega ${{ steps.tag.outputs.data }}
           generate_release_notes: true
+          make_latest: true
           files: |
             TheLastContract-linux.tar.gz
+            TheLastContract-windows.zip
             projeto.pdf

@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/maps/village_road/ground.tscn" id="grid_ground"]
+
+[ext_resource type="PackedScene" path="res://scenes/maps/village_road/structure.tscn" id="grid_structure"]
+
+[ext_resource type="PackedScene" path="res://scenes/maps/village_road/objects.tscn" id="grid_objects"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_field"]
+albedo_color = Color(0.2, 0.18, 0.13, 1)
+roughness = 1.0
+
+[sub_resource type="PlaneMesh" id="Mesh_field"]
+material = SubResource("Mat_field")
+size = Vector2(90, 90)
+
+[node name="VillageRoad" type="Node3D"]
+
+[node name="Campo" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.03, -20)
+mesh = SubResource("Mesh_field")
+
+[node name="Chao" parent="." instance=ExtResource("grid_ground")]
+
+[node name="Estrutura" parent="." instance=ExtResource("grid_structure")]
+
+[node name="Objetos" parent="." instance=ExtResource("grid_objects")]

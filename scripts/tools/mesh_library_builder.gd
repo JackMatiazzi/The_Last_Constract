@@ -2,7 +2,7 @@
 class_name MeshLibraryBuilder
 extends RefCounted
 
-# regra: {"dir": pasta, "prefixes": [...], "scale": opcional}
+# regra: {dir, prefixes, scale opcional}; scale porque o GridMap nao escala por celula
 
 
 static func build(rules: Array) -> MeshLibrary:
@@ -38,6 +38,7 @@ static func _add_item(library: MeshLibrary, path: String, scale: float) -> void:
 	library.set_item_shapes(id, [mesh.create_trimesh_shape(), Transform3D.IDENTITY])
 
 
+# o GridMap aceita uma malha por item e um .gltf pode ter varias
 static func _merge_meshes(root: Node, base: Transform3D) -> ArrayMesh:
 	var merged := ArrayMesh.new()
 	for mesh_instance: MeshInstance3D in root.find_children("*", "MeshInstance3D"):

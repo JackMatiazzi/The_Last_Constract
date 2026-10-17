@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/enemies/enemy.tscn" id="1_enemy"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_skeletons/characters/Skeleton_Minion.glb" id="2_model"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_skeletons/accessories/Skeleton_Blade.gltf" id="3_weapon"]
+[ext_resource type="Resource" path="res://resources/enemies/skeleton_minion.tres" id="4_profile"]
+[ext_resource type="Script" path="res://scripts/combat/melee_attack.gd" id="5_attack"]
+[ext_resource type="AudioStream" path="res://resources/audio/swing.tres" id="snd_swing"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hitbox"]
+size = Vector3(1.6, 1.8, 1.6)
+
+[node name="SkeletonMinion" node_paths=PackedStringArray("animation_player", "attack") instance=ExtResource("1_enemy")]
+animation_player = NodePath("Model/Skeleton_Minion/AnimationPlayer")
+attack = NodePath("Model/MeleeAttack")
+profile = ExtResource("4_profile")
+
+[node name="Skeleton_Minion" parent="Model" instance=ExtResource("2_model")]
+
+[node name="handslot_r" type="BoneAttachment3D" parent="Model/Skeleton_Minion/Rig/Skeleton3D"]
+bone_name = "handslot.r"
+bone_idx = 13
+
+[node name="Skeleton_Blade" parent="Model/Skeleton_Minion/Rig/Skeleton3D/handslot_r" instance=ExtResource("3_weapon")]
+
+[node name="MeleeAttack" type="Node3D" parent="Model" node_paths=PackedStringArray("sound")]
+script = ExtResource("5_attack")
+sound = NodePath("Sound")
+cooldown = 1.8
+animations = PackedStringArray("1H_Melee_Attack_Chop", "1H_Melee_Attack_Slice_Diagonal")
+impact_delay = 0.6
+recovery = 0.25
+move_factor = 0.0
+
+[node name="Hitbox" type="Area3D" parent="Model/MeleeAttack"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Model/MeleeAttack/Hitbox"]
+position = Vector3(0, 1.1, 1.1)
+shape = SubResource("BoxShape3D_hitbox")
+
+[editable path="Model/Skeleton_Minion"]
+
+[node name="Sound" type="AudioStreamPlayer3D" parent="Model/MeleeAttack"]
+stream = ExtResource("snd_swing")
+pitch_scale = 0.9
+max_distance = 30.0
+bus = &"SFX"

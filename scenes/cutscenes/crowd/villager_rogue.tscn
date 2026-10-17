@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/kaykit_adventurers/characters/Rogue.glb" id="1_model"]
+
+[node name="RogueVillager" instance=ExtResource("1_model")]
+
+[node name="Knife_Offhand" parent="Rig/Skeleton3D/handslot_l"]
+visible = false
+
+[node name="1H_Crossbow" parent="Rig/Skeleton3D/handslot_r"]
+visible = false
+
+[node name="2H_Crossbow" parent="Rig/Skeleton3D/handslot_r"]
+visible = false
+
+[node name="Knife" parent="Rig/Skeleton3D/handslot_r"]
+visible = false
+
+[node name="Throwable" parent="Rig/Skeleton3D/handslot_r"]
+visible = false
+
+[node name="AnimationPlayer" parent="."]
+autoplay = &"Idle"

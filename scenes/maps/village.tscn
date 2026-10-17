@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/maps/village/ground.tscn" id="grid_ground"]
 
 [ext_resource type="PackedScene" path="res://scenes/maps/village/structure.tscn" id="grid_structure"]
 
 [ext_resource type="PackedScene" path="res://scenes/maps/village/objects.tscn" id="grid_objects"]
+[ext_resource type="PackedScene" path="res://scenes/world/chest.tscn" id="chest"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_edge_x"]
 size = Vector3(50, 6, 1)
@@ -123,3 +124,94 @@ shape = SubResource("BoxShape3D_edge_z")
 [node name="Leste" type="CollisionShape3D" parent="Limites"]
 position = Vector3(24.5, 3, 0)
 shape = SubResource("BoxShape3D_edge_z")
+
+[node name="PlayerSpots" type="Node3D" parent="."]
+
+[node name="Player1" type="Marker3D" parent="PlayerSpots"]
+position = Vector3(0, 0.2, 22)
+
+[node name="Player2" type="Marker3D" parent="PlayerSpots"]
+position = Vector3(-20, 0.2, 20)
+
+[node name="Player3" type="Marker3D" parent="PlayerSpots"]
+position = Vector3(20, 0.2, 20)
+
+[node name="Player4" type="Marker3D" parent="PlayerSpots"]
+position = Vector3(0, 0.2, -23)
+
+[node name="Player5" type="Marker3D" parent="PlayerSpots"]
+position = Vector3(-23, 0.2, -11)
+
+[node name="Player6" type="Marker3D" parent="PlayerSpots"]
+position = Vector3(23, 0.2, -11)
+
+[node name="GroupSpots" type="Node3D" parent="."]
+
+[node name="Group1" type="Marker3D" parent="GroupSpots"]
+position = Vector3(0, 0.1, -5)
+rotation = Vector3(0, 0.0000, 0)
+
+[node name="Group2" type="Marker3D" parent="GroupSpots"]
+position = Vector3(5, 0.1, 4)
+rotation = Vector3(0, 1.3700, 0)
+
+[node name="Group3" type="Marker3D" parent="GroupSpots"]
+position = Vector3(-11, 0.1, -12)
+rotation = Vector3(0, 2.7400, 0)
+
+[node name="Group4" type="Marker3D" parent="GroupSpots"]
+position = Vector3(11, 0.1, -10)
+rotation = Vector3(0, 4.1100, 0)
+
+[node name="Group5" type="Marker3D" parent="GroupSpots"]
+position = Vector3(-11, 0.1, 12)
+rotation = Vector3(0, 5.4800, 0)
+
+[node name="Group6" type="Marker3D" parent="GroupSpots"]
+position = Vector3(11, 0.1, 13)
+rotation = Vector3(0, 0.5668, 0)
+
+[node name="Group7" type="Marker3D" parent="GroupSpots"]
+position = Vector3(-6, 0.1, 19)
+rotation = Vector3(0, 1.9368, 0)
+
+[node name="Group8" type="Marker3D" parent="GroupSpots"]
+position = Vector3(8, 0.1, 19)
+rotation = Vector3(0, 3.3068, 0)
+
+[node name="Group9" type="Marker3D" parent="GroupSpots"]
+position = Vector3(0, 0.1, -18)
+rotation = Vector3(0, 4.6768, 0)
+
+[node name="Group10" type="Marker3D" parent="GroupSpots"]
+position = Vector3(-18, 0.1, -11)
+rotation = Vector3(0, 6.0468, 0)
+
+[node name="Group11" type="Marker3D" parent="GroupSpots"]
+position = Vector3(18, 0.1, -11)
+rotation = Vector3(0, 1.1336, 0)
+
+[node name="Group12" type="Marker3D" parent="GroupSpots"]
+position = Vector3(18, 0.1, 2)
+rotation = Vector3(0, 2.5036, 0)
+
+[node name="Group13" type="Marker3D" parent="GroupSpots"]
+position = Vector3(-18, 0.1, 2)
+rotation = Vector3(0, 3.8736, 0)
+
+[node name="Chests" type="Node3D" parent="."]
+
+[node name="Chest" parent="Chests" instance=ExtResource("chest")]
+position = Vector3(9, 0, -8)
+rotation = Vector3(0, -1.5708, 0)
+
+[node name="Chest2" parent="Chests" instance=ExtResource("chest")]
+position = Vector3(-12, 0, 9)
+rotation = Vector3(0, 1.5708, 0)
+
+[node name="Chest3" parent="Chests" instance=ExtResource("chest")]
+position = Vector3(12, 0, 20)
+rotation = Vector3(0, 3.1416, 0)
+
+[node name="BossSpot" type="Marker3D" parent="."]
+position = Vector3(0, 0.1, 0)

@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/props/crate.tscn" id="4_crate"]
 [ext_resource type="PackedScene" path="res://scenes/props/big_crate.tscn" id="5_big_crate"]
 [ext_resource type="PackedScene" path="res://scenes/props/barrel.tscn" id="6_barrel"]
-[ext_resource type="PackedScene" path="res://scenes/characters/enemies/skeleton.tscn" id="7_skeleton"]
+[ext_resource type="PackedScene" path="res://scenes/characters/enemies/skeleton_minion.tscn" id="7_skeleton"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
 
@@ -31,6 +31,7 @@ environment = SubResource("Environment_env")
 position = Vector3(11.5, 0.2, 11.5)
 
 [node name="Skeleton" parent="." instance=ExtResource("7_skeleton")]
+ai_enabled = false
 position = Vector3(10, 0.2, 5.5)
 
 [node name="Props" type="Node3D" parent="."]

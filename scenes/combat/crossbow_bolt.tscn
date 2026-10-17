@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/projectile.gd" id="1_projectile"]
+[ext_resource type="PackedScene" path="res://scenes/combat/stuck_arrow.tscn" id="3_impact"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_adventurers/accessories/arrow.gltf" id="2_arrow"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_bolt"]
+radius = 0.15
+
+[node name="CrossbowBolt" type="Area3D"]
+collision_layer = 0
+monitorable = false
+script = ExtResource("1_projectile")
+impact_scene = ExtResource("3_impact")
+speed = 30.0
+max_distance = 24.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_bolt")
+
+[node name="Arrow" parent="." instance=ExtResource("2_arrow")]
+rotation = Vector3(1.5708, 0, 0)

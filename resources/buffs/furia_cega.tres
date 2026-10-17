@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="Buff" format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/stat_modifier.gd" id="1_qr6lv"]
+[ext_resource type="Script" path="res://scripts/combat/buff.gd" id="2_27if3"]
+
+[sub_resource type="Resource" id="Resource_q4idb"]
+script = ExtResource("1_qr6lv")
+amount = 1.0
+
+[sub_resource type="Resource" id="Resource_au716"]
+script = ExtResource("1_qr6lv")
+stat = 1
+amount = -3.0
+
+[resource]
+script = ExtResource("2_27if3")
+title = "Fúria Cega"
+flavor = "Mais força do que o corpo aguenta."
+modifiers = Array[ExtResource("1_qr6lv")]([SubResource("Resource_q4idb"), SubResource("Resource_au716")])

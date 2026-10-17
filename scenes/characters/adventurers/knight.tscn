@@ -1,27 +1,28 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/characters/adventurers/adventurer.tscn" id="1_adventurer"]
 [ext_resource type="PackedScene" path="res://scenes/characters/adventurers/models/knight_model.tscn" id="2_model"]
 [ext_resource type="Script" path="res://scripts/combat/melee_attack.gd" id="3_attack"]
-[ext_resource type="AudioStream" path="res://resources/audio/swing.tres" id="4_swing"]
+[ext_resource type="Script" path="res://scripts/combat/block_ability.gd" id="4_block"]
+[ext_resource type="AudioStream" path="res://resources/audio/swing.tres" id="snd_swing"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hitbox"]
 size = Vector3(1.6, 1.8, 1.6)
 
-[node name="Knight" node_paths=PackedStringArray("animation_player", "attack") instance=ExtResource("1_adventurer")]
+[node name="Knight" node_paths=PackedStringArray("animation_player", "attack", "block") instance=ExtResource("1_adventurer")]
 animation_player = NodePath("Model/Knight/AnimationPlayer")
 attack = NodePath("Model/MeleeAttack")
+block = NodePath("Block")
 
 [node name="Knight" parent="Model" instance=ExtResource("2_model")]
 
-[node name="MeleeAttack" type="Node3D" parent="Model" node_paths=PackedStringArray("hitbox", "sound")]
+[node name="MeleeAttack" type="Node3D" parent="Model" node_paths=PackedStringArray("sound")]
 script = ExtResource("3_attack")
+sound = NodePath("Sound")
 cooldown = 0.6
 animations = PackedStringArray("1H_Melee_Attack_Chop", "1H_Melee_Attack_Slice_Diagonal", "1H_Melee_Attack_Slice_Horizontal")
 animation_speed = 1.25
 impact_delay = 0.32
-hitbox = NodePath("Hitbox")
-sound = NodePath("Sound")
 
 [node name="Hitbox" type="Area3D" parent="Model/MeleeAttack"]
 collision_layer = 0
@@ -32,8 +33,11 @@ monitorable = false
 position = Vector3(0, 1.1, 1.1)
 shape = SubResource("BoxShape3D_hitbox")
 
+[node name="Block" type="Node" parent="."]
+script = ExtResource("4_block")
+
 [node name="Sound" type="AudioStreamPlayer3D" parent="Model/MeleeAttack"]
-position = Vector3(0, 1.2, 0.6)
-stream = ExtResource("4_swing")
+stream = ExtResource("snd_swing")
+pitch_scale = 1.0
 max_distance = 30.0
 bus = &"SFX"

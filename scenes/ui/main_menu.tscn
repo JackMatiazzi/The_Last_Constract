@@ -1,0 +1,141 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/main_menu.gd" id="1_menu"]
+[ext_resource type="PackedScene" path="res://scenes/maps/grid_sandbox.tscn" id="2_map"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_adventurers/characters/Knight.glb" id="3_knight"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_skeletons/characters/Skeleton_Minion.glb" id="4_skeleton"]
+[ext_resource type="PackedScene" path="res://scenes/ui/settings_menu.tscn" id="5_settings"]
+[ext_resource type="Script" path="res://scripts/audio/music_cue.gd" id="cue_script"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/menu_medieval_fair.ogg" id="cue_track"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_dusk"]
+sky_top_color = Color(0.12, 0.1, 0.16, 1)
+sky_horizon_color = Color(0.55, 0.32, 0.22, 1)
+ground_horizon_color = Color(0.3, 0.2, 0.15, 1)
+ground_bottom_color = Color(0.06, 0.05, 0.05, 1)
+
+[sub_resource type="Sky" id="Sky_dusk"]
+sky_material = SubResource("ProceduralSkyMaterial_dusk")
+
+[sub_resource type="Environment" id="Environment_menu"]
+background_mode = 2
+sky = SubResource("Sky_dusk")
+tonemap_mode = 2
+fog_enabled = true
+fog_light_color = Color(0.35, 0.24, 0.2, 1)
+fog_density = 0.02
+
+[sub_resource type="Gradient" id="Gradient_shade"]
+colors = PackedColorArray(0.03, 0.02, 0.015, 0.95, 0.03, 0.02, 0.015, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_shade"]
+gradient = SubResource("Gradient_shade")
+fill_to = Vector2(1, 0)
+
+[node name="MainMenu" type="Node3D" node_paths=PackedStringArray("camera_pivot", "knight_animation", "skeleton_animation")]
+script = ExtResource("1_menu")
+camera_pivot = NodePath("CameraPivot")
+knight_animation = NodePath("Knight/AnimationPlayer")
+skeleton_animation = NodePath("Skeleton/AnimationPlayer")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_menu")
+
+[node name="Map" parent="." instance=ExtResource("2_map")]
+
+[node name="Knight" parent="." instance=ExtResource("3_knight")]
+position = Vector3(9, 0, 11)
+scale = Vector3(0.8, 0.8, 0.8)
+
+[node name="Skeleton" parent="." instance=ExtResource("4_skeleton")]
+position = Vector3(9, 0, 13.2)
+rotation = Vector3(0, 3.14159, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+
+[node name="CameraPivot" type="Node3D" parent="."]
+position = Vector3(9, 1, 12)
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot"]
+position = Vector3(0, 1.6, 6.5)
+rotation = Vector3(-0.24, 0, 0)
+fov = 50.0
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Shade" type="TextureRect" parent="UI"]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 760.0
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_shade")
+expand_mode = 1
+
+[node name="MenuPanel" type="MarginContainer" parent="UI"]
+unique_name_in_owner = true
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 620.0
+grow_vertical = 2
+theme_override_constants/margin_left = 72
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_bottom = 48
+
+[node name="Column" type="VBoxContainer" parent="UI/MenuPanel"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="UI/MenuPanel/Column"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "The Last
+Contract"
+
+[node name="Tagline" type="Label" parent="UI/MenuPanel/Column"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 19
+text = "Um contrato do Lorde. Uma vida por tentativa."
+
+[node name="Spacer" type="Control" parent="UI/MenuPanel/Column"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="Buttons" type="VBoxContainer" parent="UI/MenuPanel/Column"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 12
+
+[node name="PlayButton" type="Button" parent="UI/MenuPanel/Column/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "Aceitar contrato"
+
+[node name="SettingsButton" type="Button" parent="UI/MenuPanel/Column/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Configurações"
+
+[node name="QuitButton" type="Button" parent="UI/MenuPanel/Column/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Sair"
+
+[node name="Fill" type="Control" parent="UI/MenuPanel/Column"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Credits" type="Label" parent="UI/MenuPanel/Column"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 14
+text = "André Bartzen Araujo · Jackson Matiazzi · José Maciel Camargo
+Avaliação Grau 2 · Modelos: Kay Lousberg e Quaternius (CC0)"
+
+[node name="SettingsMenu" parent="UI" instance=ExtResource("5_settings")]
+unique_name_in_owner = true
+
+[node name="MusicCue" type="Node" parent="."]
+script = ExtResource("cue_script")
+track = ExtResource("cue_track")

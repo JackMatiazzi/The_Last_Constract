@@ -1,7 +1,5 @@
 extends GdUnitTestSuite
 
-const SKELETON := "res://scenes/characters/enemies/skeleton.tscn"
-
 var arena: TestArena
 
 
@@ -46,7 +44,7 @@ func test_getting_hit_plays_hurt_sound() -> void:
 
 
 func test_skeleton_falls_apart_with_bones_sound() -> void:
-	var skeleton := arena.spawn(SKELETON, Vector3.ZERO) as Enemy
+	var skeleton := arena.spawn(TestArena.SKELETON, Vector3.ZERO) as Enemy
 	await arena.wait_physics(3)
 
 	skeleton.take_damage(99.0)
