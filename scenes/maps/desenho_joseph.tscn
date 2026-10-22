@@ -1,0 +1,53 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="MeshLibrary" path="res://resources/mesh_libraries/ground.res" id="1_ground"]
+[ext_resource type="MeshLibrary" path="res://resources/mesh_libraries/village_structure.res" id="2_structure"]
+[ext_resource type="MeshLibrary" path="res://resources/mesh_libraries/props.res" id="3_props"]
+[ext_resource type="Script" path="res://scripts/world/breakable_props.gd" id="4_breakable"]
+[ext_resource type="PackedScene" path="res://scenes/world/prop_debris.tscn" id="5_debris"]
+
+[sub_resource type="ProceduralSkyMaterial" id="Sky_material"]
+sky_top_color = Color(0.32, 0.44, 0.62, 1)
+sky_horizon_color = Color(0.66, 0.7, 0.76, 1)
+
+[sub_resource type="Sky" id="Sky_day"]
+sky_material = SubResource("Sky_material")
+
+[sub_resource type="Environment" id="Environment_day"]
+background_mode = 2
+sky = SubResource("Sky_day")
+ambient_light_source = 3
+
+[node name="DesenhoJoseph" type="Node3D"]
+editor_description = "Esquema para desenhar o proximo mapa: abra esta cena, clique numa das grades e pinte com a paleta. Para outro mapa, duplique este arquivo.
+Chao: celulas de 2 m, ruas e praca. Estrutura: celulas de 1 m, paredes, pisos e escadas das casas. Objetos: celulas de 1 x 0,5 m; barris e caixotes quebram com o golpe pesado.
+As pecas e grades sao as mesmas da vila."
+
+[node name="Chao" type="GridMap" parent="."]
+position = Vector3(-24, 0, -24)
+mesh_library = ExtResource("1_ground")
+cell_size = Vector3(2, 1, 2)
+cell_center_y = false
+
+[node name="Estrutura" type="GridMap" parent="."]
+position = Vector3(-24, 0, -24)
+mesh_library = ExtResource("2_structure")
+cell_size = Vector3(1, 1, 1)
+cell_center_y = false
+cell_center_x = false
+cell_center_z = false
+
+[node name="Objetos" type="GridMap" parent="."]
+script = ExtResource("4_breakable")
+position = Vector3(-24, 0, -24)
+mesh_library = ExtResource("3_props")
+debris_scene = ExtResource("5_debris")
+cell_size = Vector3(1, 0.5, 1)
+cell_center_y = false
+
+[node name="Ceu" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_day")
+
+[node name="Sol" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.81915206, 0.43938506, -0.36868784, 0, 0.64278764, 0.76604444, 0.57357645, -0.62750685, 0.5265408, 0, 0, 0)
+shadow_enabled = true
