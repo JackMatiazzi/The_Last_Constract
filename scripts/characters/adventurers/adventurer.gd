@@ -4,7 +4,6 @@ extends Character
 signal energy_short(pool: EnergyPool)
 signal ability_changed
 
-const DOUBLE_TAP_WINDOW := 0.3
 const ATTACK_BUFFER := 0.2
 const PITCH_MIN := deg_to_rad(-60.0)
 const PITCH_MAX := deg_to_rad(30.0)
@@ -69,8 +68,8 @@ var stamina: EnergyPool
 # null em quem nao usa mana
 var mana: EnergyPool
 
-var _is_running := false
-var _double_tap_left := 0.0
+# o clique do analogico liga a corrida ate o boneco parar; no teclado corre enquanto segura Espaco
+var _run_toggled := false
 var _attack_buffer_left := 0.0
 # -1 = botao solto; senao, ha quanto tempo o ataque esta segurado
 var _attack_hold := -1.0
@@ -127,10 +126,9 @@ func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority():
 		return
 	_push_bodies(delta)
-	_double_tap_left -= delta
 	_attack_buffer_left -= delta
-	if _is_running and _read_move_input().length() < MOVE_DEADZONE:
-		_is_running = false
+	if _run_toggled and _read_move_input().length() < MOVE_DEADZONE:
+		_run_toggled = false
 	if not is_dead:
 		if not _drain_for_running(delta) and not _drain_for_blocking(delta):
 			stamina.regenerate(delta)
@@ -159,15 +157,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		use_secondary()
 	elif event.is_action_released("secondary"):
 		release_secondary()
-	elif event.is_action_pressed("move_forward") and not event.is_echo():
-		_is_running = _double_tap_left > 0.0
-		_double_tap_left = DOUBLE_TAP_WINDOW
-	elif event.is_action_released("move_forward"):
-		_is_running = false
-	elif event.is_action_pressed("run"):
-		_is_running = true
-	elif event.is_action_pressed("jump"):
-		request_jump()
+	elif event.is_action_pressed("run") and event is InputEventJoypadButton:
+		_run_toggled = true
 	elif event.is_action_pressed("interact"):
 		if revive_target:
 			revive_ally()
@@ -467,7 +458,9 @@ func _read_move_input() -> Vector2:
 
 
 func wants_to_run() -> bool:
-	return _is_running and not _exhausted
+	if _exhausted or input_locked or not is_multiplayer_authority():
+		return false
+	return _run_toggled or Input.is_action_pressed("run")
 
 
 func _update_animation(direction: Vector3) -> void:

@@ -35,8 +35,7 @@ A trilha ambiente toca no bus Music e os efeitos no bus SFX.
 | Ação | Teclado e mouse | Controle (layout Xbox) |
 |---|---|---|
 | Mover | W A S D | Analógico esquerdo |
-| Correr | W duas vezes | Clicar no analógico esquerdo |
-| Pular | Espaço | A |
+| Correr | Segurar Espaço | Clicar no analógico esquerdo |
 | Câmera | Mouse | Analógico direito |
 | Atacar | Botão esquerdo | RT |
 | Habilidade (escudo do Knight, segundo machado do Barbarian) | Botão direito | LT |

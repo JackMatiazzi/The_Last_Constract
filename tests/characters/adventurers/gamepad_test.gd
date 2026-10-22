@@ -80,14 +80,6 @@ func test_right_trigger_attacks() -> void:
 	assert_bool(await _until(func() -> bool: return knight.is_busy)).is_true()
 
 
-func test_a_jumps() -> void:
-	_button(JOY_BUTTON_A)
-	var jumped: bool = await _until(func() -> bool: return knight.velocity.y > 0.0)
-	_button(JOY_BUTTON_A, false)
-
-	assert_bool(jumped).is_true()
-
-
 func test_keyboard_mode_ignores_the_gamepad() -> void:
 	Settings.set_value(&"input_device", Settings.InputDevice.KEYBOARD_MOUSE)
 	var yaw := knight.camera_pivot.rotation.y

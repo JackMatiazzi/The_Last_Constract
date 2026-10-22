@@ -14,9 +14,6 @@ const ANIM_HIT := "Hit_A"
 const ANIM_DEATH := "Death_A"
 const ANIM_BLEND := 0.2
 const HIT_RECOVERY := 0.3
-# o raio que reconhece uma abertura logo abaixo sai um pouco acima dos pes e vai um pouco alem da capsula
-const FEET_HEIGHT := 0.05
-const OPENING_PROBE := 0.25
 const MIN_STAT_FACTOR := 0.2
 # em rede so quem tem autoridade simula; as outras maquinas seguem o estado enviado
 const NET_SEND_INTERVAL := 0.05
@@ -37,10 +34,7 @@ const REMOTE_REACH_SLACK := 1.5
 @export var acceleration := 45.0
 @export var deceleration := 55.0
 @export var turn_speed := 18.0
-@export var jump_velocity := 7.0
 @export var fall_gravity_multiplier := 1.8
-@export var coyote_time := 0.1
-@export var jump_buffer_time := 0.12
 @export var model: Node3D
 @export var animation_player: AnimationPlayer
 @export var attack: Attack
@@ -67,11 +61,8 @@ var _action_time := 0.0
 var _action_cancel_after := INF
 var _action_move_factor := 0.0
 var _holding_pose := false
-var _coyote_left := 0.0
-var _jump_buffer_left := 0.0
 var _stride := 0.0
 var _net_send_left := 0.0
-var _feet_query := PhysicsRayQueryParameters3D.new()
 var _net_position := Vector3.ZERO
 var _net_yaw := 0.0
 var _net_on_floor := true
@@ -87,8 +78,6 @@ func _ready() -> void:
 	animation_player.animation_finished.connect(_on_animation_finished)
 	_net_position = global_position
 	_net_yaw = model.rotation.y
-	_feet_query.collision_mask = collision_mask
-	_feet_query.exclude = [get_rid()]
 
 
 func _physics_process(delta: float) -> void:
@@ -100,7 +89,6 @@ func _physics_process(delta: float) -> void:
 	if is_busy:
 		_action_time += delta
 	_apply_gravity(delta)
-	_try_buffered_jump(delta)
 
 	var wish := _get_move_direction()
 	if is_busy and wish != Vector3.ZERO and is_action_cancelable():
@@ -115,28 +103,9 @@ func _physics_process(delta: float) -> void:
 		_face(direction, delta)
 
 	move_and_slide()
-	_drop_into_opening_below()
 	_update_animation(direction)
 	_count_steps(delta)
 	_send_network_state(delta)
-
-
-# pulando contra a parede acima de uma porta, o corpo trava e o vao fica embaixo dos pes: o
-# personagem comeca a cair na hora, em vez de subir colado na parede ate o fim do pulo. Contra
-# caixote ou muro os pes tambem batem, e o pulo segue normal
-func _drop_into_opening_below() -> void:
-	if velocity.y <= 0.0 or not is_on_wall():
-		return
-	var into := -get_wall_normal().slide(Vector3.UP).normalized()
-	var reach := (collision_shape.shape as CapsuleShape3D).radius + OPENING_PROBE
-	_feet_query.from = global_position + Vector3.UP * FEET_HEIGHT
-	_feet_query.to = _feet_query.from + into * reach
-	if get_world_3d().direct_space_state.intersect_ray(_feet_query).is_empty():
-		velocity.y = 0.0
-
-
-func request_jump() -> void:
-	_jump_buffer_left = jump_buffer_time
 
 
 func can_act() -> bool:
@@ -338,24 +307,8 @@ func _end_action_locally() -> void:
 
 
 func _apply_gravity(delta: float) -> void:
-	if is_on_floor():
-		_coyote_left = coyote_time
-		return
-	_coyote_left -= delta
-	var multiplier := fall_gravity_multiplier if velocity.y < 0.0 else 1.0
-	velocity.y -= gravity * multiplier * delta
-
-
-func _try_buffered_jump(delta: float) -> void:
-	if _jump_buffer_left <= 0.0:
-		return
-	_jump_buffer_left -= delta
-	if _coyote_left > 0.0 and can_act():
-		if is_busy:
-			_end_action()
-		velocity.y = jump_velocity
-		_jump_buffer_left = 0.0
-		_coyote_left = 0.0
+	if not is_on_floor():
+		velocity.y -= gravity * fall_gravity_multiplier * delta
 
 
 func _count_steps(delta: float) -> void:

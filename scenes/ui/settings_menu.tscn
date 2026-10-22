@@ -209,11 +209,11 @@ layout_mode = 2
 layout_mode = 2
 theme_type_variation = &"MutedLabel"
 script = ExtResource("hint_script")
-text = "Mover: W A S D   ·   Correr: W duas vezes   ·   Pular: Espaço
+text = "Mover: W A S D   ·   Correr: segurar Espaço
 Atacar: botão esquerdo   ·   Habilidade: botão direito   ·   Câmera: mouse   ·   Pausar: Esc"
-keyboard_text = "Mover: W A S D   ·   Correr: W duas vezes   ·   Pular: Espaço
+keyboard_text = "Mover: W A S D   ·   Correr: segurar Espaço
 Atacar: botão esquerdo   ·   Habilidade: botão direito   ·   Câmera: mouse   ·   Pausar: Esc"
-gamepad_text = "Mover: analógico esquerdo   ·   Correr: clicar no analógico esquerdo   ·   Pular: A
+gamepad_text = "Mover: analógico esquerdo   ·   Correr: clicar no analógico esquerdo
 Atacar: RT   ·   Habilidade: LT   ·   Câmera: analógico direito   ·   Pausar: Start"
 
 [node name="BackButton" type="Button" parent="Center/Panel/Content"]

@@ -12,7 +12,7 @@ func before_test() -> void:
 
 
 func after_test() -> void:
-	for action in ["move_forward", "run", "jump"]:
+	for action in ["move_forward", "run"]:
 		Input.action_release(action)
 
 
@@ -42,8 +42,8 @@ func test_walking_and_running_have_their_own_states() -> void:
 	assert_str(knight.animation_player.current_animation).is_equal(Character.ANIM_RUN)
 
 
-func test_jumping_goes_through_air_and_lands_idle() -> void:
-	await arena.send_action("jump")
+func test_falling_goes_through_air_and_lands_idle() -> void:
+	knight.global_position.y = 1.5
 	assert_bool(await _until_state("Air")).is_true()
 	assert_str(knight.animation_player.current_animation).is_equal(Character.ANIM_AIR)
 
@@ -87,8 +87,8 @@ func test_dead_adventurer_ignores_input() -> void:
 	knight.take_damage(99.0)
 	assert_str(_state()).is_equal("Dead")
 
-	await arena.send_action("jump")
-	await arena.wait_physics(3)
+	await arena.send_action("move_forward")
+	await arena.wait_physics(5)
 
-	assert_float(knight.velocity.y).is_less_equal(0.0)
+	assert_float(Vector2(knight.velocity.x, knight.velocity.z).length()).is_equal(0.0)
 	assert_str(_state()).is_equal("Dead")

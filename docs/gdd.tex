@@ -145,7 +145,7 @@ Não existe sistema de níveis para jogadores ou inimigos.
 \toprule
 \textbf{Mecânica} & \textbf{Descrição} \\
 \midrule
-Movimentação & Terceira pessoa, com exploração livre da vila. Resposta rápida: atinge a velocidade de andar (4\,m/s) em cerca de 0,1\,s e para em cerca de 0,1\,s; correr chega a 7,5\,m/s e gasta estamina. O pulo sobe e cai num arco firme (a queda é mais rápida que a subida) e perdoa pequenos erros de tempo: pular logo após sair de uma borda ou um instante antes de aterrissar ainda funciona. Pular contra a parede acima de uma porta não deixa o personagem colado nela: ao bater com o vão livre embaixo dos pés, ele começa a cair e entra pela porta. \\
+Movimentação & Terceira pessoa, com exploração livre da vila. Resposta rápida: atinge a velocidade de andar (4\,m/s) em cerca de 0,1\,s e para em cerca de 0,1\,s; correr chega a 7,5\,m/s e gasta estamina. Não há pulo: segurar Espaço corre, e soltar volta a andar. \\
 Combate & Corpo a corpo e à distância, conforme o aventureiro escolhido. Clique é o ataque rápido; segurar o botão é o ataque pesado (mais lento e mais forte). Cada golpe rápido tira 1 ponto de vida; o alvo reage ao dano e, ao chegar a zero, morre. \\
 Energia & Estamina para todos (correr, escudo, golpes físicos) e mana para o Mage (feitiços). Gastar pausa a recarga por um instante; depois ela volta sozinha. O dano do golpe acompanha a energia paga: com metade do custo, metade do dano. Detalhes em \ref{sec:energia}. \\
 Vida & Pontos inteiros: aventureiros têm 10 e mortos-vivos têm 5. Uma barra de vida flutua sobre cada personagem (verde para aventureiros, vermelha para mortos-vivos). Ao levar dano, um rastro claro mostra o pedaço perdido antes de encolher e um número de dano sobe acima da cabeça. \\
@@ -177,8 +177,7 @@ O jogador escolhe em Configurações $\rightarrow$ Controles se joga com \textbf
 \textbf{Ação} & \textbf{Teclado e mouse} & \textbf{Controle} \\
 \midrule
 Mover      & W, A, S, D (relativo à câmera) & Analógico esquerdo \\
-Correr     & W duas vezes seguidas; corre enquanto W estiver pressionado & Clicar no analógico esquerdo; corre até soltar o analógico \\
-Pular      & Espaço (vale apertar um pouco antes de tocar o chão) & A \\
+Correr     & Segurar Espaço & Clicar no analógico esquerdo; corre até soltar o analógico \\
 Câmera     & Movimento do mouse (sobre o ombro direito) & Analógico direito \\
 Atacar     & Botão esquerdo: clique é o ataque rápido; segurar 0,35\,s dispara o pesado. Um clique pouco antes da recarga terminar fica guardado & RT (mesmas regras) \\
 Habilidade & Botão direito: o Knight ergue o escudo enquanto segura; o Barbarian golpeia com o segundo machado & LT \\
@@ -255,7 +254,7 @@ Cada aventureiro tem um ataque único. Todos atacam na direção em que a câmer
 Regras comuns de ataque, pensadas para o controle não ficar pesado:
 \begin{itemize}
     \item durante o ataque o aventureiro ainda se move a 30\% da velocidade, sem girar, para manter a mira;
-    \item logo depois do impacto, mover, pular ou atacar de novo corta o resto da animação; parado, a animação termina normalmente;
+    \item logo depois do impacto, mover ou atacar de novo corta o resto da animação; parado, a animação termina normalmente;
     \item ser atingido durante a preparação (antes do impacto) cancela o golpe; depois do impacto, o golpe já contou;
     \item ao ser atingido, o aventureiro recupera o controle em 0,3\,s.
 \end{itemize}
@@ -388,7 +387,7 @@ As cutscenes usam o AnimationPlayer do próprio Godot: câmeras, legendas, fades
 
 \subsection{Testes automatizados}
 
-O projeto usa o gdUnit4 (versão 6.2.1). São 394 testes em 51 suítes, incluindo a mira dos ataques à distância, organizados por área: seleção de aventureiro, criação do aventureiro escolhido na partida, cena de execução, um teste específico para cada personagem (Knight, Barbarian, Mage, Rogue e Skeleton Minion), personagem base (vida, morte, buffs), percepção e cérebro dos mortos-vivos (visão, audição, memória, despertar, perseguição, ataque com aviso, busca e navegação contornando paredes), habilidades do botão direito (escudo do Knight, segundo machado do Barbarian), jogo pelo controle (analógicos, gatilhos, filtro por dispositivo, navegação nos menus), formação do elite, movimento do aventureiro (aceleração, andar, correr, pulo com tolerâncias, mira pela câmera), comandos de ataque (combo, cancelamento, ataque guardado, golpe interrompido), combate corpo a corpo e à distância, estado da missão, fase da vila (sorteio dos encontros e alcance pela navegação), áudio, baú e poção, Necromante e vitória, configurações, HUD, barra de vida, tela de morte e pausa, máquina de estados do jogador, energia (custos, golpe pesado, dano proporcional, corrida e escudo), votação, histórico de dano e placar, inventário rápido, beber segurando E, troca de habilidade, poção e objetos que quebram, portal e HUD em cruz, e funções de rede do lobby. Para rodar: aba gdUnit do editor ou o workflow de testes no GitHub. Além deles, dois testes de ponta a ponta rodam o jogo de verdade a partir do menu, apertando os mesmos botões que o jogador: um contrato solo até a segunda tentativa e uma partida em grupo com dois processos ligados pela rede local (dano entre máquinas, pedido forjado recusado pelo host, reviver pela rede, votação e placar). Rodam com \texttt{tests/e2e/run\_e2e.sh}, também no GitHub.
+O projeto usa o gdUnit4 (versão 6.2.1). São 387 testes em 51 suítes, incluindo a mira dos ataques à distância, organizados por área: seleção de aventureiro, criação do aventureiro escolhido na partida, cena de execução, um teste específico para cada personagem (Knight, Barbarian, Mage, Rogue e Skeleton Minion), personagem base (vida, morte, buffs), percepção e cérebro dos mortos-vivos (visão, audição, memória, despertar, perseguição, ataque com aviso, busca e navegação contornando paredes), habilidades do botão direito (escudo do Knight, segundo machado do Barbarian), jogo pelo controle (analógicos, gatilhos, filtro por dispositivo, navegação nos menus), formação do elite, movimento do aventureiro (aceleração, andar, correr segurando Espaço, queda, mira pela câmera), comandos de ataque (combo, cancelamento, ataque guardado, golpe interrompido), combate corpo a corpo e à distância, estado da missão, fase da vila (sorteio dos encontros e alcance pela navegação), áudio, baú e poção, Necromante e vitória, configurações, HUD, barra de vida, tela de morte e pausa, máquina de estados do jogador, energia (custos, golpe pesado, dano proporcional, corrida e escudo), votação, histórico de dano e placar, inventário rápido, beber segurando E, troca de habilidade, poção e objetos que quebram, portal e HUD em cruz, e funções de rede do lobby. Para rodar: aba gdUnit do editor ou o workflow de testes no GitHub. Além deles, dois testes de ponta a ponta rodam o jogo de verdade a partir do menu, apertando os mesmos botões que o jogador: um contrato solo até a segunda tentativa e uma partida em grupo com dois processos ligados pela rede local (dano entre máquinas, pedido forjado recusado pelo host, reviver pela rede, votação e placar). Rodam com \texttt{tests/e2e/run\_e2e.sh}, também no GitHub.
 
 % ===============================================================
 \section{Assets}

@@ -8,7 +8,7 @@ const PATH := "user://settings.cfg"
 # tremida do mouse na mesa nao tira do modo controle
 const MOUSE_SWITCH_DISTANCE := 4.0
 const SECTION := "settings"
-const GAMEPLAY_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "jump", "attack", "secondary",
+const GAMEPLAY_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "attack", "secondary",
 		"run", "look_left", "look_right", "look_up", "look_down", "interact", "scoreboard",
 		"next_ability", "next_item"]
 
