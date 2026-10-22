@@ -29,7 +29,7 @@
 \newcommand{\subtitulo}{Mini Game Design Document}
 \newcommand{\equipe}{André Bartzen Araujo \and Jackson Matiazzi \and José Maciel Camargo}
 \newcommand{\disciplina}{Disciplina --- Avaliação Grau 2}
-\newcommand{\gddversao}{0.24}
+\newcommand{\gddversao}{0.25}
 
 \definecolor{Destaque}{HTML}{7A2E2E}
 \definecolor{Pendente}{HTML}{9A9A9A}
@@ -149,14 +149,14 @@ Movimentação & Terceira pessoa, com exploração livre da vila. Resposta rápi
 Combate & Corpo a corpo e à distância, conforme o aventureiro escolhido. Clique é o ataque rápido; segurar o botão é o ataque pesado (mais lento e mais forte). Cada golpe rápido tira 1 ponto de vida; o alvo reage ao dano e, ao chegar a zero, morre. \\
 Energia & Estamina para todos (correr, escudo, golpes físicos) e mana para o Mage (feitiços). Gastar pausa a recarga por um instante; depois ela volta sozinha. O dano do golpe acompanha a energia paga: com metade do custo, metade do dano. Detalhes em \ref{sec:energia}. \\
 Vida & Pontos inteiros: aventureiros têm 10 e mortos-vivos têm 5. Uma barra de vida flutua sobre cada personagem (verde para aventureiros, vermelha para mortos-vivos). Ao levar dano, um rastro claro mostra o pedaço perdido antes de encolher e um número de dano sobe acima da cabeça. \\
-Vida única & O jogador possui apenas uma vida por tentativa. Em grupo, um aliado com uma poção no inventário pode reviver quem caiu: perto do caído aparece ``E Reviver'' sobre ele, e ele volta com metade da vida. Se todos caem, abre a tela de morte. \\
+Vida única & O jogador possui apenas uma vida por tentativa. Em grupo, um aliado com uma poção no inventário pode reviver quem caiu: perto do caído aparece ``E Reviver'' sobre ele, e ele volta com metade da vida. A poção só é gasta quando o reviver vale: se outro aliado reviveu antes, ela continua no inventário. Se todos caem, abre a tela de morte. \\
 Grupos de inimigos & Mortos-vivos organizados em grupos espalhados pelo mapa. \\
 Posições aleatórias & A cada tentativa, o jogador renasce em um ponto sorteado e os grupos de inimigos são reposicionados. \\
 Reviver ou Desistir & Escolha apresentada quando o grupo inteiro cai. Desistir (só o host) encerra a missão com a execução do aventureiro. \\
 Buffs acumulativos & Ao reviver, o grupo vota num entre dois buffs aleatórios; os buffs se acumulam entre tentativas. \\
 Buffs dos inimigos & Os mortos-vivos recebem os mesmos buffs escolhidos pelo jogador nas tentativas anteriores. \\
 Boss & O Necromante, um mago esqueleto que surge na praça quando todos os grupos caem: mantém distância, dispara rajadas mágicas e levanta mortos-vivos ao seu redor. \\
-Objetos interativos & Baús espalhados pela vila: perto de um, aparece o aviso para abrir; aberto, solta uma poção. Tocar na poção a guarda no inventário (até 4); com o inventário cheio ela fica no chão. Um golpe ou projétil de aventureiro quebra a poção que está no chão, e ela se perde. \\
+Objetos interativos & Baús espalhados pela vila: perto de um, aparece o aviso para abrir; aberto, solta uma poção. Tocar na poção a guarda no inventário (até 4); com o inventário cheio ela fica no chão e é pega assim que sobrar espaço, se o aventureiro ainda estiver em cima dela. Em grupo, dois jogadores na mesma poção não levam uma cada: o host decide quem pegou. Um golpe ou projétil de aventureiro quebra a poção que está no chão, e ela se perde. \\
 Inventário rápido & Itens guardados para usar quando quiser: a poção de vida cura 3 ao ser usada (não é gasta com a vida cheia) e serve para reviver um aliado. A roda do mouse para baixo troca o item selecionado; segurar E por 0,6\,s bebe (o gole deixa o aventureiro exposto). \\
 Objetos quebráveis & Barris, caixotes e barris de bebida quebram com o ataque pesado (golpe ou projétil), soltando lascas; carroças, cercas e tochas aguentam. Evita ficar encurralado contra o cenário. \\
 Troca de habilidade & A roda do mouse para cima troca a habilidade do ataque principal. O Mage alterna entre o Projétil mágico e o Portal; os outros aventureiros têm uma habilidade por enquanto. \\
@@ -337,7 +337,7 @@ Configurações & Áudio (geral, música, efeitos), vídeo (tela cheia, VSync) e
 HUD & Tentativa atual, vida do jogador em número e barra, estamina (amarela) e mana (azul, só o Mage), bênçãos ativas com efeito e acúmulos, aviso de abates e quedas no canto e placar segurando Tab. No canto inferior esquerdo, uma cruz de slots com ícones: em cima a habilidade ativa (com o custo em \% da barra no canto e o nome ao lado), à esquerda o botão direito (escudo ou segundo machado; vazio para quem não tem) e embaixo o item rápido (com a quantidade e o lembrete ``segure E''). Segurar o ataque ou o E enche um anel dourado em volta do slot correspondente, mostrando quanto falta para o golpe pesado ou o gole. Os ícones são renderizados dos próprios modelos 3D do jogo. Para Mage e Rogue, e com o Portal ativo, uma mira no centro da tela indica o alvo. \\
 Barras 3D & Sobre os mortos-vivos (vermelha, com rastro do dano); escondida enquanto o morto-vivo dorme, aparece quando ele começa a levantar. Sobre os aliados, nome e barra verde; sobre um aliado caído, o aviso de reviver para quem tem poção por perto. O jogador usa a barra do HUD. Números de dano sobem de todos os personagens \\
 Entrada na missão & Cena curta à noite: o aventureiro escolhido chega pela estrada até a entrada da vila (``Contrato aceito.'', ``O Lorde quer a vila livre dos mortos.''); em grupo, os aliados vêm em formação atrás. Qualquer tecla marca ``pronto''; a partida começa quando todos estão prontos \\
-Pausa & Continuar, Configurações e Abandonar contrato (com confirmação; leva à execução). Em grupo, o jogo não congela e abandonar tira só quem saiu \\
+Pausa & Continuar, Configurações e Abandonar contrato (com confirmação; leva à execução). Em grupo, o jogo não congela, mas o aventureiro para de obedecer enquanto o menu está aberto (solta o escudo e cancela o que estava segurado); abandonar tira só quem saiu \\
 Morte & Histórico de dano da vida (de quem veio cada golpe, curas e o golpe final), tentativa, bênçãos acumuladas, Reviver ou Desistir (só o host; com confirmação; leva à execução). Reviver mostra duas cartas de bênção para votar, com o mouse ou as teclas 1 e 2 \\
 Execução & Cena em duas tomadas: o aventureiro escolhido vai embora pela estrada da vila ao entardecer (``Ele deu as costas ao contrato''); corta para a praça pública, onde ele está ajoelhado num cadafalso diante da multidão, ouve o veredito do Lorde e recebe o golpe de machado do carrasco encapuzado, enquanto a multidão comemora; termina em ``Contrato encerrado'' e volta ao menu. Qualquer tecla pula \\
 \bottomrule
@@ -378,7 +378,7 @@ O aventureiro tem um nó \texttt{StateMachine} com um nó filho por estado, no m
 
 \subsection{Rede (co-op)}
 
-Um jogador hospeda (ENet, porta UDP 7777) e os outros entram pelo endereço dele. Cada máquina manda no movimento do próprio aventureiro e envia posição e animação 20 vezes por segundo; o host manda nos mortos-vivos, no elite, no boss e na votação. O dano é aplicado na máquina de quem é dono do alvo. Antes de começar cada fase todos esperam a última máquina carregar, para nenhuma mensagem chegar a uma cena que ainda não existe. Jogar sozinho usa o mesmo código, sem rede. Entradas vindas de outros jogadores são validadas (índices, remetente, valores finitos e nomes sem caracteres de controle).
+Um jogador hospeda (ENet, porta UDP 7777) e os outros entram pelo endereço dele. Cada máquina manda no movimento do próprio aventureiro e envia posição e animação 20 vezes por segundo; o host manda nos mortos-vivos, no elite, no boss e na votação. O dano é aplicado na máquina de quem é dono do alvo. Antes de começar cada fase todos esperam a última máquina carregar, para nenhuma mensagem chegar a uma cena que ainda não existe. Jogar sozinho usa o mesmo código, sem rede. Todo pedido que chega de outra máquina é conferido antes de valer: quem pediu (só o dono do atacante relata o golpe dele), se ele está vivo e perto do que quer mexer (até 35\,m para tiros, o alcance da seta mais o que dá para andar enquanto ela voa) e se o valor é plausível (dano ou cura de no máximo 20, perto do golpe mais forte do jogo). Baú, barril e poção são decididos pelo host, que avisa todas as máquinas juntas; a queda de cada jogador conta uma vez só no placar; depois do início ninguém troca de aventureiro nem de nome; e nomes perdem caracteres de controle e invisíveis.
 
 \subsection{Mapa}
 
@@ -411,8 +411,8 @@ O projeto utiliza pacotes gratuitos de modelos 3D e áudio, todos sob licença \
 
 \section{Publicação}
 
-O jogo é exportado para Windows e Linux (64 bits) como um executável único, com o conteúdo embutido, e publicado no itch.io. Para jogar em grupo, o host precisa estar na mesma rede local que os outros, ou liberar a porta UDP 7777 no roteador, ou usar uma VPN de jogo (Radmin, Tailscale). A versão para navegador não é usada porque o jogo depende do renderizador Forward+ (sombras, névoa e luzes dinâmicas), que o navegador não suporta. O build de Linux e este documento em PDF são gerados pelo GitHub Actions (workflows \texttt{build-linux.yml} e \texttt{gdd.yml}).
+O jogo é exportado para Windows e Linux (64 bits) como um executável único, com o conteúdo embutido, e publicado no itch.io. Para jogar em grupo, o host precisa estar na mesma rede local que os outros, ou liberar a porta UDP 7777 no roteador, ou usar uma VPN de jogo (Radmin, Tailscale). A versão para navegador não é usada porque o jogo depende do renderizador Forward+ (sombras, névoa e luzes dinâmicas), que o navegador não suporta. O GitHub Actions gera os executáveis de Windows e Linux em todo pull request para a \texttt{main} (\texttt{build.yml}), publica uma release com os dois a cada merge na \texttt{main} (\texttt{release.yml}) e gera este documento em PDF (\texttt{gdd.yml}). Como o executável não é assinado, o Windows mostra o aviso do SmartScreen na primeira execução (``Mais informações'', ``Executar assim mesmo''); quem hospeda precisa permitir o jogo no firewall, marcando também a rede Pública, que é como redes de faculdade e VPNs costumam aparecer.
 
-O executável usa o ícone do jogo (o Knight sob a luz verde do Necromante). O README do projeto traz os controles, como rodar, como testar e os créditos, e o workflow \texttt{.github/workflows/tests.yml} roda a suíte de testes a cada push e pull request.
+O executável usa o ícone do jogo (o Knight sob a luz verde do Necromante). O README do projeto traz os controles, como rodar, como testar e os créditos, e os workflows \texttt{tests.yml} e \texttt{e2e.yml} rodam os testes unitários e os de ponta a ponta a cada pull request.
 
 \end{document}
