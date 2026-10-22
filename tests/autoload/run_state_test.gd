@@ -59,3 +59,35 @@ func test_reset_clears_attempts_and_buffs() -> void:
 
 	assert_int(RunState.attempt).is_equal(1)
 	assert_array(RunState.buffs).is_empty()
+
+
+func _report(victim_peer: int, killer_peer: int, helpers: Array) -> Dictionary:
+	return {"victim_peer": victim_peer, "victim": "Esqueleto", "killer_peer": killer_peer, "killer": "Jackson", "cause": "Esqueleto", "helpers": helpers}
+
+
+func test_a_kill_counts_for_the_killer_and_assists_for_the_helpers() -> void:
+	RunState._apply_death(_report(0, 1, [2, 1, 3]))
+
+	assert_int(RunState.stats_of(1).kills).is_equal(1)
+	assert_int(RunState.stats_of(1).assists).is_equal(0)
+	assert_int(RunState.stats_of(2).assists).is_equal(1)
+	assert_int(RunState.stats_of(3).assists).is_equal(1)
+
+
+func test_a_fallen_player_counts_a_death_with_its_cause() -> void:
+	RunState._apply_death(_report(2, 0, []))
+
+	assert_int(RunState.stats_of(2).deaths).is_equal(1)
+	assert_str(RunState.stats_of(2).last_death).is_equal("Esqueleto")
+
+
+func test_an_enemy_that_dies_to_nobody_counts_nothing() -> void:
+	RunState._apply_death(_report(0, 0, []))
+
+	assert_bool(RunState.stats.is_empty()).is_true()
+
+
+func test_a_death_report_from_outside_the_match_is_ignored() -> void:
+	RunState._report_death({"cause": "Esqueleto"})
+
+	assert_bool(RunState.stats.is_empty()).is_true()

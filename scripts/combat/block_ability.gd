@@ -2,7 +2,9 @@ class_name BlockAbility
 extends Node
 
 @export var animation := "Blocking"
-@export var move_factor := 0.35
+@export var icon: Texture2D
+# a pose do escudo e parada; andar com ela deslizaria ate o tronco ter animacao propria
+@export var move_factor := 0.0
 # graus, a frente do personagem
 @export var arc_degrees := 140.0
 

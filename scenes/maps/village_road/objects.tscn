@@ -1,10 +1,15 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="MeshLibrary" path="res://resources/mesh_libraries/props.res" id="props_lib"]
 
+[ext_resource type="Script" path="res://scripts/world/breakable_props.gd" id="breakable_script"]
+[ext_resource type="PackedScene" path="res://scenes/world/prop_debris.tscn" id="debris_scene"]
+
 [node name="Objetos" type="GridMap"]
+script = ExtResource("breakable_script")
 position = Vector3(-16, 0, -40)
 mesh_library = ExtResource("props_lib")
+debris_scene = ExtResource("debris_scene")
 cell_size = Vector3(1, 0.5, 1)
 cell_center_x = false
 cell_center_y = false

@@ -1,6 +1,9 @@
 class_name EnemyProfile
 extends Resource
 
+# aparece no placar e no aviso de quem derrubou quem
+@export var display_name := "Morto-vivo"
+
 @export_group("Percepcao")
 @export var sight_range := 14.0
 @export var sight_angle := 120.0 # graus, cone inteiro

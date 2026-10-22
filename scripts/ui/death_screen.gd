@@ -6,8 +6,10 @@ signal gave_up
 
 const SHOW_DELAY := 1.2
 
-@export var player: Character
 @export var buff_card_scene: PackedScene
+
+# em grupo o host sorteia as opcoes e todos votam nelas
+var _vote_choices: Array[Buff] = []
 
 @onready var death_panel: Control = %DeathPanel
 @onready var confirm_panel: Control = %ConfirmPanel
@@ -20,20 +22,24 @@ const SHOW_DELAY := 1.2
 func _ready() -> void:
 	assert(buff_card_scene, "DeathScreen precisa de buff_card_scene")
 	hide()
-	if player:
-		bind(player)
 	%ReviveButton.pressed.connect(_on_revive_pressed)
 	%GiveUpButton.pressed.connect(_show_panel.bind(confirm_panel))
 	%CancelGiveUpButton.pressed.connect(_show_panel.bind(death_panel))
 	%ConfirmGiveUpButton.pressed.connect(gave_up.emit)
 
 
-func bind(new_player: Character) -> void:
-	player = new_player
-	player.died.connect(_on_player_died)
+func set_recap(text: String) -> void:
+	%RecapLabel.text = text
+	%RecapLabel.visible = not text.is_empty()
 
 
-func _on_player_died() -> void:
+func open_vote(choices: Array[Buff], can_give_up: bool) -> void:
+	_vote_choices = choices
+	%GiveUpButton.visible = can_give_up
+	open()
+
+
+func open() -> void:
 	await get_tree().create_timer(SHOW_DELAY).timeout
 	attempt_label.text = "Tentativa %d" % RunState.attempt
 	active_buffs_label.text = _active_buffs_text()
@@ -54,13 +60,12 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _on_revive_pressed() -> void:
-	var choices := RunState.roll_choices()
-	if choices.is_empty():
+	if _vote_choices.is_empty():
 		revive_chosen.emit(null)
 		return
 	for child in cards.get_children():
 		child.queue_free()
-	for buff in choices:
+	for buff in _vote_choices:
 		var card := buff_card_scene.instantiate() as BuffCard
 		cards.add_child(card)
 		card.setup(buff, RunState.stacks_of(buff))

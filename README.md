@@ -14,6 +14,7 @@ reviva com uma bênção (que os mortos-vivos também recebem) ou desista e enfr
 |---|---|---|
 | 08/10 | Protótipo | Knight anda, corre, pula, empurra caixotes e barris e ataca um esqueleto de treino num mapa de teste |
 | 15/10 | Primeiro nível (som 3D) | Vila medieval à noite, com sons posicionados nos personagens e trilha ambiente |
+| 22/10 | Personagem jogável (máquinas de estados) | Aventureiro controlado por máquina de estados, estamina e mana, golpe rápido e pesado, inventário rápido, portal do Mage e co-op online para até 4 |
 
 ### Primeiro nível
 
@@ -30,17 +31,28 @@ lado mudam conforme a distância e a posição em relação à câmera:
 Cada som usa um `AudioStreamRandomizer` com variação de tom e de arquivo, para não repetir igual.
 A trilha ambiente toca no bus Music e os efeitos no bus SFX.
 
+### Personagem jogável
+
+O aventureiro é controlado por uma máquina de estados: cada estado (`Idle`, `Walk`, `Run`, `Air`,
+`Action`, `Block`, `Dead`) é um nó filho de `StateMachine` e decide a animação e para onde passar.
+Correr, o escudo e os golpes gastam estamina; o Mage paga os feitiços com mana. Clicar é o golpe
+rápido; segurar é o pesado, que também quebra barris e caixotes. Em grupo, até quatro jogadores
+entram pelo lobby (um hospeda pela porta 7777) e cada um controla o próprio aventureiro.
+
 ## Como jogar
 
 | Ação | Teclado e mouse | Controle (layout Xbox) |
 |---|---|---|
 | Mover | W A S D | Analógico esquerdo |
-| Correr | W duas vezes | Clicar no analógico esquerdo |
-| Pular | Espaço | A |
+| Correr | Segurar Espaço | Clicar no analógico esquerdo |
 | Câmera | Mouse | Analógico direito |
 | Atacar | Botão esquerdo | RT |
 | Habilidade (escudo do Knight, segundo machado do Barbarian) | Botão direito | LT |
-| Interagir (abrir baú) | E | X |
+| Trocar habilidade (Mage: projétil ou portal) | Roda do mouse para cima | Direcional para cima |
+| Trocar item | Roda do mouse para baixo | Direcional para baixo |
+| Interagir (abrir baú, reviver aliado) | E | X |
+| Beber o item selecionado | Segurar E | Segurar X |
+| Placar (em grupo) | Segurar Tab | Segurar Back |
 | Pausar | Esc | Menu (Start) |
 
 **Objetivo:** limpe os grupos de esqueletos espalhados pela vila (a HUD mostra quantos faltam).
@@ -50,6 +62,9 @@ Quando o último cair, o Necromante surge na praça. Derrote-o para cumprir o co
 
 1. Abra o projeto no Godot 4.7 (Forward+).
 2. Rode a cena principal (F5): menu → seleção de aventureiro → entrada na missão → vila.
+3. Em grupo: menu → Co-op. Quem hospeda clica no próprio endereço para copiar e manda aos outros,
+   que entram por ele. Na rede da faculdade, usem o Radmin VPN; quem hospeda libera o jogo no
+   firewall marcando também a rede Pública.
 
 O mapa do protótipo continua em `scenes/levels/prototype.tscn`.
 
@@ -61,6 +76,8 @@ No GitHub Actions, a cada push e pull request:
 
 - **Testes** (`test`): roda toda a suíte do gdUnit4.
 - **Smoke** (`smoke`): abre a cena principal sem tela por 300 quadros e falha se aparecer qualquer erro no log.
+- **Ponta a ponta** (`e2e`): joga um contrato solo do menu até a segunda tentativa e uma partida em grupo
+  com dois processos ligados pela rede local (`tests/e2e/run_e2e.sh`).
 - **Documento**: compila `docs/projeto.tex` quando algo em `docs/` muda.
 
 Antes de uma entrega, o pull request para o `main` também roda o **Build**, que exporta o jogo para Linux e Windows.
@@ -68,7 +85,7 @@ O Dependabot abre um pull request por semana na `desenvolvimento` quando alguma 
 
 ### Release de cada entrega
 
-Todo merge no `main` gera a release sozinho: o workflow **Release da entrega** cria a tag
+Todo merge no `main` que não mexa só no CI ou no README gera a release sozinho: o workflow **Release da entrega** cria a tag
 `entrega-AAAA-MM-DD` (data de Brasília), exporta o jogo para Linux e Windows, compila o documento e publica
 tudo na página de Releases. Um segundo merge no mesmo dia move a tag e atualiza a mesma release.
 

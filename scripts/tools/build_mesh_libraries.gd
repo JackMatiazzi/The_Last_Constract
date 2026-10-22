@@ -10,9 +10,10 @@ const OUTPUT_DIR := "res://resources/mesh_libraries"
 const PREVIEW_SIZE := 128
 
 const LIBRARIES := {
+	# so pisos Quaternius: os do KayKit sao cor lisa e destoam do tijolo com textura;
+	# o ponto final pega so a peca inteira de madeira, sem as metades e beiradas
 	"ground": [
-		{"dir": VILLAGE, "prefixes": ["Floor_Brick", "Floor_RedBrick", "Floor_UnevenBrick"]},
-		{"dir": DUNGEON, "prefixes": ["floor_dirt_small", "floor_tile_small", "floor_wood_small"]},
+		{"dir": VILLAGE, "prefixes": ["Floor_Brick", "Floor_RedBrick", "Floor_UnevenBrick", "Floor_WoodDark.", "Floor_WoodLight."]},
 	],
 	"village_structure": [
 		{"dir": VILLAGE, "prefixes": ["Floor_Wood", "Wall_", "Corner_", "Stairs_Exterior", "HoleCover",

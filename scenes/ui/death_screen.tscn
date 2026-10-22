@@ -48,6 +48,12 @@ theme_override_font_sizes/font_size = 20
 text = "Tentativa 1"
 horizontal_alignment = 1
 
+[node name="RecapLabel" type="Label" parent="Center/Panels/DeathPanel"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+horizontal_alignment = 1
+
 [node name="Hint" type="Label" parent="Center/Panels/DeathPanel"]
 layout_mode = 2
 text = "O contrato ainda pode ser cumprido. Reviver traz uma bênção, e os mortos-vivos recebem a mesma."

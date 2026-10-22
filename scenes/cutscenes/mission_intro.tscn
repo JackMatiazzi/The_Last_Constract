@@ -117,12 +117,15 @@ _data = {
 &"intro": SubResource("Animation_intro")
 }
 
-[node name="MissionIntro" type="Node3D" node_paths=PackedStringArray("timeline", "actor_spots")]
+[node name="MissionIntro" type="Node3D" node_paths=PackedStringArray("timeline", "actor_spots", "party_spots", "party_status", "skip_hint")]
 script = ExtResource("1_cutscene")
 next_scene = "res://scenes/levels/village_level.tscn"
 timeline = NodePath("Timeline")
 actor_spots = [NodePath("TravelerSpot")]
 actor_animations = PackedStringArray("Walking_A")
+party_spots = [NodePath("TravelerSpot/AllyLeft"), NodePath("TravelerSpot/AllyRight"), NodePath("TravelerSpot/AllyBack")]
+party_status = NodePath("UI/PartyStatus")
+skip_hint = NodePath("UI/SkipHint")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_night")
@@ -145,6 +148,15 @@ omni_range = 7.0
 [node name="TravelerSpot" type="Marker3D" parent="."]
 position = Vector3(0, 0, -24)
 scale = Vector3(0.8, 0.8, 0.8)
+
+[node name="AllyLeft" type="Marker3D" parent="TravelerSpot"]
+position = Vector3(-1.4, 0, -1.6)
+
+[node name="AllyRight" type="Marker3D" parent="TravelerSpot"]
+position = Vector3(1.4, 0, -1.6)
+
+[node name="AllyBack" type="Marker3D" parent="TravelerSpot"]
+position = Vector3(0, 0, -3.2)
 
 [node name="ApproachCamera" type="Camera3D" parent="."]
 position = Vector3(1, 1.2, -8)
@@ -195,6 +207,22 @@ text = "Qualquer tecla para pular"
 keyboard_text = "Qualquer tecla para pular"
 gamepad_text = "Qualquer botão para pular"
 horizontal_alignment = 2
+
+[node name="PartyStatus" type="Label" parent="UI"]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -260.0
+offset_top = -96.0
+offset_right = 260.0
+offset_bottom = -64.0
+theme_type_variation = &"MutedLabel"
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+horizontal_alignment = 1
 
 [node name="Timeline" type="AnimationPlayer" parent="."]
 libraries = {

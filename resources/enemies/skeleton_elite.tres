@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="EnemyProfile" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="EnemyProfile" format=3 uid="uid://d0hnxbh2qt8iq"]
 
-[ext_resource type="Script" path="res://scripts/characters/enemies/enemy_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://dvsumwr8ai5ko" path="res://scripts/characters/enemies/enemy_profile.gd" id="1_profile"]
 
 [resource]
 script = ExtResource("1_profile")
+display_name = "Esqueleto de elite"
 sight_range = 18.0
 hearing_range = 9.0
 memory_time = 6.0

@@ -1,0 +1,29 @@
+name: Ponta a ponta
+
+# um contrato solo e uma partida em grupo com dois processos ligados pela rede local;
+# tambem roda pelo botao Run workflow da aba Actions
+on:
+  push:
+    branches: [main, desenvolvimento]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    container: barichello/godot-ci:4.7.2
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - name: Fontes do sistema
+        run: apt-get update -qq && apt-get install -y -qq fontconfig > /dev/null
+      - run: godot --headless --import
+      - run: bash tests/e2e/run_e2e.sh
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-logs
+          path: /tmp/the-last-contract-e2e

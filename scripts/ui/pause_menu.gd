@@ -19,8 +19,9 @@ func _ready() -> void:
 	settings_menu.closed.connect(_show_panel.bind(main_panel))
 
 
+# em grupo o mundo segue rodando para os outros jogadores
 func open() -> void:
-	get_tree().paused = true
+	get_tree().paused = not Net.is_coop()
 	show()
 	_show_panel(main_panel)
 

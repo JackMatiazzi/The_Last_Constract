@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="EnemyProfile" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="EnemyProfile" format=3 uid="uid://c4x0qq3hhpyvs"]
 
-[ext_resource type="Script" path="res://scripts/characters/enemies/enemy_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://dvsumwr8ai5ko" path="res://scripts/characters/enemies/enemy_profile.gd" id="1_profile"]
 
 [resource]
 script = ExtResource("1_profile")
+display_name = "Esqueleto"

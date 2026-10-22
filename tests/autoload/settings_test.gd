@@ -54,7 +54,7 @@ func _has_keyboard_or_mouse_event(action: String) -> bool:
 func test_gamepad_mode_keeps_only_gamepad_bindings_on_gameplay_actions() -> void:
 	Settings.set_value(&"input_device", Settings.InputDevice.GAMEPAD)
 
-	for action in ["move_forward", "jump", "attack", "secondary"]:
+	for action in ["move_forward", "run", "attack", "secondary"]:
 		assert_bool(_has_gamepad_event(action)).override_failure_message(action).is_true()
 		assert_bool(_has_keyboard_or_mouse_event(action)).override_failure_message(action).is_false()
 
@@ -63,7 +63,7 @@ func test_keyboard_mode_gets_its_bindings_back() -> void:
 	Settings.set_value(&"input_device", Settings.InputDevice.GAMEPAD)
 	Settings.set_value(&"input_device", Settings.InputDevice.KEYBOARD_MOUSE)
 
-	for action in ["move_forward", "jump", "attack", "secondary"]:
+	for action in ["move_forward", "run", "attack", "secondary"]:
 		assert_bool(_has_keyboard_or_mouse_event(action)).override_failure_message(action).is_true()
 		assert_bool(_has_gamepad_event(action)).override_failure_message(action).is_false()
 

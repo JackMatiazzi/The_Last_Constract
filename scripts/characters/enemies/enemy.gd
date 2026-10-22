@@ -34,6 +34,9 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if not is_multiplayer_authority():
+		super(delta)
+		return
 	if ai_enabled and not is_dead:
 		brain.physics_step(delta)
 	else:
@@ -45,13 +48,17 @@ func _physics_process(delta: float) -> void:
 
 func take_damage(amount: float, source: Node3D = null) -> void:
 	super(amount, source)
-	if is_dead:
+	if is_dead or not is_multiplayer_authority():
 		return
 	perception.acquire_target()
 	if perception.target != null:
 		perception.force_awareness(perception.target)
 	if brain.current_state_name == "Dormant" and ai_enabled:
 		brain.change_state("Awaken")
+
+
+func get_display_name() -> String:
+	return profile.display_name
 
 
 func _can_flinch() -> bool:
@@ -87,5 +94,20 @@ func _get_move_direction() -> Vector3:
 	return brain.desired_direction if ai_enabled else Vector3.ZERO
 
 
-func _wants_to_run() -> bool:
+func wants_to_run() -> bool:
 	return ai_enabled and brain.wants_run
+
+
+func share_brain_state(state_name: String) -> void:
+	if is_broadcasting():
+		_net_brain_state.rpc(state_name)
+
+
+# nas outras maquinas o cerebro nao pensa; so o que aparece na tela acompanha o estado
+@rpc("authority", "reliable")
+func _net_brain_state(state_name: String) -> void:
+	brain.current_state_name = state_name
+	if state_name == "Awaken":
+		health_bar.show()
+		if rise_sound:
+			rise_sound.play()

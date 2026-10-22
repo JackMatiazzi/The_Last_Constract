@@ -22,6 +22,7 @@ func spawn_groups(player_position: Vector3) -> Array[EnemyGroup]:
 	var spawned: Array[EnemyGroup] = []
 	for i in mini(group_count, spots.size()):
 		var group := scenes[i % scenes.size()].instantiate() as EnemyGroup
+		group.name = "Group%d" % i
 		group.transform = global_transform.affine_inverse() * spots[i].global_transform
 		add_child(group)
 		spawned.append(group)

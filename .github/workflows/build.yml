@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     container: barichello/godot-ci:4.7.2
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Modelos de exportacao
         run: |
@@ -47,7 +47,7 @@ jobs:
             (cd ${{ matrix.pasta }} && zip -q "$GITHUB_WORKSPACE/${{ matrix.pacote }}" ${{ matrix.arquivo }})
           fi
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.pacote }}
           path: ${{ matrix.pacote }}
