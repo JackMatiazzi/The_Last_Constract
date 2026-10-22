@@ -1,6 +1,9 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=7 format=3]
 
+[ext_resource type="Texture2D" path="res://assets/ui/ring.png" id="ring_texture"]
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/feed_entry.tscn" id="feed_entry"]
+[ext_resource type="PackedScene" path="res://scenes/ui/score_cell.tscn" id="score_cell"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boss_bg"]
 bg_color = Color(0.08, 0.05, 0.05, 0.85)
@@ -10,11 +13,19 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.45, 1, 0.4, 0.8)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stamina_fill"]
+bg_color = Color(0.93, 0.74, 0.25, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mana_fill"]
+bg_color = Color(0.3, 0.52, 0.95, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boss_fill"]
 bg_color = Color(0.36, 0.78, 0.3, 1)
 
 [node name="Hud" type="CanvasLayer"]
 script = ExtResource("1_hud")
+feed_entry_scene = ExtResource("feed_entry")
+score_cell_scene = ExtResource("score_cell")
 
 [node name="Margin" type="MarginContainer" parent="."]
 offset_right = 360.0
@@ -47,16 +58,36 @@ show_percentage = false
 
 [node name="HealthLabel" type="Label" parent="Margin/Content/HealthBar"]
 unique_name_in_owner = true
+theme_type_variation = &"OutlinedSmallLabel"
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 16
 text = "10 / 10"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="StaminaBar" type="ProgressBar" parent="Margin/Content"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(300, 12)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_stamina_fill")
+step = 0.0
+value = 100.0
+show_percentage = false
+
+[node name="ManaBar" type="ProgressBar" parent="Margin/Content"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(300, 12)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_mana_fill")
+step = 0.0
+value = 100.0
+show_percentage = false
 
 [node name="BuffTitle" type="Label" parent="Margin/Content"]
 unique_name_in_owner = true
@@ -184,6 +215,260 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 22
 horizontal_alignment = 2
+
+[node name="Cross" type="GridContainer" parent="."]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -300.0
+offset_right = 432.0
+offset_bottom = -24.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 3
+
+[node name="TopLeft" type="Control" parent="Cross"]
+custom_minimum_size = Vector2(88, 88)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="AbilitySlot" type="PanelContainer" parent="Cross"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(88, 88)
+mouse_filter = 2
+
+[node name="Face" type="Control" parent="Cross/AbilitySlot"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="AbilityIcon" type="TextureRect" parent="Cross/AbilitySlot/Face"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AbilityProgress" type="TextureProgressBar" parent="Cross/AbilitySlot/Face"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+max_value = 1.0
+step = 0.01
+fill_mode = 4
+nine_patch_stretch = true
+texture_progress = ExtResource("ring_texture")
+tint_progress = Color(0.98, 0.8, 0.4, 1)
+
+[node name="AbilityCost" type="Label" parent="Cross/AbilitySlot/Face"]
+unique_name_in_owner = true
+theme_type_variation = &"OutlinedSmallLabel"
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -24.0
+grow_horizontal = 0
+grow_vertical = 0
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="AbilityName" type="Label" parent="Cross"]
+unique_name_in_owner = true
+theme_type_variation = &"OutlinedLabel"
+layout_mode = 2
+custom_minimum_size = Vector2(220, 88)
+vertical_alignment = 1
+
+[node name="SecondarySlot" type="PanelContainer" parent="Cross"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(88, 88)
+mouse_filter = 2
+
+[node name="Face" type="Control" parent="Cross/SecondarySlot"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="SecondaryIcon" type="TextureRect" parent="Cross/SecondarySlot/Face"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Center" type="Control" parent="Cross"]
+custom_minimum_size = Vector2(88, 88)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="MiddleRight" type="Control" parent="Cross"]
+custom_minimum_size = Vector2(88, 88)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="BottomLeft" type="Control" parent="Cross"]
+custom_minimum_size = Vector2(88, 88)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ItemSlot" type="PanelContainer" parent="Cross"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(88, 88)
+mouse_filter = 2
+
+[node name="Face" type="Control" parent="Cross/ItemSlot"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ItemIcon" type="TextureRect" parent="Cross/ItemSlot/Face"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ItemProgress" type="TextureProgressBar" parent="Cross/ItemSlot/Face"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+max_value = 1.0
+step = 0.01
+fill_mode = 4
+nine_patch_stretch = true
+texture_progress = ExtResource("ring_texture")
+tint_progress = Color(0.98, 0.8, 0.4, 1)
+
+[node name="ItemCount" type="Label" parent="Cross/ItemSlot/Face"]
+unique_name_in_owner = true
+theme_type_variation = &"OutlinedSmallLabel"
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -24.0
+grow_horizontal = 0
+grow_vertical = 0
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="ItemHint" type="Label" parent="Cross"]
+unique_name_in_owner = true
+theme_type_variation = &"OutlinedLabel"
+layout_mode = 2
+custom_minimum_size = Vector2(220, 88)
+vertical_alignment = 1
+
+[node name="Feed" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -460.0
+offset_top = 64.0
+offset_right = -24.0
+offset_bottom = 220.0
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="ScoreLayer" type="CanvasLayer" parent="."]
+unique_name_in_owner = true
+layer = 30
+visible = false
+
+[node name="Dim" type="ColorRect" parent="ScoreLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.02, 0.015, 0.01, 0.7)
+
+[node name="Scoreboard" type="PanelContainer" parent="ScoreLayer"]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -380.0
+offset_top = -160.0
+offset_right = 380.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Content" type="VBoxContainer" parent="ScoreLayer/Scoreboard"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="ScoreLayer/Scoreboard/Content"]
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "Placar do contrato"
+horizontal_alignment = 1
+
+[node name="ScoreGrid" type="GridContainer" parent="ScoreLayer/Scoreboard/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 28
+theme_override_constants/v_separation = 8
+columns = 5
+
+[node name="NameHeader" type="Label" parent="ScoreLayer/Scoreboard/Content/ScoreGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"MutedLabel"
+text = "Aventureiro"
+
+[node name="KillsHeader" type="Label" parent="ScoreLayer/Scoreboard/Content/ScoreGrid"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "Abates"
+horizontal_alignment = 1
+
+[node name="AssistsHeader" type="Label" parent="ScoreLayer/Scoreboard/Content/ScoreGrid"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "Assist."
+horizontal_alignment = 1
+
+[node name="DeathsHeader" type="Label" parent="ScoreLayer/Scoreboard/Content/ScoreGrid"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "Mortes"
+horizontal_alignment = 1
+
+[node name="CauseHeader" type="Label" parent="ScoreLayer/Scoreboard/Content/ScoreGrid"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "Última queda"
 
 [node name="BossPanel" type="VBoxContainer" parent="."]
 unique_name_in_owner = true

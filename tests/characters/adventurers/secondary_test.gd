@@ -52,7 +52,7 @@ func test_skeleton_strike_is_stopped_by_the_shield() -> void:
 	assert_float(knight.health).is_equal(10.0)
 
 
-func test_knight_moves_slowly_while_blocking() -> void:
+func test_knight_stands_still_while_blocking() -> void:
 	var knight := arena.spawn(TestArena.KNIGHT, Vector3.ZERO) as Adventurer
 	await arena.wait_physics(3)
 	knight.use_secondary()
@@ -60,7 +60,8 @@ func test_knight_moves_slowly_while_blocking() -> void:
 	await arena.send_action("move_forward")
 	await arena.wait_seconds(0.5)
 
-	assert_float(_horizontal_speed(knight)).is_equal_approx(knight.walk_speed * knight.block.move_factor, 0.05)
+	assert_float(_horizontal_speed(knight)).is_equal_approx(0.0, 0.05)
+	assert_bool(knight.is_blocking).is_true()
 
 
 func test_knight_cannot_attack_while_blocking() -> void:

@@ -29,7 +29,7 @@
 \newcommand{\subtitulo}{Mini Game Design Document}
 \newcommand{\equipe}{André Bartzen Araujo \and Jackson Matiazzi \and José Maciel Camargo}
 \newcommand{\disciplina}{Disciplina --- Avaliação Grau 2}
-\newcommand{\gddversao}{0.23}
+\newcommand{\gddversao}{0.25}
 
 \definecolor{Destaque}{HTML}{7A2E2E}
 \definecolor{Pendente}{HTML}{9A9A9A}
@@ -72,8 +72,8 @@
 \textbf{Gênero}          & Ação 3D \\
 \textbf{Perspectiva}     & Terceira pessoa \\
 \textbf{Ambientação}     & Vila medieval tomada por mortos-vivos \\
-\textbf{Estrutura}       & Mapa único, uma vida por tentativa \\
-\textbf{Plataforma}      & \preencher{PC / Web} \\
+\textbf{Estrutura}       & Mapa único, de 1 a 4 jogadores (co-op online), uma vida por tentativa \\
+\textbf{Plataforma}      & PC (Windows e Linux) \\
 \textbf{Engine}          & Godot 4.7 (GDScript) \\
 \textbf{Público-alvo}    & Jogadores experientes, 16+, acostumados a ação e a escolhas com custo e benefício \\
 \bottomrule
@@ -104,6 +104,8 @@ Ao morrer, pode escolher entre \textbf{Reviver} ou \textbf{Desistir}. Ao reviver
 
 Não existe sistema de níveis para jogadores ou inimigos.
 
+\textbf{Em grupo.} Até quatro jogadores enfrentam a mesma vila, cada um com um aventureiro diferente. Jogar sozinho é um grupo de um: o fluxo é o mesmo. Quem cai espera os aliados, que podem revivê-lo com uma poção guardada. Quando o grupo inteiro cai, todos votam numa das duas bênçãos sorteadas (empate é sorteado) e a tentativa recomeça junta.
+
 \subsection{Ciclo de jogo}
 
 \begin{center}
@@ -115,14 +117,14 @@ Não existe sistema de níveis para jogadores ou inimigos.
     seta/.style={-{Stealth[length=2.5mm]}, thick, Destaque},
     rotulo/.style={font=\footnotesize, midway}
 ]
-    \node[etapa] (contrato) {Aceitar o contrato\\do Lorde};
+    \node[etapa] (contrato) {Aceitar o contrato\\(sozinho ou em grupo)};
     \node[etapa, below=of contrato] (sorteio) {Sortear posições do\\jogador e dos inimigos};
     \node[etapa, below=of sorteio] (combate) {Explorar a vila e\\enfrentar os grupos};
     \node[etapa, below=of combate] (boss) {Derrotar o boss};
     \node[fim, below=of boss] (vitoria) {Vitória};
 
-    \node[etapa, right=2.2cm of combate] (morte) {Morte};
-    \node[etapa, above=of morte] (buff) {Escolher 1 entre\\2 buffs aleatórios};
+    \node[etapa, right=2.2cm of combate] (morte) {Todo o grupo cai};
+    \node[etapa, above=of morte] (buff) {Votar em 1 entre\\2 buffs aleatórios};
     \node[fim, below=of morte] (execucao) {Desistir:\\execução};
 
     \draw[seta] (contrato) -- (sorteio);
@@ -143,17 +145,24 @@ Não existe sistema de níveis para jogadores ou inimigos.
 \toprule
 \textbf{Mecânica} & \textbf{Descrição} \\
 \midrule
-Movimentação & Terceira pessoa, com exploração livre da vila. Resposta rápida: atinge a velocidade de andar (4\,m/s) em cerca de 0,1\,s e para em cerca de 0,1\,s; correr chega a 7,5\,m/s. O pulo sobe e cai num arco firme (a queda é mais rápida que a subida) e perdoa pequenos erros de tempo: pular logo após sair de uma borda ou um instante antes de aterrissar ainda funciona. \\
-Combate & Corpo a corpo e à distância, conforme o aventureiro escolhido. Cada golpe tira 1 ponto de vida; o alvo reage ao dano e, ao chegar a zero, morre. \\
+Movimentação & Terceira pessoa, com exploração livre da vila. Resposta rápida: atinge a velocidade de andar (4\,m/s) em cerca de 0,1\,s e para em cerca de 0,1\,s; correr chega a 7,5\,m/s e gasta estamina. Não há pulo: segurar Espaço corre, e soltar volta a andar. \\
+Combate & Corpo a corpo e à distância, conforme o aventureiro escolhido. Clique é o ataque rápido; segurar o botão é o ataque pesado (mais lento e mais forte). Cada golpe rápido tira 1 ponto de vida; o alvo reage ao dano e, ao chegar a zero, morre. \\
+Energia & Estamina para todos (correr, escudo, golpes físicos) e mana para o Mage (feitiços). Gastar pausa a recarga por um instante; depois ela volta sozinha. O dano do golpe acompanha a energia paga: com metade do custo, metade do dano. Detalhes em \ref{sec:energia}. \\
 Vida & Pontos inteiros: aventureiros têm 10 e mortos-vivos têm 5. Uma barra de vida flutua sobre cada personagem (verde para aventureiros, vermelha para mortos-vivos). Ao levar dano, um rastro claro mostra o pedaço perdido antes de encolher e um número de dano sobe acima da cabeça. \\
-Vida única & O jogador possui apenas uma vida por tentativa. \\
+Vida única & O jogador possui apenas uma vida por tentativa. Em grupo, um aliado com uma poção no inventário pode reviver quem caiu: perto do caído aparece ``E Reviver'' sobre ele, e ele volta com metade da vida. A poção só é gasta quando o reviver vale: se outro aliado reviveu antes, ela continua no inventário. Se todos caem, abre a tela de morte. \\
 Grupos de inimigos & Mortos-vivos organizados em grupos espalhados pelo mapa. \\
 Posições aleatórias & A cada tentativa, o jogador renasce em um ponto sorteado e os grupos de inimigos são reposicionados. \\
-Reviver ou Desistir & Escolha apresentada ao morrer. Desistir encerra a missão com a execução do aventureiro. \\
-Buffs acumulativos & Ao reviver, o jogador escolhe um entre dois buffs aleatórios; os buffs se acumulam entre tentativas. \\
+Reviver ou Desistir & Escolha apresentada quando o grupo inteiro cai. Desistir (só o host) encerra a missão com a execução do aventureiro. \\
+Buffs acumulativos & Ao reviver, o grupo vota num entre dois buffs aleatórios; os buffs se acumulam entre tentativas. \\
 Buffs dos inimigos & Os mortos-vivos recebem os mesmos buffs escolhidos pelo jogador nas tentativas anteriores. \\
 Boss & O Necromante, um mago esqueleto que surge na praça quando todos os grupos caem: mantém distância, dispara rajadas mágicas e levanta mortos-vivos ao seu redor. \\
-Objetos interativos & Baús espalhados pela vila: perto de um, aparece o aviso para abrir; aberto, solta uma poção que cura ao ser tocada. \\
+Objetos interativos & Baús espalhados pela vila: perto de um, aparece o aviso para abrir; aberto, solta uma poção. Tocar na poção a guarda no inventário (até 4); com o inventário cheio ela fica no chão e é pega assim que sobrar espaço, se o aventureiro ainda estiver em cima dela. Em grupo, dois jogadores na mesma poção não levam uma cada: o host decide quem pegou. Um golpe ou projétil de aventureiro quebra a poção que está no chão, e ela se perde. \\
+Inventário rápido & Itens guardados para usar quando quiser: a poção de vida cura 3 ao ser usada (não é gasta com a vida cheia) e serve para reviver um aliado. A roda do mouse para baixo troca o item selecionado; segurar E por 0,6\,s bebe (o gole deixa o aventureiro exposto). \\
+Objetos quebráveis & Barris, caixotes e barris de bebida quebram com o ataque pesado (golpe ou projétil), soltando lascas; carroças, cercas e tochas aguentam. Evita ficar encurralado contra o cenário. \\
+Troca de habilidade & A roda do mouse para cima troca a habilidade do ataque principal. O Mage alterna entre o Projétil mágico e o Portal; os outros aventureiros têm uma habilidade por enquanto. \\
+Portal & Magia do Mage, 20\% de mana por portal. O primeiro uso abre a entrada no chão onde a mira aponta (até 15\,m), o segundo abre a saída; o par dura 12\,s e um par novo fecha o anterior. Aventureiro que entra numa ponta sai na frente da outra (0,5\,s de recarga por pessoa); mortos-vivos não atravessam. Projéteis de todos (setas, projéteis mágicos e os do Necromante) atravessam e saem pela frente do outro portal, na direção que a janela mostra. Uma barra acima do anel esvazia até o portal fechar. O véu do portal mostra o outro lado, como uma janela para a saída, acompanhando o ângulo da câmera de quem olha. Com parede logo à frente da saída, o aventureiro sai no próprio portal. Em grupo, o portal aparece para todos e serve para os aliados. \\
+Fogo amigo & Opção do host no lobby, ligada por padrão: golpes e projéteis também acertam aliados. \\
+Placar & Abates, assistências, mortes e a última queda de cada jogador, segurando Tab. Um aviso no canto mostra quem abateu quem e como cada um caiu; a tela de morte mostra o histórico de dano daquela vida. \\
 Som 3D & Passos, golpes, dor, ossos caindo e feitiços saem da posição de quem os faz; a música muda conforme a cena. \\
 Vitória & Limpar todos os grupos (a HUD mostra quantos faltam), derrotar o Necromante e ver a tela ``Contrato cumprido''. \\
 \bottomrule
@@ -168,12 +177,14 @@ O jogador escolhe em Configurações $\rightarrow$ Controles se joga com \textbf
 \textbf{Ação} & \textbf{Teclado e mouse} & \textbf{Controle} \\
 \midrule
 Mover      & W, A, S, D (relativo à câmera) & Analógico esquerdo \\
-Correr     & W duas vezes seguidas; corre enquanto W estiver pressionado & Clicar no analógico esquerdo; corre até soltar o analógico \\
-Pular      & Espaço (vale apertar um pouco antes de tocar o chão) & A \\
+Correr     & Segurar Espaço & Clicar no analógico esquerdo; corre até soltar o analógico \\
 Câmera     & Movimento do mouse (sobre o ombro direito) & Analógico direito \\
-Atacar     & Botão esquerdo; segurar ataca em sequência e um clique pouco antes da recarga terminar fica guardado & RT (mesmas regras) \\
+Atacar     & Botão esquerdo: clique é o ataque rápido; segurar 0,35\,s dispara o pesado. Um clique pouco antes da recarga terminar fica guardado & RT (mesmas regras) \\
 Habilidade & Botão direito: o Knight ergue o escudo enquanto segura; o Barbarian golpeia com o segundo machado & LT \\
-Interagir  & E (abrir baú) & X \\
+Trocar habilidade & Roda do mouse para cima & Direcional para cima \\
+Trocar item & Roda do mouse para baixo & Direcional para baixo \\
+Interagir  & E: toque abre baú ou revive aliado caído (com poção no inventário); perto de um baú, segurar não bebe; longe, segurar 0,6\,s bebe o item selecionado. Perto de um aliado caído sem poção, o aviso diz ``Sem poção para reviver'' & X (mesmas regras) \\
+Placar     & Tab (segurar) & Back (segurar) \\
 Pausar     & Esc & Menu (Start) \\
 Menus      & Mouse, setas, Enter, Esc; teclas 1--4 na seleção e 1--2 nas bênçãos & Direcional, A confirma, B volta, LB/RB trocam aventureiro ou aba \\
 \bottomrule
@@ -185,7 +196,7 @@ As ligações dos dois dispositivos ficam no Input Map do projeto e podem ser tr
 
 \subsection{Buffs}
 
-Ao reviver, o jogador escolhe uma entre duas bênçãos sorteadas. Pelo contrato do Lorde, a bênção escolhida vale para o aventureiro \emph{e também para todos os mortos-vivos} nas tentativas seguintes. Como o aventureiro tem 10 de vida e enfrenta vários mortos-vivos de 5 de vida, o mesmo buff pesa diferente para cada lado: a escolha é decidir qual efeito favorece mais o jogador do que os inimigos. Metade dos buffs tem custo e benefício, pensados para o público experiente.
+Ao reviver, o grupo vota numa entre duas bênçãos sorteadas (sozinho, o voto é só seu). Pelo contrato do Lorde, a bênção escolhida vale para o aventureiro \emph{e também para todos os mortos-vivos} nas tentativas seguintes. Como o aventureiro tem 10 de vida e enfrenta vários mortos-vivos de 5 de vida, o mesmo buff pesa diferente para cada lado: a escolha é decidir qual efeito favorece mais o jogador do que os inimigos. Metade dos buffs tem custo e benefício, pensados para o público experiente.
 
 \begin{tabularx}{\textwidth}{@{}lX@{}}
 \toprule
@@ -201,6 +212,24 @@ Sangue Frio & +2 de vida máxima, $-$10\% de velocidade \\
 \end{tabularx}
 
 Regras: cada buff acumula até 3 vezes; os dois sorteados são sempre diferentes; vida máxima nunca fica abaixo de 1; velocidade e tempo entre ataques nunca caem abaixo de 20\% do valor base. Desistir na tela de morte, ou abandonar o contrato pela pausa, leva à cena de execução do aventureiro e depois ao menu principal; o próximo contrato começa do zero (tentativas e buffs zerados).
+
+\subsection{Energia: estamina e mana}
+\label{sec:energia}
+
+Todo aventureiro tem uma barra de estamina de 100; o Mage tem também uma de mana. Gastar pausa a recarga (0,6\,s na estamina, 1\,s na mana); depois a barra volta sozinha. A recarga parte de uma velocidade base comum a todos (30 por segundo) e cada classe tem um multiplicador próprio. Correr ou segurar o escudo gasta estamina continuamente e impede a recarga enquanto dura. Quem zera a estamina correndo volta a andar e só corre de novo com a barra em 30\%.
+
+\begin{tabularx}{\textwidth}{@{}lccccX@{}}
+\toprule
+\textbf{Aventureiro} & \textbf{Paga com} & \textbf{Rápido} & \textbf{Pesado} & \textbf{Recarga} & \textbf{Outros gastos} \\
+\midrule
+Knight    & estamina & 15 & 35 & 1$\times$ & escudo: 6 por segundo e 12 por golpe defendido \\
+Barbarian & estamina & 20 & 40 & 1$\times$ & --- \\
+Rogue     & estamina & 12 & 30 & 1$\times$ & --- \\
+Mage      & mana     & 20 & 45 & mana 1,5$\times$, estamina 0,5$\times$ & --- \\
+\bottomrule
+\end{tabularx}
+
+Todos gastam 12 de estamina por segundo correndo. Com menos energia que o custo, o golpe sai proporcionalmente mais fraco; abaixo de 25\% do custo ele não sai e a barra pisca em vermelho. Os números ficam no inspetor de cada aventureiro (grupos ``Energia'' e ``Pesado'').
 
 % ===============================================================
 \section{Personagens}
@@ -220,12 +249,12 @@ Boss & Principal inimigo e responsável pela infestação. \\
 
 \subsection{Aventureiros jogáveis}
 
-Cada aventureiro tem um ataque único. Todos atacam na direção em que a câmera olha. Mage e Rogue têm uma mira no centro da tela: o projétil sai da arma em direção ao ponto que a mira cobre (parede, chão ou morto-vivo, até 40\,m), inclusive para cima ou para baixo, então acertar de longe exige apontar a câmera; todos causam 1 de dano por acerto (mais os buffs) e nenhum acerta outro aventureiro. Projéteis param ao bater em paredes e deixam rastro: o projétil do Mage queima uma marca violeta na superfície (some após 6\,s) e o virote do Rogue fica cravado onde bateu, na parede ou no corpo do morto-vivo, acompanhando-o enquanto ele se move (some após 4\,s). Golpes corpo a corpo não atravessam paredes: só acertam quem está com o caminho livre até o atacante. O virote da besta fica cravado no osso mais próximo de onde acertou e acompanha o morto-vivo andando, girando e caindo ao morrer.
+Cada aventureiro tem um ataque único. Todos atacam na direção em que a câmera olha. Mage e Rogue têm uma mira no centro da tela: o projétil sai da arma em direção ao ponto que a mira cobre (parede, chão ou morto-vivo, até 40\,m), inclusive para cima ou para baixo, então acertar de longe exige apontar a câmera; o ataque rápido causa 1 de dano por acerto (mais os buffs) e só acerta outro aventureiro com o fogo amigo ligado. Projéteis param ao bater em paredes e deixam rastro: o projétil do Mage queima uma marca violeta na superfície (some após 6\,s) e o virote do Rogue fica cravado onde bateu, na parede ou no corpo do morto-vivo, acompanhando-o enquanto ele se move (some após 4\,s). Golpes corpo a corpo não atravessam paredes: só acertam quem está com o caminho livre até o atacante. O virote da besta fica cravado no osso mais próximo de onde acertou e acompanha o morto-vivo andando, girando e caindo ao morrer.
 
 Regras comuns de ataque, pensadas para o controle não ficar pesado:
 \begin{itemize}
     \item durante o ataque o aventureiro ainda se move a 30\% da velocidade, sem girar, para manter a mira;
-    \item logo depois do impacto, mover, pular ou atacar de novo corta o resto da animação; parado, a animação termina normalmente;
+    \item logo depois do impacto, mover ou atacar de novo corta o resto da animação; parado, a animação termina normalmente;
     \item ser atingido durante a preparação (antes do impacto) cancela o golpe; depois do impacto, o golpe já contou;
     \item ao ser atingido, o aventureiro recupera o controle em 0,3\,s.
 \end{itemize}
@@ -235,10 +264,10 @@ Regras comuns de ataque, pensadas para o controle não ficar pesado:
 \toprule
 \textbf{Aventureiro} & \textbf{Alcance} & \textbf{Estilo de combate} \\
 \midrule
-Knight & Corpo a corpo & Espada e escudo. \textbf{Combo de três golpes} (vertical, diagonal, horizontal) que segue enquanto o jogador continua atacando e reinicia após uma pausa; acerta só à frente; recarga de 0,6\,s. \textbf{Escudo} (botão direito): enquanto segura, bloqueia golpes e projéteis que chegam pela frente (arco de 140°), anda devagar e não ataca; o bloqueio aparece como ``Bloqueado'' sobre a barra de vida \\
-Barbarian & Corpo a corpo & Dois machados. \textbf{Giro}: acerta todos os mortos-vivos em volta; recarga de 1,6\,s. \textbf{Segundo machado} (botão direito): golpe rápido só à frente, recarga de 0,5\,s, para finalizar um alvo sem esperar o giro \\
-Mage & Longo alcance & Cajado. \textbf{Projétil mágico}: mais lento (14\,m/s), alcance de 18\,m e \emph{atravessa} os inimigos em linha; recarga de 1,0\,s \\
-Rogue & Longo alcance & Besta. \textbf{Virote}: rápido (30\,m/s), alcance de 24\,m, para no primeiro inimigo; recarga de 0,7\,s \\
+Knight & Corpo a corpo & Espada e escudo de torre. \textbf{Combo de três golpes} (vertical, diagonal, horizontal) que segue enquanto o jogador continua atacando e reinicia após uma pausa; acerta só à frente; recarga de 0,6\,s. \textbf{Pesado}: golpe de cima com as duas mãos, dano dobrado. \textbf{Escudo} (botão direito): enquanto segura, bloqueia golpes e projéteis que chegam pela frente (arco de 140°), fica parado (gira com a câmera) e não ataca; gasta estamina e, sem estamina, a guarda quebra; o bloqueio aparece como ``Bloqueado'' sobre a barra de vida \\
+Barbarian & Corpo a corpo & Dois machados. \textbf{Giro}: acerta todos os mortos-vivos em volta; recarga de 1,6\,s. \textbf{Pesado}: giro mais lento, dano dobrado. \textbf{Segundo machado} (botão direito): golpe rápido só à frente, recarga de 0,5\,s, para finalizar um alvo sem esperar o giro \\
+Mage & Longo alcance & Cajado, usa mana. \textbf{Projétil mágico}: mais lento (14\,m/s), alcance de 18\,m e \emph{atravessa} os inimigos em linha; recarga de 1,0\,s. \textbf{Pesado}: feitiço longo, 2,5$\times$ o dano. \textbf{Portal} (troca na roda do mouse): abre um par de portais para o grupo atravessar \\
+Rogue & Longo alcance & Besta. \textbf{Virote}: rápido (30\,m/s), alcance de 24\,m, para no primeiro inimigo; recarga de 0,7\,s. \textbf{Pesado}: disparo mais lento, dano dobrado \\
 \bottomrule
 \end{tabularx}
 
@@ -246,7 +275,7 @@ Rogue & Longo alcance & Besta. \textbf{Virote}: rápido (30\,m/s), alcance de 24
 
 Os mortos-vivos não se limitam a andar e bater: eles percebem, reagem com atraso humano e, nas próximas fases, se coordenam em grupo e respondem às ações do jogador. Todos usam a mesma base de física e animação do jogador e são mais lentos que ele (andar 2,8\,m/s, correr 5\,m/s), para que fugir seja uma opção real.
 
-\textbf{Percepção.} Visão em cone de 120\textdegree{} até 14\,m, bloqueada por paredes; audição de corrida e de ataques num raio de 6\,m, mesmo sem ver; percepção de proximidade: nota o jogador a até 2,5\,m mesmo de costas, se não houver parede; ser atingido, inclusive por um disparo de longe, revela a posição do jogador; memória da última posição do jogador por 3\,s.
+\textbf{Percepção.} Em grupo, cada morto-vivo mira o aventureiro vivo mais próximo. Visão em cone de 120\textdegree{} até 14\,m, bloqueada por paredes; audição de corrida e de ataques num raio de 6\,m, mesmo sem ver; percepção de proximidade: nota o jogador a até 2,5\,m mesmo de costas, se não houver parede; ser atingido, inclusive por um disparo de longe, revela a posição do jogador; memória da última posição do jogador por 3\,s.
 
 \textbf{Comportamento (implementado).}
 \begin{itemize}
@@ -277,9 +306,9 @@ Não existem fases separadas. Toda a missão acontece em um único mapa.
 
 A cada nova tentativa, tanto o jogador quanto os grupos de inimigos recebem novas posições aleatórias dentro da vila, fazendo com que os encontros e o caminho percorrido possam mudar entre as partidas.
 
-\textbf{A vila (primeira versão).} Um vilarejo medieval de 48\,m $\times$ 48\,m, à noite, iluminado por tochas nas paredes. No centro, uma praça calçada com carroças, caixotes e barris que servem de cobertura; em volta, oito casas de pedra e enxaimel, de um ou dois andares, formando ruas e becos; ao sul, um campo aberto cercado. As portas em arco são vãos de verdade: dá para entrar nas casas, que viram esconderijos e atalhos.
+\textbf{A vila (primeira versão).} Um vilarejo medieval de 48\,m $\times$ 48\,m, à noite, iluminado por tochas nas paredes. Todo o chão é de pedra (tijolo, tijolo vermelho e calçamento irregular). No centro, uma praça calçada com carroças, caixotes e barris que servem de cobertura; em volta, oito casas de pedra e enxaimel, de um ou dois andares, formando ruas e becos; ao sul, um campo aberto cercado. As portas em arco são vãos de verdade: dá para entrar nas casas, que viram esconderijos e atalhos.
 
-\textbf{Sorteio dos encontros.} O mapa tem seis pontos de nascimento do jogador e treze pontos de grupo. A cada tentativa o jogador nasce num ponto sorteado e cinco grupos ocupam pontos a pelo menos 16\,m dele. Os grupos são cenas prontas: \textbf{patrulha} (2 esqueletos, sem elite), \textbf{guarda} (3 esqueletos, com elite) e \textbf{dormentes} (3 esqueletos deitados, com elite). Um teste garante que de todo ponto de grupo se anda até todo ponto de nascimento.
+\textbf{Sorteio dos encontros.} O mapa tem seis pontos de nascimento do jogador e treze pontos de grupo. A cada tentativa o jogador nasce num ponto sorteado e cinco grupos ocupam pontos a pelo menos 16\,m dele. Os grupos são cenas prontas: \textbf{patrulha} (2 esqueletos, sem elite), \textbf{guarda} (3 esqueletos, com elite) e \textbf{dormentes} (3 esqueletos deitados, com elite). Um teste garante que de todo ponto de grupo se anda até todo ponto de nascimento. Em grupo, todos usam a mesma semente de sorteio, então a vila sai igual em todas as máquinas, e os jogadores nascem lado a lado no ponto sorteado.
 
 % Para incluir um mapa ou esboço, salve a imagem em docs/img/ e ajuste o nome.
 \IfFileExists{img/mapa.png}{%
@@ -294,20 +323,21 @@ A cada nova tentativa, tanto o jogador quanto os grupos de inimigos recebem nova
 
 Todas as telas compartilham um tema único de madeira escura e dourado. Ações destrutivas usam borda vermelha e sempre pedem confirmação; a ação principal de cada tela vem destacada e recebe o foco do teclado. A interface foi desenhada para 1152$\times$648 e escala com o tamanho da janela, mantendo a proporção.
 
-\textbf{Fluxo de telas:} Menu principal $\rightarrow$ Seleção de aventureiro $\rightarrow$ Entrada na missão $\rightarrow$ Partida (HUD, Pausa) $\rightarrow$ Morte $\rightarrow$ Reviver (nova tentativa na mesma partida) ou Desistir $\rightarrow$ Execução $\rightarrow$ Menu principal. Abandonar o contrato pela pausa também leva à Execução.
+\textbf{Fluxo de telas:} Menu principal $\rightarrow$ Seleção de aventureiro (sozinho) ou Contrato em grupo (lobby) $\rightarrow$ Entrada na missão $\rightarrow$ Partida (HUD, Pausa) $\rightarrow$ Morte $\rightarrow$ Reviver (nova tentativa na mesma partida) ou Desistir $\rightarrow$ Execução $\rightarrow$ Menu principal. Abandonar o contrato pela pausa também leva à Execução.
 
 \begin{tabularx}{\textwidth}{@{}lX@{}}
 \toprule
 \textbf{Tela} & \textbf{Conteúdo} \\
 \midrule
-Menu principal & Título, ``Aceitar contrato'', Configurações, Sair e créditos, sobre uma cena 3D da vila com câmera girando \\
+Menu principal & Título, ``Aceitar contrato'', ``Contrato em grupo'', Configurações, Sair e créditos, sobre uma cena 3D da vila com câmera girando \\
+Contrato em grupo & Nome do jogador, Hospedar ou Entrar (pelo endereço do host). Na sala, em duas colunas: à esquerda os endereços do host (clicar copia) e o grupo; à direita a escolha do aventureiro (sem repetir), o fogo amigo (só o host) e Iniciar (só o host, quando todos escolheram) \\
 Seleção de aventureiro & Os quatro aventureiros lado a lado em 3D; o escolhido dá um passo à frente, ganha um anel dourado no chão e o nome destacado. Ficha com estilo, ataque e descrição. Escolha por clique, teclas 1 a 4 ou setas; a escolha vale para todas as tentativas do contrato \\
 Configurações & Áudio (geral, música, efeitos), vídeo (tela cheia, VSync) e controles (sensibilidade do mouse, inverter eixo vertical, lista de teclas). Salvas automaticamente \\
-HUD & Tentativa atual, vida do jogador em número e barra, e bênçãos ativas com efeito e acúmulos. Para Mage e Rogue, uma mira no centro da tela indica para onde o projétil vai \\
-Barras 3D & Sobre os mortos-vivos (vermelha, com rastro do dano); escondida enquanto o morto-vivo dorme, aparece quando ele começa a levantar. O jogador usa a barra do HUD. Números de dano sobem de todos os personagens \\
-Entrada na missão & Cena curta à noite: o aventureiro escolhido chega pela estrada até a entrada da vila (``Contrato aceito.'', ``O Lorde quer a vila livre dos mortos.''); depois começa a partida. Qualquer tecla pula \\
-Pausa & Continuar, Configurações e Abandonar contrato (com confirmação; leva à execução) \\
-Morte & Tentativa, bênçãos acumuladas, Reviver ou Desistir (com confirmação; leva à execução). Reviver mostra duas cartas de bênção, escolhidas com o mouse ou as teclas 1 e 2 \\
+HUD & Tentativa atual, vida do jogador em número e barra, estamina (amarela) e mana (azul, só o Mage), bênçãos ativas com efeito e acúmulos, aviso de abates e quedas no canto e placar segurando Tab. No canto inferior esquerdo, uma cruz de slots com ícones: em cima a habilidade ativa (com o custo em \% da barra no canto e o nome ao lado), à esquerda o botão direito (escudo ou segundo machado; some para quem não tem, mantendo o lugar na cruz) e embaixo o item rápido (com a quantidade e o lembrete ``segure E''). Segurar o ataque ou o E enche um anel dourado em volta do slot correspondente, mostrando quanto falta para o golpe pesado ou o gole. Os ícones são renderizados dos próprios modelos 3D do jogo. Para Mage e Rogue, e com o Portal ativo, uma mira no centro da tela indica o alvo. \\
+Barras 3D & Sobre os mortos-vivos (vermelha, com rastro do dano); escondida enquanto o morto-vivo dorme, aparece quando ele começa a levantar. Sobre os aliados, nome e barra verde; sobre um aliado caído, o aviso de reviver para quem tem poção por perto. O jogador usa a barra do HUD. Números de dano sobem de todos os personagens \\
+Entrada na missão & Cena curta à noite: o aventureiro escolhido chega pela estrada até a entrada da vila (``Contrato aceito.'', ``O Lorde quer a vila livre dos mortos.''); em grupo, os aliados vêm em formação atrás. Qualquer tecla marca ``pronto''; a partida começa quando todos estão prontos \\
+Pausa & Continuar, Configurações e Abandonar contrato (com confirmação; leva à execução). Em grupo, o jogo não congela, mas o aventureiro para de obedecer enquanto o menu está aberto (solta o escudo e cancela o que estava segurado); abandonar tira só quem saiu \\
+Morte & Histórico de dano da vida (de quem veio cada golpe, curas e o golpe final), tentativa, bênçãos acumuladas, Reviver ou Desistir (só o host; com confirmação; leva à execução). Reviver mostra duas cartas de bênção para votar, com o mouse ou as teclas 1 e 2 \\
 Execução & Cena em duas tomadas: o aventureiro escolhido vai embora pela estrada da vila ao entardecer (``Ele deu as costas ao contrato''); corta para a praça pública, onde ele está ajoelhado num cadafalso diante da multidão, ouve o veredito do Lorde e recebe o golpe de machado do carrasco encapuzado, enquanto a multidão comemora; termina em ``Contrato encerrado'' e volta ao menu. Qualquer tecla pula \\
 \bottomrule
 \end{tabularx}
@@ -330,9 +360,9 @@ Todos os personagens compartilham uma classe base. Cada classe filha só decide 
     seta/.style={-{Stealth[length=2.5mm]}, thick, Destaque}
 ]
     \node[classe] (character) {\textbf{Character}\\ física, vida, dano, morte, animação};
-    \node[classe, below left=of character] (adventurer) {\textbf{Adventurer}\\ teclado, mouse, câmera};
-    \node[classe, below right=of character] (enemy) {\textbf{Enemy}\\ IA \preencher{a implementar}};
-    \node[classe, below=of enemy] (boss) {\textbf{Boss} \preencher{a implementar}};
+    \node[classe, below left=of character] (adventurer) {\textbf{Adventurer}\\ entrada, câmera, energia,\\ máquina de estados};
+    \node[classe, below right=of character] (enemy) {\textbf{Enemy}\\ percepção, cérebro, navegação};
+    \node[classe, below=of enemy] (boss) {\textbf{Necromante}\\ Enemy + Summoner};
     \draw[seta] (adventurer) -- (character);
     \draw[seta] (enemy) -- (character);
     \draw[seta] (boss) -- (enemy);
@@ -341,15 +371,23 @@ Todos os personagens compartilham uma classe base. Cada classe filha só decide 
 
 Cada aventureiro e cada tipo de morto-vivo é uma cena herdada da base, que troca apenas o modelo, as armas visíveis e os atributos. A IA dos mortos-vivos é dividida em percepção (o que sabem), cérebro com máquina de estados (o que decidem, a cada 0,15\,s) e navegação (como se movem); os números de cada tipo ficam num perfil de dados. O ataque é um componente separado, reaproveitado por aventureiros e inimigos: \texttt{Attack} (recarga, animação e momento do impacto) com as variantes \texttt{MeleeAttack} (o formato da hitbox define golpe frontal ou giro) e \texttt{RangedAttack} (dispara um \texttt{Projectile}). As telas apenas emitem sinais; o \texttt{GameSession} decide trocas de cena e reinícios. Buffs são recursos de dados (\texttt{Buff} com uma lista de \texttt{StatModifier}); o estado da missão (tentativa e buffs acumulados) fica no \texttt{RunState}, que sobrevive à recarga da cena a cada Reviver. Quem pode ser atingido é definido pelas camadas de física: mundo, aventureiros e inimigos.
 
+\subsection{Máquina de estados do jogador}
+
+O aventureiro tem um nó \texttt{StateMachine} com um nó filho por estado, no mesmo formato do cérebro dos mortos-vivos: \textbf{Idle}, \textbf{Walk}, \textbf{Run} e \textbf{Air} (locomoção; cada um define a própria animação no inspetor), \textbf{Action} (golpe ou reação a dano em curso), \textbf{Block} (mantém o escudo virado para a câmera e larga a guarda quando um golpe por trás a derruba) e \textbf{Dead} (ignora toda entrada). Cada estado decide a transição seguinte; física, golpes e dano continuam no \texttt{Character} e no \texttt{Attack}, então os quatro aventureiros herdam a máquina sem mudar suas cenas.
+
+\subsection{Rede (co-op)}
+
+Um jogador hospeda (ENet, porta UDP 7777) e os outros entram pelo endereço dele. Cada máquina manda no movimento do próprio aventureiro e envia posição e animação 20 vezes por segundo; o host manda nos mortos-vivos, no elite, no boss e na votação. O dano é aplicado na máquina de quem é dono do alvo. Antes de começar cada fase todos esperam a última máquina carregar, para nenhuma mensagem chegar a uma cena que ainda não existe. Jogar sozinho usa o mesmo código, sem rede. Todo pedido que chega de outra máquina é conferido antes de valer: quem pediu (só o dono do atacante relata o golpe dele), se ele está vivo e perto do que quer mexer (até 35\,m para tiros, o alcance da seta mais o que dá para andar enquanto ela voa) e se o valor é plausível (dano ou cura de no máximo 20, perto do golpe mais forte do jogo). Baú, barril e poção são decididos pelo host, que avisa todas as máquinas juntas; a queda de cada jogador conta uma vez só no placar; depois do início ninguém troca de aventureiro nem de nome; e nomes perdem caracteres de controle e invisíveis.
+
 \subsection{Mapa}
 
-A vila é montada com dois GridMaps: \textbf{Chão} (células de 2\,m para ruas e praça) e \textbf{Estrutura} (células de 1\,m para pisos, paredes, cantos e escadas das casas). Telhados, portas, janelas e objetos de cenário ficam fora da grade, como cenas avulsas. As bibliotecas de peças são geradas por um script a partir dos modelos importados. Cada mapa é uma cena própria em \texttt{scenes/maps/} (\texttt{village}, \texttt{grid\_sandbox}, \texttt{public\_square} e \texttt{village\_road}) e é desenhado inteiro pela paleta do GridMap: cada grade é uma cena separada em \texttt{scenes/maps/<mapa>/} (\texttt{ground}, \texttt{structure} e \texttt{objects}), que pode ser reaproveitada em outras cenas. São três bibliotecas de peças: \textbf{ground} (pisos), \textbf{village\_structure} (paredes, cantos, escadas, telhados e empenas) e \textbf{props} (carroça, caixotes, barris, cercas e tocha de parede, com colisão). Fora da grade ficam só as luzes, os limites invisíveis do mapa, os pontos de sorteio e peças com personagens, como o cadafalso da execução.
+A vila é montada com dois GridMaps: \textbf{Chão} (células de 2\,m para ruas e praça) e \textbf{Estrutura} (células de 1\,m para pisos, paredes, cantos e escadas das casas). Telhados, portas, janelas e objetos de cenário ficam fora da grade, como cenas avulsas. As bibliotecas de peças são geradas por um script a partir dos modelos importados. Em volta da vila, quatro paredes invisíveis de 6\,m (\texttt{Limites}) seguram quem sai pelas portas das casas da borda antes do fim do chão. Cada mapa é uma cena própria em \texttt{scenes/maps/} (\texttt{village}, \texttt{grid\_sandbox}, \texttt{public\_square} e \texttt{village\_road}) e é desenhado inteiro pela paleta do GridMap: cada grade é uma cena separada em \texttt{scenes/maps/<mapa>/} (\texttt{ground}, \texttt{structure} e \texttt{objects}), que pode ser reaproveitada em outras cenas. São três bibliotecas de peças: \textbf{ground} (pisos de pedra e madeira do Medieval Village MegaKit; os pisos do KayKit saíram por serem de cor lisa e destoarem das texturas), \textbf{village\_structure} (paredes, cantos, escadas, telhados e empenas) e \textbf{props} (carroça, caixotes, barris, cercas e tocha de parede, com colisão). Fora da grade ficam só as luzes, os limites invisíveis do mapa, os pontos de sorteio e peças com personagens, como o cadafalso da execução.
 
 As cutscenes usam o AnimationPlayer do próprio Godot: câmeras, legendas, fades, movimentos e animações dos personagens são trilhas da animação, ajustáveis no painel Animation sem mexer em código. Todas usam o mesmo script (\texttt{AdventurerCutscene}), que só coloca o aventureiro escolhido nos marcadores indicados e, ao terminar, abre a cena definida no inspetor; uma cutscene nova não precisa de código.
 
 \subsection{Testes automatizados}
 
-O projeto usa o gdUnit4 (versão 6.2.1). São 261 testes em 36 suítes, incluindo a mira dos ataques à distância, organizados por área: seleção de aventureiro, criação do aventureiro escolhido na partida, cena de execução, um teste específico para cada personagem (Knight, Barbarian, Mage, Rogue e Skeleton Minion), personagem base (vida, morte, buffs), percepção e cérebro dos mortos-vivos (visão, audição, memória, despertar, perseguição, ataque com aviso, busca e navegação contornando paredes), habilidades do botão direito (escudo do Knight, segundo machado do Barbarian), jogo pelo controle (analógicos, gatilhos, filtro por dispositivo, navegação nos menus), formação do elite, movimento do aventureiro (aceleração, andar, correr, pulo com tolerâncias, mira pela câmera), comandos de ataque (combo, cancelamento, ataque guardado, golpe interrompido), combate corpo a corpo e à distância, estado da missão, fase da vila (sorteio dos encontros e alcance pela navegação), áudio, baú e poção, Necromante e vitória, configurações, HUD, barra de vida, tela de morte e pausa. Para rodar: \texttt{tests/run\_tests.ps1}.
+O projeto usa o gdUnit4 (versão 6.2.1). São 389 testes em 52 suítes, incluindo a mira dos ataques à distância, organizados por área: seleção de aventureiro, criação do aventureiro escolhido na partida, cena de execução, um teste específico para cada personagem (Knight, Barbarian, Mage, Rogue e Skeleton Minion), personagem base (vida, morte, buffs), percepção e cérebro dos mortos-vivos (visão, audição, memória, despertar, perseguição, ataque com aviso, busca e navegação contornando paredes), habilidades do botão direito (escudo do Knight, segundo machado do Barbarian), jogo pelo controle (analógicos, gatilhos, filtro por dispositivo, navegação nos menus), formação do elite, movimento do aventureiro (aceleração, andar, correr segurando Espaço, queda, mira pela câmera), comandos de ataque (combo, cancelamento, ataque guardado, golpe interrompido), combate corpo a corpo e à distância, estado da missão, fase da vila (sorteio dos encontros e alcance pela navegação), áudio, baú e poção, Necromante e vitória, configurações, HUD, barra de vida, tela de morte e pausa, máquina de estados do jogador, energia (custos, golpe pesado, dano proporcional, corrida e escudo), votação, histórico de dano e placar, inventário rápido, beber segurando E, troca de habilidade, poção e objetos que quebram, portal e HUD em cruz, e funções de rede do lobby. Para rodar: aba gdUnit do editor ou o workflow de testes no GitHub. Além deles, dois testes de ponta a ponta rodam o jogo de verdade a partir do menu, apertando os mesmos botões que o jogador: um contrato solo até a segunda tentativa e uma partida em grupo com dois processos ligados pela rede local (dano entre máquinas, pedido forjado recusado pelo host, reviver pela rede, votação e placar). Rodam com \texttt{tests/e2e/run\_e2e.sh}, também no GitHub.
 
 % ===============================================================
 \section{Assets}
@@ -362,7 +400,7 @@ O projeto utiliza pacotes gratuitos de modelos 3D e áudio, todos sob licença \
 \midrule
 \href{https://kaylousberg.itch.io/kaykit-adventurers}{KayKit Adventurers} (Kay Lousberg) & Aventureiros jogáveis \\
 \href{https://kaylousberg.itch.io/kaykit-skeletons}{KayKit Skeletons} (Kay Lousberg) & Mortos-vivos \\
-\href{https://kaylousberg.itch.io/kaykit-dungeon-pack}{KayKit Dungeon Pack} (Kay Lousberg) & Props e elementos de cenário \\
+\href{https://kaylousberg.itch.io/kaykit-dungeon-pack}{KayKit Dungeon Pack} (Kay Lousberg) & Props e elementos de cenário (não usado no chão) \\
 \href{https://quaternius.itch.io/medieval-village-megakit}{Medieval Village MegaKit} (Quaternius) & Construção da vila \\
 \href{https://kenney.nl/assets/rpg-audio}{RPG Audio}, \href{https://kenney.nl/assets/impact-sounds}{Impact Sounds} e \href{https://kenney.nl/assets/interface-sounds}{Interface Sounds} (Kenney) & Efeitos sonoros \\
 \href{https://opengameart.org/content/dark-cavern-ambient}{Dark Cavern Ambient} (Paul Wortmann) & Música ambiente da vila \\
@@ -372,8 +410,8 @@ O projeto utiliza pacotes gratuitos de modelos 3D e áudio, todos sob licença \
 
 \section{Publicação}
 
-O jogo é exportado para Windows e Linux (64 bits) como um executável único, com o conteúdo embutido, e publicado no itch.io. A versão para navegador não é usada porque o jogo depende do renderizador Forward+ (sombras, névoa e luzes dinâmicas), que o navegador não suporta. O build de Linux e este documento em PDF são gerados pelo GitHub Actions (workflows \texttt{build-linux.yml} e \texttt{gdd.yml}).
+O jogo é exportado para Windows e Linux (64 bits) como um executável único, com o conteúdo embutido, e publicado no itch.io. Para jogar em grupo, o host precisa estar na mesma rede local que os outros, ou liberar a porta UDP 7777 no roteador, ou usar uma VPN de jogo (Radmin, Tailscale). A versão para navegador não é usada porque o jogo depende do renderizador Forward+ (sombras, névoa e luzes dinâmicas), que o navegador não suporta. O GitHub Actions gera os executáveis de Windows e Linux em todo pull request para a \texttt{main} (\texttt{build.yml}), publica uma release com os dois a cada merge na \texttt{main} (\texttt{release.yml}) e gera este documento em PDF (\texttt{gdd.yml}). Como o executável não é assinado, o Windows mostra o aviso do SmartScreen na primeira execução (``Mais informações'', ``Executar assim mesmo''); quem hospeda precisa permitir o jogo no firewall, marcando também a rede Pública, que é como redes de faculdade e VPNs costumam aparecer.
 
-O executável usa o ícone do jogo (o Knight sob a luz verde do Necromante). O README do projeto traz os controles, como rodar, como testar e os créditos, e o workflow \texttt{.github/workflows/tests.yml} roda a suíte de testes a cada push e pull request.
+O executável usa o ícone do jogo (o Knight sob a luz verde do Necromante). O README do projeto traz os controles, como rodar, como testar e os créditos, e os workflows \texttt{tests.yml} e \texttt{e2e.yml} rodam os testes unitários e os de ponta a ponta a cada pull request.
 
 \end{document}

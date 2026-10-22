@@ -3,16 +3,13 @@ extends GdUnitTestSuite
 const DEATH_SCREEN := preload("res://scenes/ui/death_screen.tscn")
 
 var arena: TestArena
-var player: Character
 var screen: DeathScreen
 
 
 func before_test() -> void:
 	RunState.reset()
 	arena = TestArena.new(self)
-	player = arena.spawn(TestArena.KNIGHT, Vector3.ZERO)
 	screen = DEATH_SCREEN.instantiate()
-	screen.player = player
 	arena.root.add_child(screen)
 
 
@@ -20,13 +17,14 @@ func after_test() -> void:
 	RunState.reset()
 
 
+# a sessao abre a votacao quando o grupo inteiro cai
 func _kill_and_wait_for_screen() -> void:
-	player.take_damage(99.0)
+	screen.open_vote(RunState.roll_choices(), true)
 	await arena.wait_seconds(DeathScreen.SHOW_DELAY + 0.2)
 
 
 func test_opens_only_after_death_animation() -> void:
-	player.take_damage(99.0)
+	screen.open_vote(RunState.roll_choices(), true)
 	await arena.wait_physics(2)
 	assert_bool(screen.visible).is_false()
 
@@ -98,3 +96,18 @@ func test_clicking_a_card_chooses_it() -> void:
 	second.pressed.emit()
 
 	await assert_signal(signals).is_emitted("revive_chosen", [second.buff])
+
+
+func test_only_the_host_can_give_up() -> void:
+	screen.open_vote(RunState.roll_choices(), false)
+	await arena.wait_seconds(DeathScreen.SHOW_DELAY + 0.2)
+
+	assert_bool(screen.get_node("%GiveUpButton").visible).is_false()
+
+
+func test_shows_the_damage_recap() -> void:
+	screen.set_recap("Dano recebido: 14")
+	await _kill_and_wait_for_screen()
+
+	assert_bool(screen.get_node("%RecapLabel").visible).is_true()
+	assert_str(screen.get_node("%RecapLabel").text).is_equal("Dano recebido: 14")

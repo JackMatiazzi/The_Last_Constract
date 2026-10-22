@@ -66,6 +66,7 @@ func _highlight(_info: AdventurerInfo) -> void:
 func _start_contract(info: AdventurerInfo) -> void:
 	RunState.reset()
 	RunState.adventurer = info
+	Net.match_seed = randi()
 	get_tree().change_scene_to_file(MISSION_INTRO)
 
 

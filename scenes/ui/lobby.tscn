@@ -1,0 +1,194 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/lobby.gd" id="1_lobby"]
+[ext_resource type="PackedScene" path="res://scenes/ui/address_button.tscn" id="2_address"]
+
+[node name="Lobby" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_lobby")
+address_button_scene = ExtResource("2_address")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.05, 0.045, 0.06, 1)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.08
+anchor_top = 0.06
+anchor_right = 0.92
+anchor_bottom = 0.94
+
+[node name="Scroll" type="ScrollContainer" parent="Panel"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Content" type="VBoxContainer" parent="Panel/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Panel/Scroll/Content"]
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "Contrato em grupo"
+horizontal_alignment = 1
+
+[node name="ConnectPanel" type="VBoxContainer" parent="Panel/Scroll/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 10
+
+[node name="NameLabel" type="Label" parent="Panel/Scroll/Content/ConnectPanel"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "Seu nome"
+
+[node name="NameInput" type="LineEdit" parent="Panel/Scroll/Content/ConnectPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+max_length = 16
+placeholder_text = "Aventureiro"
+
+[node name="AddressHint" type="Label" parent="Panel/Scroll/Content/ConnectPanel"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "Endereço do host (vazio = esta máquina)"
+
+[node name="AddressInput" type="LineEdit" parent="Panel/Scroll/Content/ConnectPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "127.0.0.1"
+
+[node name="Buttons" type="HBoxContainer" parent="Panel/Scroll/Content/ConnectPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HostButton" type="Button" parent="Panel/Scroll/Content/ConnectPanel/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PrimaryButton"
+text = "Hospedar"
+
+[node name="JoinButton" type="Button" parent="Panel/Scroll/Content/ConnectPanel/Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Entrar"
+
+[node name="RoomPanel" type="HBoxContainer" parent="Panel/Scroll/Content"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 28
+
+[node name="PartyColumn" type="VBoxContainer" parent="Panel/Scroll/Content/RoomPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="HostAddress" type="VBoxContainer" parent="Panel/Scroll/Content/RoomPanel/PartyColumn"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AddressLabel" type="Label" parent="Panel/Scroll/Content/RoomPanel/PartyColumn/HostAddress"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+autowrap_mode = 3
+
+[node name="AddressButtons" type="VBoxContainer" parent="Panel/Scroll/Content/RoomPanel/PartyColumn/HostAddress"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="PlayersTitle" type="Label" parent="Panel/Scroll/Content/RoomPanel/PartyColumn"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "Grupo"
+
+[node name="PlayersLabel" type="Label" parent="Panel/Scroll/Content/RoomPanel/PartyColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="ChoiceColumn" type="VBoxContainer" parent="Panel/Scroll/Content/RoomPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="ChooseLabel" type="Label" parent="Panel/Scroll/Content/RoomPanel/ChoiceColumn"]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+text = "Escolha seu aventureiro"
+
+[node name="Adventurers" type="GridContainer" parent="Panel/Scroll/Content/RoomPanel/ChoiceColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="Knight" type="Button" parent="Panel/Scroll/Content/RoomPanel/ChoiceColumn/Adventurers"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+
+[node name="Barbarian" type="Button" parent="Panel/Scroll/Content/RoomPanel/ChoiceColumn/Adventurers"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+
+[node name="Mage" type="Button" parent="Panel/Scroll/Content/RoomPanel/ChoiceColumn/Adventurers"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+
+[node name="Rogue" type="Button" parent="Panel/Scroll/Content/RoomPanel/ChoiceColumn/Adventurers"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+
+[node name="FriendlyFireToggle" type="CheckButton" parent="Panel/Scroll/Content/RoomPanel/ChoiceColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Fogo amigo"
+
+[node name="Spacer" type="Control" parent="Panel/Scroll/Content/RoomPanel/ChoiceColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StartButton" type="Button" parent="Panel/Scroll/Content/RoomPanel/ChoiceColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "Iniciar contrato"
+
+[node name="StatusLabel" type="Label" parent="Panel/Scroll/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="BackButton" type="Button" parent="Panel/Scroll/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Voltar"

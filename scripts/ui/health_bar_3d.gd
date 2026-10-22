@@ -37,6 +37,13 @@ func _ready() -> void:
 		_on_health_changed(character.health, character.get_max_health())
 
 
+# a barra do aliado aparece em grupo; a do proprio jogador continua na HUD
+func set_bar_visible(shown: bool) -> void:
+	show_bar = shown
+	visible = shown and not character.is_dead
+	viewport.render_target_update_mode = SubViewport.UPDATE_ONCE if shown else SubViewport.UPDATE_DISABLED
+
+
 func _on_health_changed(current: float, maximum: float) -> void:
 	fill.max_value = maximum
 	trail.max_value = maximum
