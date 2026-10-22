@@ -1,6 +1,7 @@
 extends GdUnitTestSuite
 
 const PORTAL := preload("res://scenes/world/portal.tscn")
+const BOLT := preload("res://scenes/combat/magic_bolt.tscn")
 
 var arena: TestArena
 var mage: Adventurer
@@ -139,9 +140,101 @@ func test_a_linked_portal_shows_the_other_side() -> void:
 
 	entry.link = exit
 	exit.link = entry
-	await arena.wait_physics(2)
+	# a camera do outro lado anda no _process: espera quadros de desenho, nao so de fisica
+	for i in 3:
+		await arena.root.get_tree().process_frame
 
 	var eye := entry.get_viewport().get_camera_3d()
 	assert_int(entry.view.render_target_update_mode).is_equal(SubViewport.UPDATE_ALWAYS)
 	assert_float(entry.view_camera.global_position.distance_to(exit.global_position)) \
 		.is_equal_approx(eye.global_position.distance_to(entry.global_position), 0.05)
+
+
+
+func _linked_pair(entry_spot: Vector3, exit_spot: Vector3, exit_turn := 0.0) -> Array[Portal]:
+	var entry := PORTAL.instantiate() as Portal
+	var exit := PORTAL.instantiate() as Portal
+	arena.root.add_child(entry)
+	arena.root.add_child(exit)
+	entry.global_position = entry_spot
+	exit.global_position = exit_spot
+	exit.rotation.y = exit_turn
+	entry.link = exit
+	exit.link = entry
+	return [entry, exit]
+
+
+func _fire(origin: Vector3, direction: Vector3) -> Projectile:
+	var bolt := BOLT.instantiate() as Projectile
+	arena.root.add_child(bolt)
+	bolt.launch(mage, origin, direction, 1.0, 0)
+	return bolt
+
+
+func test_a_shot_into_the_portal_comes_out_of_the_other_one() -> void:
+	_linked_pair(Vector3(0, 0, -4), Vector3(12, 0, 0))
+	await arena.wait_physics(2)
+
+	var bolt := _fire(Vector3(0, 1.1, -2), Vector3.FORWARD)
+	await arena.wait_physics(20)
+
+	assert_float(bolt.global_position.x).is_equal_approx(12.0, 0.3)
+	assert_float(bolt.global_position.z).is_less(0.0)
+
+
+func test_the_shot_leaves_facing_where_the_exit_faces() -> void:
+	_linked_pair(Vector3(0, 0, -4), Vector3(12, 0, 0), PI / 2.0)
+	await arena.wait_physics(2)
+
+	var bolt := _fire(Vector3(0, 1.1, -2), Vector3.FORWARD)
+	await arena.wait_physics(20)
+
+	assert_float(bolt.global_position.x).is_less(12.0)
+	assert_float((-bolt.global_basis.z).x).is_less(-0.9)
+
+
+func test_a_shot_from_behind_also_leaves_through_the_front() -> void:
+	_linked_pair(Vector3(0, 0, -4), Vector3(12, 0, 0))
+	await arena.wait_physics(2)
+
+	var bolt := _fire(Vector3(0, 1.1, -6), Vector3.BACK)
+	await arena.wait_physics(20)
+
+	assert_float(bolt.global_position.x).is_equal_approx(12.0, 0.3)
+	assert_float(bolt.global_position.z).is_less(0.0)
+
+
+func test_a_shot_beside_the_ring_does_not_travel() -> void:
+	_linked_pair(Vector3(0, 0, -4), Vector3(12, 0, 0))
+	await arena.wait_physics(2)
+
+	var bolt := _fire(Vector3(2, 1.1, -2), Vector3.FORWARD)
+	await arena.wait_physics(20)
+
+	assert_float(bolt.global_position.x).is_equal_approx(2.0, 0.01)
+
+
+func test_a_portal_without_a_pair_lets_the_shot_go_straight() -> void:
+	var lonely := PORTAL.instantiate() as Portal
+	arena.root.add_child(lonely)
+	lonely.global_position = Vector3(0, 0, -4)
+	await arena.wait_physics(2)
+
+	var bolt := _fire(Vector3(0, 1.1, -2), Vector3.FORWARD)
+	await arena.wait_physics(20)
+
+	assert_float(bolt.global_position.x).is_equal_approx(0.0, 0.01)
+	assert_float(bolt.global_position.z).is_less(-5.0)
+
+
+func test_the_bar_above_the_portal_empties_as_it_closes() -> void:
+	var portal := PORTAL.instantiate() as Portal
+	portal.lifetime = 1.0
+	arena.root.add_child(portal)
+	var full := portal.time_fill.region_rect.size.x
+
+	for i in 30:
+		await arena.root.get_tree().process_frame
+
+	assert_float(portal.time_left_fraction()).is_less(1.0)
+	assert_float(portal.time_fill.region_rect.size.x).is_less(full)

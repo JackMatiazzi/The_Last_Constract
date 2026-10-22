@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://scripts/world/portal.gd" id="1_portal"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/combat/magic_cast.ogg" id="2_open"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/combat/magic_impact_0.ogg" id="3_travel"]
 [ext_resource type="Shader" path="res://assets/shaders/portal_view.gdshader" id="4_view"]
+[ext_resource type="Texture2D" path="res://assets/ui/bar.png" id="5_bar"]
 
 [sub_resource type="CylinderShape3D" id="Shape_portal"]
 height = 2.2
@@ -42,7 +43,7 @@ material = SubResource("Material_spark")
 radius = 0.04
 height = 0.08
 
-[node name="Portal" type="Area3D" node_paths=PackedStringArray("visual", "travel_sound", "veil", "view", "view_camera")]
+[node name="Portal" type="Area3D" node_paths=PackedStringArray("visual", "travel_sound", "veil", "view", "view_camera", "time_fill")]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
@@ -52,6 +53,7 @@ travel_sound = NodePath("TravelSound")
 veil = NodePath("Visual/Veil")
 view = NodePath("View")
 view_camera = NodePath("View/Camera")
+time_fill = NodePath("Visual/TimeBar/Fill")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 position = Vector3(0, 1.1, 0)
@@ -89,6 +91,30 @@ spread = 20.0
 gravity = Vector3(0, 0, 0)
 initial_velocity_min = 0.2
 initial_velocity_max = 0.6
+
+[node name="TimeBar" type="Node3D" parent="Visual"]
+position = Vector3(0, 1.1, 0)
+
+[node name="Back" type="Sprite3D" parent="Visual/TimeBar"]
+layers = 524288
+modulate = Color(0.08, 0.04, 0.12, 0.85)
+centered = false
+offset = Vector2(-50, -4)
+pixel_size = 0.008
+billboard = 1
+texture = ExtResource("5_bar")
+
+[node name="Fill" type="Sprite3D" parent="Visual/TimeBar"]
+layers = 524288
+render_priority = 1
+modulate = Color(0.78, 0.6, 1, 1)
+centered = false
+offset = Vector2(-50, -4)
+pixel_size = 0.008
+billboard = 1
+texture = ExtResource("5_bar")
+region_enabled = true
+region_rect = Rect2(0, 0, 100, 8)
 
 [node name="OpenSound" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("2_open")

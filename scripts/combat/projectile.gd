@@ -6,6 +6,8 @@ extends Area3D
 const WORLD_LAYER := 1
 const STICK_DEPTH := 0.15
 const BREAK_RADIUS := 0.9
+# sai um pouco a frente do outro portal para nao contar a passagem de novo
+const PORTAL_EXIT_NUDGE := 0.05
 
 @export var speed := 15.0
 @export var max_distance := 20.0
@@ -38,10 +40,15 @@ func launch(shooter: Character, origin: Vector3, direction: Vector3, hit_damage:
 	reset_physics_interpolation()
 
 
+# parede antes do portal segura o tiro; portal antes da parede leva o tiro para o outro lado
 func _physics_process(delta: float) -> void:
 	var step := speed * delta
+	var target := global_position + _direction * step
+	var gate := Portal.first_crossed(get_tree(), global_position, target)
+	if gate:
+		target = global_position.lerp(target, gate.crossing_fraction(global_position, target))
 	_world_query.from = global_position
-	_world_query.to = global_position + _direction * step
+	_world_query.to = target
 	var hit := get_world_3d().direct_space_state.intersect_ray(_world_query)
 	if not hit.is_empty():
 		if breaks_props and hit.collider is BreakableProps and _shooter_owns_the_hit():
@@ -49,10 +56,21 @@ func _physics_process(delta: float) -> void:
 		_leave_impact(hit.position, hit.normal)
 		queue_free()
 		return
-	global_position = _world_query.to
+	if gate:
+		_pass_through(gate, target)
+	else:
+		global_position = target
 	_travelled += step
 	if _travelled >= max_distance:
 		queue_free()
+
+
+func _pass_through(gate: Portal, crossing: Vector3) -> void:
+	var came_from := global_position
+	global_transform = gate.carry(Transform3D(global_basis, crossing), came_from)
+	_direction = -global_basis.z
+	global_position += _direction * PORTAL_EXIT_NUDGE
+	reset_physics_interpolation()
 
 
 func _leave_impact(point: Vector3, normal: Vector3, holder: Node = get_parent()) -> void:

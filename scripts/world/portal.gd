@@ -1,9 +1,13 @@
 class_name Portal
 extends Area3D
 
-# metade de um par: quem entra aqui sai na frente do outro portal;
-# cada maquina so move o proprio aventureiro, e a rede leva a posicao nova aos outros
+# metade de um par: aventureiro e projetil que entram aqui saem na frente do outro portal; inimigos nao.
+# Cada maquina so move o proprio aventureiro, e a rede leva a posicao nova aos outros
 
+const GROUP := "portals"
+# centro e raio do veu, no meio da altura do aventureiro
+const RING_CENTER := Vector3(0.0, 1.1, 0.0)
+const RING_RADIUS := 0.75
 const TRAVEL_COOLDOWN := 0.5
 # sai a frente do portal de destino, longe o bastante para nao entrar nele de volta
 const EXIT_OFFSET := 1.4
@@ -13,6 +17,8 @@ const VIEW_SCALE := 0.5
 # folga do plano de corte: a camera do outro lado nao enxerga o que esta atras do portal
 const NEAR_MARGIN := 0.3
 const TURN_AROUND := Transform3D(Basis(Vector3.UP, PI), Vector3.ZERO)
+# largura da textura da barra de tempo, em pixels
+const TIME_BAR_WIDTH := 100.0
 
 @export var lifetime := 12.0
 @export var visual: Node3D
@@ -20,14 +26,18 @@ const TURN_AROUND := Transform3D(Basis(Vector3.UP, PI), Vector3.ZERO)
 @export var veil: MeshInstance3D
 @export var view: SubViewport
 @export var view_camera: Camera3D
+# a barra acima do anel esvazia ate o portal fechar
+@export var time_fill: Sprite3D
 
 var link: Portal
 
 var _showing := false
+var _age := 0.0
 
 
 func _ready() -> void:
-	assert(visual and travel_sound and veil and view and view_camera, "Portal: aponte os nos exportados")
+	assert(visual and travel_sound and veil and view and view_camera and time_fill, "Portal: aponte os nos exportados")
+	add_to_group(GROUP)
 	body_entered.connect(_on_body_entered)
 	var timeline := create_tween()
 	timeline.tween_interval(lifetime)
@@ -39,7 +49,49 @@ func is_linked() -> bool:
 	return link != null and is_instance_valid(link)
 
 
-func _process(_delta: float) -> void:
+# o portal ligado cujo veu o trecho de from a to atravessa primeiro; null se nenhum
+static func first_crossed(tree: SceneTree, from: Vector3, to: Vector3) -> Portal:
+	var first: Portal = null
+	var nearest := INF
+	for portal: Portal in tree.get_nodes_in_group(GROUP):
+		var fraction := portal.crossing_fraction(from, to)
+		if fraction >= 0.0 and fraction < nearest:
+			first = portal
+			nearest = fraction
+	return first
+
+
+# em que fracao do trecho o veu e cruzado, de qualquer lado; -1 se passa ao lado ou nao chega
+func crossing_fraction(from: Vector3, to: Vector3) -> float:
+	if not is_linked():
+		return -1.0
+	var start := to_local(from)
+	var end := to_local(to)
+	if (start.z > 0.0) == (end.z > 0.0) or is_equal_approx(start.z, end.z):
+		return -1.0
+	var fraction := start.z / (start.z - end.z)
+	var spot := start.lerp(end, fraction)
+	if Vector2(spot.x, spot.y - RING_CENTER.y).length() > RING_RADIUS:
+		return -1.0
+	return fraction
+
+
+# leva uma posicao e direcao deste lado para o outro portal: de qualquer lado que se entre,
+# sai pela frente do par. A camera da janela e os projeteis usam a mesma conta
+func carry(through: Transform3D, came_from: Vector3) -> Transform3D:
+	var relative := global_transform.affine_inverse() * through
+	if to_local(came_from).z < 0.0:
+		relative = TURN_AROUND * relative
+	return link.global_transform * relative
+
+
+func time_left_fraction() -> float:
+	return clampf(1.0 - _age / lifetime, 0.0, 1.0)
+
+
+func _process(delta: float) -> void:
+	_age += delta
+	time_fill.region_rect.size.x = TIME_BAR_WIDTH * time_left_fraction()
 	var eye := get_viewport().get_camera_3d()
 	var showing := is_linked() and eye != null
 	if showing != _showing:
@@ -50,18 +102,14 @@ func _process(_delta: float) -> void:
 		_follow(eye)
 
 
-# a camera do outro lado repete a posicao do olho em relacao a este portal; de qualquer lado
-# que se olhe, a imagem e a saida (a frente do outro portal)
+# a camera do outro lado repete a posicao do olho em relacao a este portal
 func _follow(eye: Camera3D) -> void:
 	var wanted := Vector2i(Vector2(get_viewport().get_visible_rect().size) * VIEW_SCALE)
 	if view.size != wanted:
 		view.size = wanted
-	var relative := global_transform.affine_inverse() * eye.global_transform
-	if relative.origin.z < 0.0:
-		relative = TURN_AROUND * relative
-	view_camera.global_transform = link.global_transform * relative
+	view_camera.global_transform = carry(eye.global_transform, eye.global_position)
 	view_camera.fov = eye.fov
-	view_camera.near = maxf(eye.near, absf(relative.origin.z) - NEAR_MARGIN)
+	view_camera.near = maxf(eye.near, absf(to_local(eye.global_position).z) - NEAR_MARGIN)
 
 
 # recarga e som em todas as maquinas; so o dono do aventureiro move o boneco
