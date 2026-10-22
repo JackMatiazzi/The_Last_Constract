@@ -110,7 +110,7 @@ func test_hud_cross_shows_ability_secondary_and_quick_item() -> void:
 	assert_object(hud.ability_icon.texture).is_same(knight.attack.icon)
 	assert_str(hud.ability_cost.text).is_equal("15%")
 	assert_str(hud.ability_name.text).is_equal("Espada\nestamina")
-	assert_bool(hud.get_node("%SecondarySlot").visible).is_true()
+	assert_float(hud.secondary_slot.self_modulate.a).is_equal(1.0)
 	assert_object(hud.secondary_icon.texture).is_same(knight.block.icon)
 	assert_object(hud.item_icon.texture).is_null()
 	assert_str(hud.item_hint.text).is_equal("Sem itens")
@@ -216,3 +216,14 @@ func test_near_something_to_interact_holding_e_does_not_drink() -> void:
 	await arena.wait_seconds(Adventurer.DRINK_HOLD_TIME + 0.15)
 
 	assert_int(knight.inventory.count_of(HEALTH_POTION)).is_equal(1)
+
+
+func test_without_a_right_button_ability_the_left_slot_disappears_but_keeps_its_place() -> void:
+	var rogue := arena.spawn(TestArena.ROGUE, Vector3(4, 0, 0)) as Adventurer
+	var hud: Hud = auto_free(preload("res://scenes/ui/hud.tscn").instantiate())
+	arena.root.add_child(hud)
+
+	hud.bind(rogue)
+
+	assert_float(hud.secondary_slot.self_modulate.a).is_equal(0.0)
+	assert_bool(hud.secondary_slot.visible).is_true()

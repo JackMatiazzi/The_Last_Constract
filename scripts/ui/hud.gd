@@ -20,6 +20,7 @@ const SHORT_FLASH := Color(1.0, 0.35, 0.3)
 @onready var ability_icon: TextureRect = %AbilityIcon
 @onready var ability_cost: Label = %AbilityCost
 @onready var ability_name: Label = %AbilityName
+@onready var secondary_slot: Control = %SecondarySlot
 @onready var secondary_icon: TextureRect = %SecondaryIcon
 @onready var item_icon: TextureRect = %ItemIcon
 @onready var item_count: Label = %ItemCount
@@ -133,14 +134,15 @@ func _show_item(adventurer: Adventurer) -> void:
 	item_hint.text = "%s\n%s" % [item.title, hold] if item else "Sem itens"
 
 
-# sem botao direito o slot fica vazio, mas a cruz mantem o formato
+# sem botao direito (Rogue e Mage) o slot some, mas continua ocupando a celula: a cruz nao muda de lugar
 func _show_secondary(adventurer: Adventurer) -> void:
+	var icon: Texture2D = null
 	if adventurer.block:
-		secondary_icon.texture = adventurer.block.icon
+		icon = adventurer.block.icon
 	elif adventurer.secondary_attack:
-		secondary_icon.texture = adventurer.secondary_attack.icon
-	else:
-		secondary_icon.texture = null
+		icon = adventurer.secondary_attack.icon
+	secondary_icon.texture = icon
+	secondary_slot.self_modulate.a = 1.0 if icon else 0.0
 
 
 func _bind_pool(pool: EnergyPool, bar: ProgressBar) -> void:
