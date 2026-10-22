@@ -5,6 +5,7 @@ extends Area3D
 
 const WORLD_LAYER := 1
 const STICK_DEPTH := 0.15
+const BREAK_RADIUS := 0.9
 
 @export var speed := 15.0
 @export var max_distance := 20.0
@@ -12,6 +13,8 @@ const STICK_DEPTH := 0.15
 @export var impact_scene: PackedScene
 
 var damage := 0.0
+# so o disparo pesado quebra barris e caixotes
+var breaks_props := false
 var _shooter: Character
 var _direction := Vector3.FORWARD
 var _travelled := 0.0
@@ -21,6 +24,7 @@ var _world_query := PhysicsRayQueryParameters3D.new()
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
+	area_entered.connect(_on_area_entered)
 	_world_query.collision_mask = WORLD_LAYER
 
 
@@ -40,6 +44,8 @@ func _physics_process(delta: float) -> void:
 	_world_query.to = global_position + _direction * step
 	var hit := get_world_3d().direct_space_state.intersect_ray(_world_query)
 	if not hit.is_empty():
+		if breaks_props and hit.collider is BreakableProps and _shooter_owns_the_hit():
+			(hit.collider as BreakableProps).break_near(hit.position, BREAK_RADIUS)
 		_leave_impact(hit.position, hit.normal)
 		queue_free()
 		return
@@ -64,11 +70,30 @@ func _on_body_entered(body: Node3D) -> void:
 	if target.is_dead or target in _already_hit:
 		return
 	_already_hit.append(target)
-	target.take_damage(damage, _shooter)
+	if not is_instance_valid(_shooter):
+		if multiplayer.is_server():
+			target.take_damage(damage)
+	elif _shooter.is_multiplayer_authority():
+		target.take_damage(damage, _shooter)
 	if not pierce:
 		var point := global_position + _direction * STICK_DEPTH
 		_leave_impact(point, -_direction, _stick_holder(target, point))
 		queue_free()
+
+
+# so o tiro de quem atirou quebra; nas outras maquinas o projetil so some
+func _on_area_entered(area: Area3D) -> void:
+	if not area is HealthPotion:
+		return
+	if _shooter_owns_the_hit():
+		(area as HealthPotion).shatter()
+	if not pierce:
+		_leave_impact(global_position, -_direction)
+		queue_free()
+
+
+func _shooter_owns_the_hit() -> bool:
+	return not is_instance_valid(_shooter) or _shooter.is_multiplayer_authority()
 
 
 # preso ao osso mais proximo para acompanhar o alvo andando e caindo

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="QuickItem" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/ui/icons/potion.png" id="icon_potion"]
+[ext_resource type="Script" path="res://scripts/world/quick_item.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+icon = ExtResource("icon_potion")
+title = "Poção de vida"
+heal_amount = 3.0

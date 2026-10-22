@@ -1,0 +1,109 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/portal.gd" id="1_portal"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/combat/magic_cast.ogg" id="2_open"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/combat/magic_impact_0.ogg" id="3_travel"]
+[ext_resource type="Shader" path="res://assets/shaders/portal_view.gdshader" id="4_view"]
+
+[sub_resource type="CylinderShape3D" id="Shape_portal"]
+height = 2.2
+radius = 0.75
+
+[sub_resource type="StandardMaterial3D" id="Material_ring"]
+albedo_color = Color(0.55, 0.3, 1, 1)
+emission_enabled = true
+emission = Color(0.6, 0.35, 1, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="TorusMesh" id="Mesh_ring"]
+material = SubResource("Material_ring")
+inner_radius = 0.75
+outer_radius = 0.9
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_view"]
+viewport_path = NodePath("View")
+
+[sub_resource type="ShaderMaterial" id="Material_veil"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("4_view")
+shader_parameter/view = SubResource("ViewportTexture_view")
+shader_parameter/tint = Color(0.35, 0.15, 0.75, 1)
+
+[sub_resource type="QuadMesh" id="Mesh_veil"]
+size = Vector2(1.5, 1.5)
+
+[sub_resource type="StandardMaterial3D" id="Material_spark"]
+shading_mode = 0
+albedo_color = Color(0.8, 0.65, 1, 1)
+
+[sub_resource type="SphereMesh" id="Mesh_spark"]
+material = SubResource("Material_spark")
+radius = 0.04
+height = 0.08
+
+[node name="Portal" type="Area3D" node_paths=PackedStringArray("visual", "travel_sound", "veil", "view", "view_camera")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_portal")
+visual = NodePath("Visual")
+travel_sound = NodePath("TravelSound")
+veil = NodePath("Visual/Veil")
+view = NodePath("View")
+view_camera = NodePath("View/Camera")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.1, 0)
+shape = SubResource("Shape_portal")
+
+[node name="Visual" type="Node3D" parent="."]
+position = Vector3(0, 1.1, 0)
+
+[node name="Ring" type="MeshInstance3D" parent="Visual"]
+layers = 524288
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("Mesh_ring")
+
+[node name="Veil" type="MeshInstance3D" parent="Visual"]
+layers = 524288
+material_override = SubResource("Material_veil")
+mesh = SubResource("Mesh_veil")
+
+[node name="Glow" type="OmniLight3D" parent="Visual"]
+light_color = Color(0.6, 0.4, 1, 1)
+light_energy = 2.0
+omni_range = 4.0
+
+[node name="Sparks" type="CPUParticles3D" parent="Visual"]
+amount = 24
+lifetime = 1.2
+mesh = SubResource("Mesh_spark")
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 0.05
+emission_ring_radius = 0.82
+emission_ring_inner_radius = 0.75
+direction = Vector3(0, 0, -1)
+spread = 20.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.2
+initial_velocity_max = 0.6
+
+[node name="OpenSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_open")
+autoplay = true
+max_distance = 30.0
+bus = &"SFX"
+
+[node name="TravelSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_travel")
+max_distance = 30.0
+bus = &"SFX"
+
+[node name="View" type="SubViewport" parent="."]
+size = Vector2i(640, 360)
+render_target_update_mode = 0
+
+[node name="Camera" type="Camera3D" parent="View"]
+cull_mask = 524287

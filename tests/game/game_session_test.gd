@@ -40,3 +40,55 @@ func test_without_a_choice_the_first_adventurer_is_used() -> void:
 	RunState.adventurer = null
 
 	assert_str(RunState.current_adventurer().title).is_equal("Knight")
+
+
+func _press_pause(session: GameSession) -> void:
+	var press := InputEventAction.new()
+	press.action = &"pause"
+	press.pressed = true
+	session._unhandled_input(press)
+
+
+func test_the_pause_menu_takes_control_away_until_it_closes() -> void:
+	var game := await _start_game_with("res://resources/adventurers/knight.tres")
+	var session: GameSession = game.get_node("GameSession")
+
+	_press_pause(session)
+	assert_bool(session.player.input_locked).is_true()
+
+	get_tree().paused = false
+	session.pause_menu.resumed.emit()
+	assert_bool(session.player.input_locked).is_false()
+
+
+func test_solo_is_a_party_of_one() -> void:
+	var game := await _start_game_with("res://resources/adventurers/knight.tres")
+	var session: GameSession = game.get_node("GameSession")
+
+	assert_array(session._peers_in_match()).contains_exactly([multiplayer.get_unique_id()])
+	assert_array(session.players).contains_exactly([session.player])
+
+
+func test_pausing_drops_the_shield_and_what_was_being_held() -> void:
+	var game := await _start_game_with("res://resources/adventurers/knight.tres")
+	var session: GameSession = game.get_node("GameSession")
+	var knight := session.player
+	knight.use_secondary()
+	await await_idle_frame()
+	assert_bool(knight.is_blocking).is_true()
+
+	_press_pause(session)
+
+	assert_bool(knight.is_blocking).is_false()
+	assert_float(knight.drink_progress()).is_equal(0.0)
+	get_tree().paused = false
+
+
+func test_only_blessings_from_the_buff_folder_are_loaded() -> void:
+	var blessing := RunState.BUFF_DIR + "/lamina_afiada.tres"
+
+	assert_object(GameSession.buff_at(blessing)).is_not_null()
+	assert_object(GameSession.buff_at("res://scenes/ui/hud.tscn")).is_null()
+	assert_object(GameSession.buff_at("user://lamina_afiada.tres")).is_null()
+	assert_object(GameSession.buff_at(RunState.BUFF_DIR + "/../items/health_potion.tres")).is_null()
+	assert_object(GameSession.buff_at("")).is_null()

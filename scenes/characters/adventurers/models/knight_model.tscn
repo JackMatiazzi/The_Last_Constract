@@ -18,3 +18,6 @@ visible = false
 
 [node name="2H_Sword" parent="Rig/Skeleton3D/handslot_r"]
 visible = false
+
+[node name="Badge_Shield" parent="Rig/Skeleton3D/handslot_l"]
+scale = Vector3(1.6, 1.6, 1.6)

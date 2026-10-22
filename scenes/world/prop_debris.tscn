@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/combat/hit_2.ogg" id="2_sound"]
+
+[sub_resource type="StandardMaterial3D" id="Material_wood"]
+albedo_color = Color(0.48, 0.32, 0.18, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="Mesh_chip"]
+material = SubResource("Material_wood")
+size = Vector3(0.14, 0.05, 0.1)
+
+[node name="PropDebris" type="Node3D"]
+
+[node name="Chips" type="CPUParticles3D" parent="."]
+position = Vector3(0, 0.6, 0)
+amount = 24
+lifetime = 1.1
+one_shot = true
+explosiveness = 0.9
+mesh = SubResource("Mesh_chip")
+emission_shape = 1
+emission_sphere_radius = 0.4
+direction = Vector3(0, 1, 0)
+spread = 70.0
+initial_velocity_min = 2.5
+initial_velocity_max = 5.0
+angular_velocity_min = -360.0
+angular_velocity_max = 360.0
+
+[node name="Sound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_sound")
+autoplay = true
+max_distance = 30.0
+bus = &"SFX"
+
+[connection signal="finished" from="Chips" to="." method="queue_free"]

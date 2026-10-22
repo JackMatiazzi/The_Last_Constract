@@ -38,6 +38,7 @@ func change_state(state_name: String) -> void:
 		current_state.exit()
 	current_state = _states[state_name]
 	current_state_name = state_name
+	enemy.share_brain_state(state_name)
 	current_state.enter()
 	if _chained_transitions < MAX_CHAINED_TRANSITIONS:
 		_chained_transitions += 1

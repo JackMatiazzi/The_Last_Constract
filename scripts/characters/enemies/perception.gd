@@ -51,9 +51,18 @@ func _mark_aware() -> void:
 
 func acquire_target() -> void:
 	if target == null or not is_instance_valid(target) or target.is_dead:
-		target = get_tree().get_first_node_in_group("players") as Character
-	if target != null and target.is_dead:
-		target = null
+		target = _nearest_living_player()
+
+
+func _nearest_living_player() -> Character:
+	var nearest: Character = null
+	var nearest_distance := INF
+	for player: Character in get_tree().get_nodes_in_group("players"):
+		var distance := player.global_position.distance_squared_to(enemy.global_position)
+		if not player.is_dead and distance < nearest_distance:
+			nearest = player
+			nearest_distance = distance
+	return nearest
 
 
 func _sees(candidate: Character) -> bool:

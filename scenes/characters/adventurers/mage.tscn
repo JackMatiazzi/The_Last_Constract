@@ -1,23 +1,40 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=10 format=3]
 
+[ext_resource type="Texture2D" path="res://assets/ui/icons/portal.png" id="icon_portal"]
+[ext_resource type="Texture2D" path="res://assets/ui/icons/magic_bolt.png" id="icon_bolt"]
 [ext_resource type="PackedScene" path="res://scenes/characters/adventurers/adventurer.tscn" id="1_adventurer"]
 [ext_resource type="PackedScene" path="res://scenes/characters/adventurers/models/mage_model.tscn" id="2_model"]
 [ext_resource type="Script" path="res://scripts/combat/ranged_attack.gd" id="3_attack"]
 [ext_resource type="PackedScene" path="res://scenes/combat/magic_bolt.tscn" id="4_projectile"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/combat/magic_cast.ogg" id="snd_magic_cast"]
 
-[node name="Mage" node_paths=PackedStringArray("animation_player", "attack") instance=ExtResource("1_adventurer")]
+[ext_resource type="Script" path="res://scripts/combat/portal_spell.gd" id="portal_spell"]
+[ext_resource type="PackedScene" path="res://scenes/world/portal.tscn" id="portal_scene"]
+
+[node name="Mage" node_paths=PackedStringArray("animation_player", "attack", "abilities") instance=ExtResource("1_adventurer")]
+uses_mana = true
+stamina_regen_multiplier = 0.5
+mana_regen_multiplier = 1.5
+quick_cost = 20.0
+heavy_cost = 45.0
 animation_player = NodePath("Model/Mage/AnimationPlayer")
 attack = NodePath("Model/MagicBoltAttack")
+abilities = [NodePath("Model/MagicBoltAttack"), NodePath("Model/PortalSpell")]
 
 [node name="Mage" parent="Model" instance=ExtResource("2_model")]
 
 [node name="MagicBoltAttack" type="Node3D" parent="Model" node_paths=PackedStringArray("sound")]
 script = ExtResource("3_attack")
+icon = ExtResource("icon_bolt")
+title = "Projétil mágico"
 sound = NodePath("Sound")
 cooldown = 1.0
 animations = PackedStringArray("Spellcast_Shoot")
 impact_delay = 0.45
+heavy_animation = "Spellcast_Long"
+heavy_animation_speed = 1.6
+heavy_impact_delay = 0.95
+heavy_damage_multiplier = 2.5
 projectile_scene = ExtResource("4_projectile")
 
 [node name="Muzzle" type="Marker3D" parent="Model/MagicBoltAttack"]
@@ -28,3 +45,13 @@ stream = ExtResource("snd_magic_cast")
 pitch_scale = 1.0
 max_distance = 30.0
 bus = &"SFX"
+
+[node name="PortalSpell" type="Node3D" parent="Model"]
+script = ExtResource("portal_spell")
+icon = ExtResource("icon_portal")
+title = "Portal"
+cost_override = 20.0
+cooldown = 0.8
+animations = PackedStringArray("Spellcast_Raise")
+impact_delay = 0.5
+portal_scene = ExtResource("portal_scene")

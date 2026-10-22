@@ -1,6 +1,7 @@
 extends Node3D
 
 const CHARACTER_SELECT := "res://scenes/ui/character_select.tscn"
+const LOBBY := "res://scenes/ui/lobby.tscn"
 const ORBIT_SPEED := 0.08
 
 @export var camera_pivot: Node3D
@@ -13,9 +14,14 @@ const ORBIT_SPEED := 0.08
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	Net.leave()
+	if Net.has_command_line():
+		get_tree().change_scene_to_file.call_deferred(LOBBY)
+		return
 	knight_animation.play("Idle")
 	skeleton_animation.play("Idle")
 	%PlayButton.pressed.connect(_on_play_pressed)
+	%CoopButton.pressed.connect(get_tree().change_scene_to_file.bind(LOBBY))
 	%SettingsButton.pressed.connect(_open_settings)
 	%QuitButton.pressed.connect(get_tree().quit)
 	settings_menu.closed.connect(_close_settings)

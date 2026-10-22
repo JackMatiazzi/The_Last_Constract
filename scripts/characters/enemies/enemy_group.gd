@@ -62,9 +62,17 @@ func _gather() -> void:
 			member.absorb_into(global_position, gather_time)
 
 
+# so o host decide; as outras maquinas recebem o mesmo elite pelo rpc
 func _raise_elite() -> void:
+	if is_multiplayer_authority():
+		_spawn_elite.rpc()
+
+
+@rpc("authority", "call_local", "reliable")
+func _spawn_elite() -> void:
 	var elite := elite_scene.instantiate() as Enemy
 	elite.position = get_parent().to_local(global_position)
+	elite.name = "%sElite" % name
 	elite.start_rising = true
 	get_parent().add_child(elite)
 	elite.died.connect(cleared.emit)

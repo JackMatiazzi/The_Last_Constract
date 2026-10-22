@@ -9,7 +9,8 @@ const PATH := "user://settings.cfg"
 const MOUSE_SWITCH_DISTANCE := 4.0
 const SECTION := "settings"
 const GAMEPLAY_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "jump", "attack", "secondary",
-		"run", "look_left", "look_right", "look_up", "look_down", "interact"]
+		"run", "look_left", "look_right", "look_up", "look_down", "interact", "scoreboard",
+		"next_ability", "next_item"]
 
 var master_volume := 1.0
 var music_volume := 0.8
@@ -20,6 +21,7 @@ var mouse_sensitivity := 1.0
 var invert_y := false
 var input_device := InputDevice.AUTOMATIC
 var stick_sensitivity := 1.0
+var player_name := "Aventureiro"
 
 var _applied_device := -1
 var _last_used_gamepad := false
@@ -88,7 +90,7 @@ func _set_bus_volume(bus: String, linear: float) -> void:
 
 
 func _keys() -> PackedStringArray:
-	return ["master_volume", "music_volume", "sfx_volume", "fullscreen", "vsync", "mouse_sensitivity", "invert_y", "input_device", "stick_sensitivity"]
+	return ["master_volume", "music_volume", "sfx_volume", "fullscreen", "vsync", "mouse_sensitivity", "invert_y", "input_device", "stick_sensitivity", "player_name"]
 
 
 func _load() -> void:
