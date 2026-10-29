@@ -11,7 +11,11 @@ const SKELETON := "res://scenes/characters/enemies/skeleton_minion.tscn"
 var root: Node3D
 
 
+# tecla que outra suite deixou apertada (o espaco das cutscenes e tambem correr) nao vaza para esta;
+# a ordem das suites muda de uma maquina para outra
 func _init(suite: GdUnitTestSuite) -> void:
+	for action in InputMap.get_actions():
+		Input.action_release(action)
 	root = suite.auto_free(ARENA.instantiate())
 	suite.add_child(root)
 

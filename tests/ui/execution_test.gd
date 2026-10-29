@@ -14,8 +14,12 @@ func before_test() -> void:
 	await await_idle_frame()
 
 
+# espaco tambem e a tecla de correr: sem soltar, as suites seguintes herdam a corrida
 func after_test() -> void:
 	RunState.adventurer = null
+	var release := InputEventKey.new()
+	release.physical_keycode = KEY_SPACE
+	Input.parse_input_event(release)
 
 
 func _animation() -> Animation:
