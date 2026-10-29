@@ -15,28 +15,32 @@ const ANIM_DEATH := "Death_A"
 const ANIM_BLEND := 0.2
 const HIT_RECOVERY := 0.3
 const MIN_STAT_FACTOR := 0.2
-# em rede so quem tem autoridade simula; as outras maquinas seguem o estado enviado
+## em rede so quem tem autoridade simula; as outras maquinas seguem o estado enviado
 const NET_SEND_INTERVAL := 0.05
 const NET_FOLLOW_SPEED := 15.0
-# pulo maior que isso (portal, reviver longe) aparece de uma vez, sem deslizar pelo mapa
+## salto de posicao maior que isso (portal, reviver longe) aparece de uma vez, sem deslizar pelo mapa
 const NET_SNAP_DISTANCE := 4.0
-# teto para dano e cura vindos de outra maquina: o golpe mais forte do jogo (pesado do mago com
-# bencaos) fica perto de 10, e a vida de reviver e metade da vida maxima
+## teto para dano e cura vindos de outra maquina; o golpe mais forte do jogo fica perto de 10
 const MAX_REMOTE_AMOUNT := 20.0
-# a seta vai ate 24 m e o atirador ainda anda enquanto ela voa
+## alcance de qualquer tiro, mais o que o atirador anda enquanto ele voa
 const REMOTE_HIT_REACH := 35.0
-# o reviver chega pela rede com a posicao um pouco atrasada
+## o reviver chega pela rede com a posicao um pouco atrasada
 const REMOTE_REACH_SLACK := 1.5
 
 @export var max_health := 10.0
 @export var walk_speed := 4.0
 @export var run_speed := 7.5
+## velocidade ganha por segundo ao andar
 @export var acceleration := 45.0
+## velocidade perdida por segundo ao parar
 @export var deceleration := 55.0
+## quao rapido o modelo gira para a direcao do movimento
 @export var turn_speed := 18.0
+## gravidade extra na queda
 @export var fall_gravity_multiplier := 1.8
 @export var model: Node3D
 @export var animation_player: AnimationPlayer
+## ataque principal
 @export var attack: Attack
 
 @export_group("Sons")
@@ -44,17 +48,18 @@ const REMOTE_REACH_SLACK := 1.5
 @export var hurt_sound: AudioStreamPlayer3D
 @export var death_sound: AudioStreamPlayer3D
 @export var block_sound: AudioStreamPlayer3D
+## distancia andada entre dois sons de passo
 @export var step_length := 1.7
 
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var health: float
 var is_dead := false
 var is_busy := false
-# muda a cada acao; o golpe compara para saber se foi interrompido
+## muda a cada acao; o golpe compara para saber se foi interrompido
 var action_id := 0
 var active_buffs: Array[Buff] = []
 var damage_log := DamageLog.new()
-# o host conta cada queda uma vez so, mesmo que o relato chegue repetido
+## o host conta cada queda uma vez so, mesmo que o relato chegue repetido
 var fall_counted := false
 
 var _action_time := 0.0
@@ -349,7 +354,7 @@ func play_locomotion(animation: String, speed_scale := 1.0) -> void:
 		animation_player.play(animation, ANIM_BLEND)
 
 
-# a passada acompanha a velocidade real para o pe nao deslizar na arrancada
+## a passada acompanha a velocidade real para o pe nao deslizar na arrancada
 func stride_speed_scale() -> float:
 	return clampf(Vector2(velocity.x, velocity.z).length() / get_max_speed(), 0.5, 1.2)
 
@@ -412,8 +417,8 @@ static func is_valid_remote_amount(amount: float) -> bool:
 	return is_finite(amount) and amount >= 0.0 and amount <= MAX_REMOTE_AMOUNT
 
 
-# so quem controla o atacante pode dizer que ele acertou, e de uma distancia que um ataque alcanca;
-# golpe sem atacante so vem do host
+## so quem controla o atacante pode dizer que ele acertou, e de uma distancia que um ataque alcanca;
+## golpe sem atacante so vem do host
 func accepts_hit_from(sender: int, source: Node3D) -> bool:
 	var attacker := source as Character
 	if attacker == null:

@@ -1,32 +1,32 @@
 class_name Portal
 extends Area3D
-
-# metade de um par: aventureiro e projetil que entram aqui saem na frente do outro portal; inimigos nao.
-# Cada maquina so move o proprio aventureiro, e a rede leva a posicao nova aos outros
+## metade de um par: aventureiro e projetil que entram aqui saem na frente do outro portal; inimigos nao.
+## Cada maquina so move o proprio aventureiro, e a rede leva a posicao nova aos outros
 
 const GROUP := "portals"
-# centro e raio do veu, no meio da altura do aventureiro
+## centro e raio do veu, no meio da altura do aventureiro
 const RING_CENTER := Vector3(0.0, 1.1, 0.0)
 const RING_RADIUS := 0.75
 const TRAVEL_COOLDOWN := 0.5
-# sai a frente do portal de destino, longe o bastante para nao entrar nele de volta
+## sai a frente do portal de destino, longe o bastante para nao entrar nele de volta
 const EXIT_OFFSET := 1.4
 const CLOSE_TIME := 0.4
 const WORLD_LAYER := 1
 const VIEW_SCALE := 0.5
-# folga do plano de corte: a camera do outro lado nao enxerga o que esta atras do portal
+## folga do plano de corte: a camera do outro lado nao enxerga o que esta atras do portal
 const NEAR_MARGIN := 0.3
 const TURN_AROUND := Transform3D(Basis(Vector3.UP, PI), Vector3.ZERO)
-# largura da textura da barra de tempo, em pixels
+## largura da textura da barra de tempo, em pixels
 const TIME_BAR_WIDTH := 100.0
 
+## quanto tempo o par fica aberto
 @export var lifetime := 12.0
 @export var visual: Node3D
 @export var travel_sound: AudioStreamPlayer3D
 @export var veil: MeshInstance3D
 @export var view: SubViewport
 @export var view_camera: Camera3D
-# a barra acima do anel esvazia ate o portal fechar
+## a barra acima do anel esvazia ate o portal fechar
 @export var time_fill: Sprite3D
 
 var link: Portal
@@ -49,7 +49,7 @@ func is_linked() -> bool:
 	return link != null and is_instance_valid(link)
 
 
-# o portal ligado cujo veu o trecho de from a to atravessa primeiro; null se nenhum
+## o portal ligado cujo veu o trecho de from a to atravessa primeiro; null se nenhum
 static func first_crossed(tree: SceneTree, from: Vector3, to: Vector3) -> Portal:
 	var first: Portal = null
 	var nearest := INF
@@ -61,7 +61,7 @@ static func first_crossed(tree: SceneTree, from: Vector3, to: Vector3) -> Portal
 	return first
 
 
-# em que fracao do trecho o veu e cruzado, de qualquer lado; -1 se passa ao lado ou nao chega
+## em que fracao do trecho o veu e cruzado, de qualquer lado; -1 se passa ao lado ou nao chega
 func crossing_fraction(from: Vector3, to: Vector3) -> float:
 	if not is_linked():
 		return -1.0
@@ -76,8 +76,8 @@ func crossing_fraction(from: Vector3, to: Vector3) -> float:
 	return fraction
 
 
-# leva uma posicao e direcao deste lado para o outro portal: de qualquer lado que se entre,
-# sai pela frente do par. A camera da janela e os projeteis usam a mesma conta
+## leva uma posicao e direcao deste lado para o outro portal: de qualquer lado que se entre,
+## sai pela frente do par. A camera da janela e os projeteis usam a mesma conta
 func carry(through: Transform3D, came_from: Vector3) -> Transform3D:
 	var relative := global_transform.affine_inverse() * through
 	if to_local(came_from).z < 0.0:
@@ -133,7 +133,7 @@ func _send_through(traveler: Adventurer, point: Vector3) -> void:
 		traveler.reset_physics_interpolation()
 
 
-# a frente do portal, no chao; com parede no caminho sai no proprio portal (a recarga evita voltar)
+## a frente do portal, no chao; com parede no caminho sai no proprio portal (a recarga evita voltar)
 func exit_point() -> Vector3:
 	var space := get_world_3d().direct_space_state
 	var ahead := global_position - global_basis.z * EXIT_OFFSET

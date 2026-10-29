@@ -1,18 +1,17 @@
 class_name EnergyPool
 extends RefCounted
-
-# reserva que gasta e volta sozinha depois de uma pausa; estamina e mana sao duas destas
+## reserva que gasta e volta sozinha depois de uma pausa; estamina e mana sao duas destas
 
 signal changed(current: float, maximum: float)
 
-# com menos que o custo o golpe sai mais fraco, mas abaixo disso nem sai
+## com menos que o custo o golpe sai mais fraco, mas abaixo disso nem sai
 const MIN_FRACTION := 0.25
 
 var current: float
 var maximum: float
 var regen_per_second: float
 var regen_delay: float
-# zerada, volta sem esperar a pausa
+## zerada, recarrega sem esperar a pausa
 var recovers_when_empty := false
 
 var _wait := 0.0
@@ -52,7 +51,7 @@ func refill() -> void:
 	changed.emit(current, maximum)
 
 
-# quanto do custo da para pagar agora; o dano do golpe escala com isso
+## quanto do custo da para pagar agora; o dano do golpe escala com isso
 func affordable_power(cost: float) -> float:
 	if cost <= 0.0:
 		return 1.0

@@ -1,6 +1,5 @@
 extends Control
-
-# rodar a cena (F6) e apertar o controle para ver o que o Godot recebe
+## rodar a cena (F6) e apertar o controle para ver o que o Godot recebe
 
 const BUTTON_NAMES := {
 	JOY_BUTTON_A: "A", JOY_BUTTON_B: "B", JOY_BUTTON_X: "X", JOY_BUTTON_Y: "Y",
@@ -13,7 +12,7 @@ const BUTTON_NAMES := {
 const ACTION_NAMES := {
 	"move_forward": "Mover", "move_back": "Mover", "move_left": "Mover", "move_right": "Mover",
 	"look_left": "Câmera", "look_right": "Câmera", "look_up": "Câmera", "look_down": "Câmera",
-	"attack": "Atacar", "secondary": "Habilidade", "jump": "Pular", "run": "Correr", "pause": "Pausar",
+	"attack": "Atacar", "secondary": "Habilidade", "run": "Correr", "pause": "Pausar",
 	"ui_accept": "Confirmar (menu)", "ui_cancel": "Voltar (menu)",
 	"menu_previous": "Aba/opção anterior", "menu_next": "Próxima aba/opção",
 }

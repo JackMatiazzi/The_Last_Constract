@@ -2,6 +2,7 @@ class_name RangedAttack
 extends Attack
 
 @export var projectile_scene: PackedScene
+## camadas que o projetil acerta
 @export_flags_3d_physics var target_layers := 4
 
 @onready var muzzle: Marker3D = $Muzzle

@@ -2,11 +2,16 @@ class_name Summoner
 extends Node3D
 
 @export var minion_scene: PackedScene
+## tempo entre as invocacoes
 @export var interval := 9.0
+## lacaios por invocacao
 @export var per_cast := 2
+## maximo de lacaios vivos ao mesmo tempo
 @export var max_alive := 4
+## distancia dos lacaios em volta de quem invoca
 @export var radius := 2.5
 @export var animation := "Spellcast_Summon"
+## espera entre o gesto e os lacaios aparecerem
 @export var raise_delay := 0.7
 @export var sound: AudioStreamPlayer3D
 

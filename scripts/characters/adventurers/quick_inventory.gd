@@ -1,7 +1,6 @@
 class_name QuickInventory
 extends Node
-
-# itens na ordem em que chegaram; a roda do mouse para baixo troca o selecionado
+## itens na ordem em que chegaram; a roda do mouse para baixo troca o selecionado
 
 signal changed
 
@@ -49,7 +48,7 @@ func count_of(item: QuickItem) -> int:
 	return _counts.get(item, 0)
 
 
-# qualquer item que cure serve para reviver um aliado
+## qualquer item que cure serve para reviver um aliado
 func first_healing() -> QuickItem:
 	for item in _items:
 		if item.heal_amount > 0.0:

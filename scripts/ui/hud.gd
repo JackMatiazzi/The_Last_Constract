@@ -61,7 +61,7 @@ func _process(_delta: float) -> void:
 	score_layer.visible = holding
 
 
-# ligar duas vezes no mesmo jogador dobraria cada sinal
+## ligar duas vezes no mesmo jogador dobraria cada sinal
 func bind(new_player: Character) -> void:
 	if new_player == _bound_player:
 		return

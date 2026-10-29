@@ -14,7 +14,7 @@ func before_test() -> void:
 	await await_idle_frame()
 
 
-# espaco tambem e a tecla de correr: sem soltar, as suites seguintes herdam a corrida
+# solta o espaco, que tambem e a tecla de correr
 func after_test() -> void:
 	RunState.adventurer = null
 	var release := InputEventKey.new()
@@ -27,7 +27,7 @@ func _cut_time() -> float:
 	return animation.track_get_key_time(animation.find_track(^"EntranceCamera:current", Animation.TYPE_VALUE), 0)
 
 
-# pausada, a cutscene nao anda sozinha no quadro seguinte (no CI um quadro passa de 0.1 s)
+# pausada, a cutscene nao anda sozinha no quadro seguinte
 func _jump_to(time: float) -> void:
 	cutscene.timeline.play()
 	cutscene.timeline.advance(time - cutscene.timeline.current_animation_position)

@@ -1,6 +1,5 @@
 extends Node
-
-# o foco so soa depois de uma acao do jogador, senao tocaria no grab_focus de cada tela
+## o foco so soa depois de uma acao do jogador, senao tocaria no grab_focus de cada tela
 
 const FOCUS_AFTER_INPUT := 0.5
 

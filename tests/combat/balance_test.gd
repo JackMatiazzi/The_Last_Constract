@@ -1,6 +1,6 @@
 extends GdUnitTestSuite
 
-# os numeros combinados no ajuste de equilibrio; mudar algum deles deve ser de proposito
+# valores de equilibrio do combate
 
 const NECROMANCER := preload("res://resources/enemies/necromancer.tres")
 const MAGIC_BOLT := preload("res://scenes/combat/magic_bolt.tscn")
@@ -47,21 +47,23 @@ func test_the_rogue_moves_a_fifth_faster_than_the_knight() -> void:
 	assert_float(rogue.run_speed).is_equal_approx(knight.run_speed * 1.2, 0.001)
 
 
-func test_common_skeletons_strike_more_often_than_before() -> void:
+func test_common_skeletons_strike_every_1_35_seconds() -> void:
 	var skeleton := arena.spawn(TestArena.SKELETON, Vector3.ZERO)
 
 	assert_float(skeleton.attack.cooldown).is_equal_approx(1.35, 0.001)
 
 
 func test_emptied_stamina_starts_coming_back_without_the_pause() -> void:
+	var spot := -4.0
 	for scene in [TestArena.BARBARIAN, TestArena.MAGE, TestArena.ROGUE]:
-		var adventurer := arena.spawn(scene, Vector3(randf_range(-6, 6), 0, 6)) as Adventurer
+		var adventurer := arena.spawn(scene, Vector3(spot, 0, 6)) as Adventurer
+		spot += 4.0
 		await arena.wait_physics(2)
+		assert_float(SHORT_WAIT).is_less(adventurer.stamina_regen_delay)
 
 		adventurer.stamina.spend(adventurer.stamina.maximum)
 		await arena.wait_seconds(SHORT_WAIT)
 
-		assert_float(SHORT_WAIT).is_less(adventurer.stamina_regen_delay)
 		assert_float(adventurer.stamina.current).override_failure_message(scene).is_greater(0.0)
 
 

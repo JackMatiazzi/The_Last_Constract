@@ -14,7 +14,7 @@ func before_test() -> void:
 	await await_idle_frame()
 
 
-# espaco tambem e a tecla de correr: sem soltar, as suites seguintes herdam a corrida
+# solta o espaco, que tambem e a tecla de correr
 func after_test() -> void:
 	RunState.adventurer = null
 	var release := InputEventKey.new()

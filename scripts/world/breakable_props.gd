@@ -1,11 +1,10 @@
 class_name BreakableProps
 extends GridMap
-
-# o golpe pesado quebra o que e de madeira solta; carroca, cerca e tocha aguentam
+## o golpe pesado quebra o que e de madeira solta; carroca, cerca e tocha aguentam
 
 const GROUP := "breakable_props"
 const BREAKABLE_PREFIXES := ["Prop_Crate", "keg", "crates_stacked", "barrel_"]
-# altura de celulas olhada acima e abaixo do golpe
+## altura de celulas olhada acima e abaixo do golpe
 const VERTICAL_REACH := 2.0
 
 @export var debris_scene: PackedScene

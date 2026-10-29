@@ -15,46 +15,56 @@ const AIM_RANGE := 40.0
 const AIM_LAYERS := 1 | 4
 const REVIVE_RANGE := 2.2
 const REVIVE_HEALTH_FRACTION := 0.5
-# segurar o ataque alem disso vira golpe pesado; soltar antes e golpe rapido
+## segurar o ataque alem disso vira golpe pesado; soltar antes e golpe rapido
 const HEAVY_HOLD_TIME := 0.35
-# segurar interagir bebe o item selecionado; o tempo segurando e o gole, exposto aos golpes
+## segurar interagir bebe o item selecionado; o tempo segurando e o gole, exposto aos golpes
 const DRINK_HOLD_TIME := 0.6
 const REVIVE_READY_COLOR := Color(1.0, 0.88, 0.6)
 const REVIVE_MISSING_COLOR := Color(0.62, 0.6, 0.58)
 const MAX_ENERGY := 100.0
-# ritmo de recarga comum a todos; cada classe ajusta com os multiplicadores
+## ritmo de recarga comum a todos; cada classe ajusta com os multiplicadores
 const BASE_REGEN := 30.0
-# depois de zerar a estamina correndo, so volta a correr com a barra neste ponto
+## depois de zerar a estamina correndo, so volta a correr com a barra neste ponto
 const RUN_RECOVER_FRACTION := 0.3
 
+## quao rapido a camera alcanca o aventureiro
 @export var camera_follow_speed := 14.0
+## forca com que empurra barris e caixotes
 @export var push_force := 120.0
+## golpe do botao direito; vazio se a classe nao tem
 @export var secondary_attack: Attack
+## escudo do botao direito; vazio se a classe nao tem
 @export var block: BlockAbility
-# a roda para cima percorre esta lista; vazia = so o ataque principal
+## a roda para cima percorre esta lista; vazia = so o ataque principal
 @export var abilities: Array[Attack] = []
 
-# todos tem estamina (correr, escudo, golpes fisicos); quem usa mana paga os feiticos com ela
+## todos tem estamina (correr, escudo, golpes fisicos); quem usa mana paga os feiticos com ela
 @export_group("Energia")
+## paga os ataques com mana em vez de estamina
 @export var uses_mana := false
+## multiplica a recarga base da estamina
 @export var stamina_regen_multiplier := 1.0
+## multiplica a recarga base da mana
 @export var mana_regen_multiplier := 1.0
+## pausa depois de gastar estamina, antes de recarregar
 @export var stamina_regen_delay := 0.6
+## pausa depois de gastar mana, antes de recarregar
 @export var mana_regen_delay := 1.0
-# estamina e mana que zeram ja comecam a voltar, sem a pausa (o Knight desliga)
+## estamina ou mana zerada recarrega sem esperar a pausa
 @export var recovers_when_empty := true
-# custo do ataque, pago da mana se o aventureiro usa mana, senao da estamina
+## custo do ataque, pago da mana se o aventureiro usa mana, senao da estamina
 @export var quick_cost := 15.0
+## custo do golpe pesado (segurar o ataque)
 @export var heavy_cost := 35.0
-# por segundo de corrida
+## por segundo de corrida
 @export var run_cost := 12.0
-# segurar o escudo cansa devagar; cada golpe defendido custa mais; sem estamina a guarda quebra
+## segurar o escudo cansa devagar; cada golpe defendido custa mais; sem estamina a guarda quebra
 @export var block_cost := 6.0
+## estamina gasta a cada golpe defendido
 @export var block_hit_cost := 12.0
 
 var is_blocking := false
-# menu aberto em grupo: o mundo nao pausa, mas o boneco para de obedecer. Soltar um botao com o
-# menu aberto nao chega ao boneco, entao travar ja solta o escudo e cancela o que estava segurado
+## menu aberto em grupo: o mundo segue, mas o boneco para de obedecer e solta o que estava segurando
 var input_locked := false:
 	set(locked):
 		input_locked = locked
@@ -62,12 +72,12 @@ var input_locked := false:
 			_attack_hold = -1.0
 			_interact_hold = -1.0
 			release_secondary()
-# so existe com pocao no inventario; o aviso aparece mesmo sem pocao
+## aliado caido ao alcance que da para reviver agora (precisa de pocao)
 var revive_target: Adventurer
-# baus e afins ao alcance: tocar E interage com eles em vez de comecar a beber
+## baus e afins ao alcance: tocar E interage com eles em vez de comecar a beber
 var interactables_in_reach := 0
 var stamina: EnergyPool
-# null em quem nao usa mana
+## null em quem nao usa mana
 var mana: EnergyPool
 
 # o clique do analogico liga a corrida ate o boneco parar; no teclado corre enquanto segura Espaco
@@ -175,7 +185,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		inventory.select_next()
 
 
-# o aventureiro que o jogador peer_id controla; null se ele saiu ou ainda nao nasceu
+## o aventureiro que o jogador peer_id controla; null se ele saiu ou ainda nao nasceu
 static func of_peer(tree: SceneTree, peer_id: int) -> Adventurer:
 	for adventurer: Adventurer in tree.get_nodes_in_group("players"):
 		if adventurer.get_multiplayer_authority() == peer_id:
@@ -183,8 +193,8 @@ static func of_peer(tree: SceneTree, peer_id: int) -> Adventurer:
 	return null
 
 
-# pedido vindo da rede so vale de quem esta perto do que quer mexer; tiro pode chegar depois de
-# o atirador cair, entao quem confere um tiro passa alive_only = false
+## pedido vindo da rede so vale de quem esta perto do que quer mexer; tiro pode chegar depois de
+## o atirador cair, entao quem confere um tiro passa alive_only = false
 static func peer_can_reach(tree: SceneTree, peer_id: int, point: Vector3, reach: float, alive_only := true) -> bool:
 	var adventurer := of_peer(tree, peer_id)
 	if adventurer == null or (alive_only and adventurer.is_dead):
@@ -227,7 +237,7 @@ func next_ability() -> void:
 	ability_changed.emit()
 
 
-# com a vida e a mana cheias o item nao e gasto
+## com a vida e a mana cheias o item nao e gasto
 func use_item() -> bool:
 	var item := inventory.selected()
 	if item == null or is_dead:
@@ -244,8 +254,8 @@ func use_item() -> bool:
 	return true
 
 
-# o item so e gasto quando o reviver vale; em grupo quem decide e a maquina do aliado caido,
-# que confirma de volta (outro jogador pode ter revivido antes)
+## o item so e gasto quando o reviver vale; em grupo quem decide e a maquina do aliado caido,
+## que confirma de volta (outro jogador pode ter revivido antes)
 func revive_ally() -> void:
 	if inventory.first_healing() == null or not is_instance_valid(revive_target) or not revive_target.is_dead:
 		return
@@ -438,7 +448,7 @@ func _blocks(source: Node3D) -> bool:
 	return true
 
 
-# o raio comeca depois do personagem para nao bater em algo entre a camera e ele
+## o raio comeca depois do personagem para nao bater em algo entre a camera e ele
 func get_aim_point() -> Vector3:
 	var center := get_viewport().get_visible_rect().size / 2.0
 	var origin := camera.project_ray_origin(center)

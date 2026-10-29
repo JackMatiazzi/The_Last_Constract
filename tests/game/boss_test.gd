@@ -108,8 +108,7 @@ func test_clearing_every_group_summons_the_necromancer_on_the_square() -> void:
 	assert_bool(hud.boss_panel.visible).is_true()
 
 
-# espera a condicao com limite em tempo de jogo: no CI os quadros atrasam e o jogo anda mais devagar
-# que o relogio, entao um limite pelo relogio desistia antes do timer do jogo terminar
+# espera a condicao, com limite em tempo de jogo (nao de relogio)
 func _until(condition: Callable, seconds: float) -> bool:
 	var waited := 0.0
 	while waited < seconds:

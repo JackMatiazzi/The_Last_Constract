@@ -190,7 +190,6 @@ func test_awakened_skeleton_reengages_after_player_returns() -> void:
 	assert_array(["Chase", "Attack"]).contains([skeleton.brain.current_state_name])
 
 
-# o virote alcanca 6 m: o tiro vem de perto, mas pelas costas, fora da vista
 func test_shot_from_behind_makes_skeleton_hunt_the_shooter() -> void:
 	await arena.bake_navigation()
 	var skeleton := _spawn_skeleton(Vector3.ZERO)

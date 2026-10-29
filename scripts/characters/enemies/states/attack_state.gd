@@ -1,6 +1,6 @@
 extends EnemyState
 
-# folga para nao ficar trocando entre Chase e Attack na borda do alcance
+## folga para nao ficar trocando entre Chase e Attack na borda do alcance
 const RANGE_MARGIN := 0.5
 const FACING_TOLERANCE := 30.0
 

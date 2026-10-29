@@ -1,15 +1,18 @@
 @tool
 class_name EnemyGroup
 extends Node3D
-
-# so os corpos dentro de gather_radius vao ate o elite; os outros somem como corpo comum
+## so os corpos dentro de gather_radius vao ate o elite; os outros somem como corpo comum
 
 signal elite_formed(elite: Enemy)
 signal cleared
 
+## elite que levanta quando o grupo inteiro cai
 @export var elite_scene: PackedScene
+## espera depois do ultimo cair, antes de puxar os corpos
 @export var merge_delay := 2.0
+## tempo dos corpos deslizando ate o ponto do grupo
 @export var gather_time := 1.2
+## so os corpos ate esta distancia do grupo viram o elite
 @export var gather_radius := 8.0:
 	set(value):
 		gather_radius = value
