@@ -118,7 +118,7 @@ func _bind_quickbar(adventurer: Adventurer) -> void:
 	_show_secondary(adventurer)
 
 
-# o custo aparece em % da barra: da para usar a vontade, mas a barra mostra o peso
+# o custo aparece em % da barra, e a barra marca um bloco por golpe
 func _show_ability(adventurer: Adventurer) -> void:
 	var pool := adventurer.attack_pool()
 	var source := "mana" if pool == adventurer.mana else "estamina"

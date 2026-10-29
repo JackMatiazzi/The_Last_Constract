@@ -321,7 +321,7 @@ func _has_control() -> bool:
 	return not input_locked and (Input.mouse_mode == Input.MOUSE_MODE_CAPTURED or Settings.uses_gamepad())
 
 
-# so guarda o clique recusado pela recarga do golpe; sem estamina ele nao fica esperando
+# so guarda o clique recusado porque o golpe anterior nao terminou; sem estamina ele nao espera
 func request_attack() -> void:
 	if not attack_toward_camera() and attack_pool().can_afford(cost_of(attack)):
 		_attack_buffer_left = ATTACK_BUFFER
