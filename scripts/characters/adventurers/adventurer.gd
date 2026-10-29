@@ -321,8 +321,9 @@ func _has_control() -> bool:
 	return not input_locked and (Input.mouse_mode == Input.MOUSE_MODE_CAPTURED or Settings.uses_gamepad())
 
 
+# so guarda o clique recusado pela recarga do golpe; sem estamina ele nao fica esperando
 func request_attack() -> void:
-	if not attack_toward_camera():
+	if not attack_toward_camera() and attack_pool().can_afford(cost_of(attack)):
 		_attack_buffer_left = ATTACK_BUFFER
 
 
@@ -414,14 +415,13 @@ func _attack_toward_camera(chosen: Attack, heavy := false) -> bool:
 		return false
 	var cost := cost_of(chosen, heavy)
 	var pool := attack_pool()
-	var power := pool.affordable_power(cost)
-	if power == 0.0:
+	if not pool.can_afford(cost):
 		energy_short.emit(pool)
 		return false
 	face_camera()
-	if not chosen.try_attack(self, heavy, power):
+	if not chosen.try_attack(self, heavy):
 		return false
-	pool.spend(cost * power)
+	pool.spend(cost)
 	return true
 
 

@@ -147,7 +147,7 @@ Não existe sistema de níveis para jogadores ou inimigos.
 \midrule
 Movimentação & Terceira pessoa, com exploração livre da vila. Resposta rápida: atinge a velocidade de andar (4\,m/s) em cerca de 0,1\,s e para em cerca de 0,1\,s; correr chega a 7,5\,m/s e gasta estamina. Não há pulo: segurar Espaço corre, e soltar volta a andar. \\
 Combate & Corpo a corpo e à distância, conforme o aventureiro escolhido. Clique é o ataque rápido; segurar o botão é o ataque pesado (mais lento e mais forte). Cada golpe rápido tira 1 ponto de vida; o alvo reage ao dano e, ao chegar a zero, morre. \\
-Energia & Estamina para todos (correr, escudo, golpes físicos) e mana para o Mage (feitiços). Gastar pausa a recarga por um instante; depois ela volta sozinha. O dano do golpe acompanha a energia paga: com metade do custo, metade do dano. Detalhes em \ref{sec:energia}. \\
+Energia & Estamina para todos (correr, escudo, golpes físicos) e mana para o Mage (feitiços). Gastar pausa a recarga por um instante; depois ela volta sozinha. O golpe só sai com o custo inteiro disponível. Detalhes em \ref{sec:energia}. \\
 Vida & Pontos inteiros: aventureiros têm 10 e mortos-vivos têm 5. Uma barra de vida flutua sobre cada personagem (verde para aventureiros, vermelha para mortos-vivos). Ao levar dano, um rastro claro mostra o pedaço perdido antes de encolher e um número de dano sobe acima da cabeça. \\
 Vida única & O jogador possui apenas uma vida por tentativa. Em grupo, um aliado com uma poção no inventário pode reviver quem caiu: perto do caído aparece ``E Reviver'' sobre ele, e ele volta com metade da vida. A poção só é gasta quando o reviver vale: se outro aliado reviveu antes, ela continua no inventário. Se todos caem, abre a tela de morte. \\
 Grupos de inimigos & Mortos-vivos organizados em grupos espalhados pelo mapa. \\
@@ -229,7 +229,7 @@ Mage      & mana     & 20 & 45 & mana 1,5$\times$, estamina 0,5$\times$ & --- \\
 \bottomrule
 \end{tabularx}
 
-Todos gastam 12 de estamina por segundo correndo. Com menos energia que o custo, o golpe sai proporcionalmente mais fraco; abaixo de 25\% do custo ele não sai e a barra pisca em vermelho. Os números ficam no inspetor de cada aventureiro (grupos ``Energia'' e ``Pesado'').
+Todos gastam 12 de estamina por segundo correndo. Com menos energia que o custo, o golpe não sai e a barra pisca em vermelho. Os números ficam no inspetor de cada aventureiro (grupos ``Energia'' e ``Pesado'').
 
 % ===============================================================
 \section{Personagens}

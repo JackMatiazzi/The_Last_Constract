@@ -48,8 +48,7 @@ func effective_cooldown(attacker: Character) -> float:
 	return cooldown * maxf(factor, Character.MIN_STAT_FACTOR)
 
 
-## power: fracao do custo de energia que o atacante conseguiu pagar
-func try_attack(attacker: Character, heavy := false, power := 1.0) -> bool:
+func try_attack(attacker: Character, heavy := false) -> bool:
 	if not can_attack(attacker):
 		return false
 	var continues_combo := not heavy and _now() - _ready_at <= combo_window
@@ -63,7 +62,7 @@ func try_attack(attacker: Character, heavy := false, power := 1.0) -> bool:
 		speed = heavy_animation_speed if heavy_animation_speed > 0.0 else animation_speed * HEAVY_FALLBACK_SLOWDOWN
 		delay = heavy_impact_delay if heavy_impact_delay > 0.0 else impact_delay / HEAVY_FALLBACK_SLOWDOWN
 	attacker.play_action(animation, speed, move_factor, delay + recovery)
-	_impact_after_delay(attacker, attacker.action_id, _damage_for(attacker, heavy) * power, delay, heavy)
+	_impact_after_delay(attacker, attacker.action_id, _damage_for(attacker, heavy), delay, heavy)
 	return true
 
 

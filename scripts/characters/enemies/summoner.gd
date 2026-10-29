@@ -74,8 +74,9 @@ func _is_hunting() -> bool:
 	return owner_enemy.brain.current_state_name in ["Chase", "Attack"]
 
 
+# o lacaio caido some do jogo depois de afundar, mas continua na lista ate aqui
 func _alive_count() -> int:
-	minions = minions.filter(func(m: Enemy) -> bool: return is_instance_valid(m) and not m.is_dead)
+	minions.assign(minions.filter(func(minion: Variant) -> bool: return is_instance_valid(minion) and not (minion as Enemy).is_dead))
 	return minions.size()
 
 

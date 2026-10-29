@@ -4,9 +4,6 @@ extends RefCounted
 
 signal changed(current: float, maximum: float)
 
-## com menos que o custo o golpe sai mais fraco, mas abaixo disso nem sai
-const MIN_FRACTION := 0.25
-
 var current: float
 var maximum: float
 var regen_per_second: float
@@ -51,9 +48,6 @@ func refill() -> void:
 	changed.emit(current, maximum)
 
 
-## quanto do custo da para pagar agora; o dano do golpe escala com isso
-func affordable_power(cost: float) -> float:
-	if cost <= 0.0:
-		return 1.0
-	var power := minf(current / cost, 1.0)
-	return power if power >= MIN_FRACTION else 0.0
+## da para pagar o custo inteiro agora
+func can_afford(cost: float) -> bool:
+	return current >= cost
