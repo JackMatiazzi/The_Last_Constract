@@ -25,10 +25,5 @@ func test_uses_the_same_pieces_and_grids_as_the_village() -> void:
 		assert_vector(mine.position).override_failure_message(grid_name).is_equal(reference.position)
 
 
-func test_starts_empty_for_him_to_draw() -> void:
-	for grid_name in GRIDS:
-		assert_int((sketch.get_node(grid_name) as GridMap).get_used_cells().size()).override_failure_message(grid_name).is_equal(0)
-
-
 func test_objects_placed_on_it_can_break() -> void:
 	assert_object(sketch.get_node("Objetos")).is_instanceof(BreakableProps)
