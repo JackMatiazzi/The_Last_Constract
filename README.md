@@ -15,6 +15,7 @@ reviva com uma bênção (que os mortos-vivos também recebem) ou desista e enfr
 | 08/10 | Protótipo | Knight anda, corre, pula, empurra caixotes e barris e ataca um esqueleto de treino num mapa de teste |
 | 15/10 | Primeiro nível (som 3D) | Vila medieval à noite, com sons posicionados nos personagens e trilha ambiente |
 | 22/10 | Personagem jogável (máquinas de estados) | Aventureiro controlado por máquina de estados, estamina e mana, golpe rápido e pesado, inventário rápido, portal do Mage e co-op online para até 4 |
+| 29/10 | Objetos interativos (Area3D) | Calabouço escondido de três andares (uns 10 minutos) com poção de mana, armadilhas, alavancas, bilhetes, portão de dois selos, uma trava para cada classe (grade do Mage, flechas do Knight, corda do Rogue, parede rachada do Barbarian), mímico, espadachim perdido e saída com a cláusula do contrato |
 
 ### Primeiro nível
 

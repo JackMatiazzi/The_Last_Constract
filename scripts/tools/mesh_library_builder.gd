@@ -2,14 +2,18 @@
 class_name MeshLibraryBuilder
 extends RefCounted
 
-# regra: {dir, prefixes, scale opcional}; scale porque o GridMap nao escala por celula
+# regra: {dir, prefixes, scale opcional, flat_top opcional}; scale porque o GridMap nao escala por celula.
+# flat_top troca a colisao exata por uma caixa lisa com o topo nessa altura: chao com sulcos e pedrinhas
+# prende a capsula do personagem nas bordas
+
+const FLAT_THICKNESS := 0.3
 
 
 static func build(rules: Array) -> MeshLibrary:
 	var library := MeshLibrary.new()
 	for rule: Dictionary in rules:
 		for file in _matching_files(rule):
-			_add_item(library, rule["dir"].path_join(file), rule.get("scale", 1.0))
+			_add_item(library, rule["dir"].path_join(file), rule.get("scale", 1.0), rule.get("flat_top", NAN))
 	return library
 
 
@@ -26,7 +30,7 @@ static func _starts_with_any(text: String, prefixes: Array) -> bool:
 	return prefixes.any(func(prefix: String) -> bool: return text.begins_with(prefix))
 
 
-static func _add_item(library: MeshLibrary, path: String, scale: float) -> void:
+static func _add_item(library: MeshLibrary, path: String, scale: float, flat_top: float) -> void:
 	var root := (load(path) as PackedScene).instantiate()
 	var mesh := _merge_meshes(root, Transform3D.IDENTITY.scaled(Vector3.ONE * scale))
 	root.free()
@@ -35,7 +39,18 @@ static func _add_item(library: MeshLibrary, path: String, scale: float) -> void:
 	library.create_item(id)
 	library.set_item_name(id, path.get_file().get_basename())
 	library.set_item_mesh(id, mesh)
-	library.set_item_shapes(id, [mesh.create_trimesh_shape(), Transform3D.IDENTITY])
+	if is_nan(flat_top):
+		library.set_item_shapes(id, [mesh.create_trimesh_shape(), Transform3D.IDENTITY])
+	else:
+		library.set_item_shapes(id, _flat_floor(mesh, flat_top))
+
+
+static func _flat_floor(mesh: Mesh, top: float) -> Array:
+	var bounds := mesh.get_aabb()
+	var box := BoxShape3D.new()
+	box.size = Vector3(bounds.size.x, FLAT_THICKNESS, bounds.size.z)
+	var center := Vector3(bounds.get_center().x, top - FLAT_THICKNESS / 2.0, bounds.get_center().z)
+	return [box, Transform3D(Basis.IDENTITY, center)]
 
 
 # o GridMap aceita uma malha por item e um .gltf pode ter varias

@@ -1,0 +1,101 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/kaykit_skeletons/characters/Skeleton_Minion.glb" id="1_minion"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_skeletons/characters/Skeleton_Rogue.glb" id="2_rogue"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_dungeon/models/table_medium.gltf" id="3_table"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_dungeon/models/chair.gltf" id="4_chair"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_dungeon/models/coin_stack_small.gltf" id="5_coins"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_dungeon/models/bottle_A_brown.gltf" id="6_bottle"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_dungeon/models/candle_lit.gltf" id="7_candle"]
+
+[sub_resource type="Animation" id="Animation_game"]
+resource_name = "rodada"
+length = 14.4
+loop_mode = 1
+tracks/0/type = "animation"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Ossos/AnimationPlayer")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"clips": PackedStringArray("Sit_Chair_Idle", "Sit_Chair_Idle", "Sit_Chair_Idle", "Sit_Chair_Idle"),
+"times": PackedFloat32Array(0, 3.6, 7.2, 10.8)
+}
+tracks/1/type = "animation"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Caveira/AnimationPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"clips": PackedStringArray("Sit_Chair_Idle", "Sit_Chair_Idle", "Sit_Chair_Idle", "Sit_Chair_Idle"),
+"times": PackedFloat32Array(0, 3.6, 7.2, 10.8)
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Conversa:text")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 3.6, 7.2, 10.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": ["Seis! Paga aí.", "Você roubou de novo, Ossos.", "Mais uma rodada antes do Lorde voltar?", "Ninguém conta pro Necromante."]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gamblers"]
+_data = {
+&"rodada": SubResource("Animation_game")
+}
+
+[node name="JogadoresDeDados" type="Node3D"]
+editor_description = "Easter egg: dois esqueletos jogando dados na sala da guarda, sem perceber o jogador."
+
+[node name="Mesa" parent="." instance=ExtResource("3_table")]
+
+[node name="CadeiraOssos" parent="." instance=ExtResource("4_chair")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.25)
+
+[node name="CadeiraCaveira" parent="." instance=ExtResource("4_chair")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 1.25)
+
+[node name="Ossos" parent="." instance=ExtResource("1_minion")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.25)
+
+[node name="Caveira" parent="." instance=ExtResource("2_rogue")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 1.25)
+
+[node name="Moedas" parent="." instance=ExtResource("5_coins")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1.0, -0.2)
+
+[node name="Garrafa" parent="." instance=ExtResource("6_bottle")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, -0.4, 1.0, 0.25)
+
+[node name="Vela" parent="." instance=ExtResource("7_candle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 1.0, 0.35)
+
+[node name="Luz" type="OmniLight3D" parent="."]
+position = Vector3(0.45, 1.5, 0.35)
+light_color = Color(1, 0.7, 0.4, 1)
+light_energy = 1.4
+omni_range = 5.0
+
+[node name="Conversa" type="Label3D" parent="."]
+position = Vector3(0, 2.8, 0)
+pixel_size = 0.004
+billboard = 1
+modulate = Color(0.95, 0.9, 0.8, 1)
+outline_modulate = Color(0, 0, 0, 1)
+text = "Seis! Paga aí."
+font_size = 44
+outline_size = 10
+width = 600.0
+autowrap_mode = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_gamblers")
+}
+autoplay = &"rodada"

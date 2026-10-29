@@ -51,6 +51,12 @@ func test_a_hit_without_source_does_not_inherit_the_last_attacker() -> void:
 	assert_str(RunState.stats_of(1).last_death).is_equal("Ferimentos")
 
 
+func test_hurting_yourself_counts_as_wounds_not_your_own_name() -> void:
+	victim.take_damage(99.0, victim)
+
+	assert_str(victim.damage_log.death_cause()).is_equal("Ferimentos")
+
+
 func test_friendly_fire_death_counts_on_the_scoreboard() -> void:
 	victim.take_damage(99.0, ally)
 

@@ -49,6 +49,8 @@ const RUN_RECOVER_FRACTION := 0.3
 # segurar o escudo cansa devagar; cada golpe defendido custa mais; sem estamina a guarda quebra
 @export var block_cost := 6.0
 @export var block_hit_cost := 12.0
+# o urro que o esqueletinho tanto pede (so o Barbarian)
+@export var roars := false
 
 var is_blocking := false
 # menu aberto em grupo: o mundo nao pausa, mas o boneco para de obedecer. Soltar um botao com o
@@ -221,6 +223,10 @@ func next_ability() -> void:
 	_ability_index = (_ability_index + 1) % abilities.size()
 	attack = abilities[_ability_index]
 	ability_changed.emit()
+
+
+func can_use(item: QuickItem) -> bool:
+	return item.heal_amount > 0.0 or (item.mana_amount > 0.0 and mana != null)
 
 
 # com a vida e a mana cheias o item nao e gasto

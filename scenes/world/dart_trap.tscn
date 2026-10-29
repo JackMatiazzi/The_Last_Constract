@@ -1,0 +1,112 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/dart_trap.gd" id="1_trap"]
+[ext_resource type="PackedScene" path="res://scenes/combat/crossbow_bolt.tscn" id="2_dart"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/combat/crossbow_shot.ogg" id="3_shot"]
+
+[sub_resource type="StandardMaterial3D" id="Material_plate"]
+albedo_color = Color(0.42, 0.4, 0.36, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="Mesh_plate"]
+material = SubResource("Material_plate")
+size = Vector3(1.4, 0.08, 1.4)
+
+[sub_resource type="StandardMaterial3D" id="Material_hole"]
+albedo_color = Color(0.02, 0.02, 0.02, 1)
+
+[sub_resource type="CylinderMesh" id="Mesh_hole"]
+material = SubResource("Material_hole")
+top_radius = 0.07
+bottom_radius = 0.07
+height = 0.05
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_plate"]
+size = Vector3(1.4, 0.5, 1.4)
+
+[sub_resource type="Animation" id="Animation_fire"]
+resource_name = "disparo"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Plate/PlateMesh:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.08, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0.04, 0), Vector3(0, -0.01, 0), Vector3(0, 0.04, 0)]
+}
+tracks/1/type = "audio"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ShotSound")
+tracks/1/use_blend = true
+tracks/1/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("3_shot")
+}],
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dart"]
+_data = {
+&"disparo": SubResource("Animation_fire")
+}
+
+[node name="DartTrap" type="Node3D" node_paths=PackedStringArray("plates", "muzzles", "animation_player")]
+script = ExtResource("1_trap")
+dart_scene = ExtResource("2_dart")
+plates = [NodePath("Plate")]
+muzzles = NodePath("Muzzles")
+animation_player = NodePath("AnimationPlayer")
+
+[node name="Plate" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 6
+monitorable = false
+
+[node name="PlateMesh" type="MeshInstance3D" parent="Plate"]
+position = Vector3(0, 0.04, 0)
+mesh = SubResource("Mesh_plate")
+
+[node name="Shape" type="CollisionShape3D" parent="Plate"]
+position = Vector3(0, 0.25, 0)
+shape = SubResource("BoxShape3D_plate")
+
+[node name="Muzzles" type="Node3D" parent="."]
+
+[node name="Muzzle1" type="Marker3D" parent="Muzzles"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1.45, 1.1, -0.7)
+
+[node name="Hole" type="MeshInstance3D" parent="Muzzles/Muzzle1"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0.03)
+mesh = SubResource("Mesh_hole")
+
+[node name="Muzzle2" type="Marker3D" parent="Muzzles"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1.45, 1.4, 0)
+
+[node name="Hole" type="MeshInstance3D" parent="Muzzles/Muzzle2"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0.03)
+mesh = SubResource("Mesh_hole")
+
+[node name="Muzzle3" type="Marker3D" parent="Muzzles"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1.45, 0.8, 0.7)
+
+[node name="Hole" type="MeshInstance3D" parent="Muzzles/Muzzle3"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0.03)
+mesh = SubResource("Mesh_hole")
+
+[node name="ShotSound" type="AudioStreamPlayer3D" parent="."]
+position = Vector3(-1.4, 1.1, 0)
+max_distance = 25.0
+bus = &"SFX"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_dart")
+}

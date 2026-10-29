@@ -1,0 +1,84 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/character.tscn" id="1_character"]
+[ext_resource type="Script" path="res://scripts/characters/npcs/bone_kid.gd" id="2_kid"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_skeletons/characters/Skeleton_Minion.glb" id="3_model"]
+[ext_resource type="PackedScene" path="res://scenes/world/health_potion.tscn" id="4_gift"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/combat/hurt_2.ogg" id="5_roar"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kid"]
+radius = 0.25
+height = 0.9
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_talk"]
+radius = 2.2
+
+[node name="Esqueletinho" node_paths=PackedStringArray("animation_player", "speech", "prompt", "talk_area", "roar_sound") instance=ExtResource("1_character")]
+editor_description = "Easter egg: esqueletinho que segue quem chega pedindo o urro. So o Barbarian (roars) ve o E Urrar; o urro faz ele desmontar de emocao, e o primeiro da um presente e a dica da adega. Apanhar so o desmonta. Nao conta na clausula. Falas no grupo Falas."
+collision_layer = 4
+script = ExtResource("2_kid")
+walk_speed = 2.6
+animation_player = NodePath("Model/Ossos/AnimationPlayer")
+speech = NodePath("Fala")
+prompt = NodePath("Aviso")
+talk_area = NodePath("Perto")
+roar_sound = NodePath("Urro")
+gift_scene = ExtResource("4_gift")
+pester_lines = PackedStringArray("Faz o urro!", "Faz o urro! Faz o urro!", "Por favooor, faz o urro!")
+wrong_hero_line = "Cadê o grandão? Só o grandão sabe fazer o urro."
+again_line = "DE NOVO! DE NOVO!"
+hint_line = "O tio grandão que morava atrás daquela parede rachada também urrava assim!"
+hurt_line = "Ai! Vou contar pro meu pai!"
+sulk_line = "Você não quer urrar? Então eu também sou um morto-vivo de verdade agora. Humpf."
+make_up_line = "AGORA SIM! Tá perdoado, grandão!"
+
+[node name="CollisionShape3D" parent="." index="0"]
+position = Vector3(0, 0.45, 0)
+shape = SubResource("CapsuleShape3D_kid")
+
+[node name="Model" parent="." index="1"]
+scale = Vector3(0.42, 0.42, 0.42)
+
+[node name="HealthBar3D" parent="." index="2"]
+show_bar = false
+
+[node name="Ossos" parent="Model" instance=ExtResource("3_model")]
+
+[node name="Fala" type="Label3D" parent="."]
+position = Vector3(0, 1.45, 0)
+pixel_size = 0.004
+billboard = 1
+no_depth_test = true
+modulate = Color(1, 0.95, 0.8, 1)
+outline_modulate = Color(0, 0, 0, 1)
+font_size = 44
+outline_size = 12
+width = 520.0
+autowrap_mode = 2
+
+[node name="Aviso" type="Label3D" parent="."]
+position = Vector3(0, 1.05, 0)
+pixel_size = 0.004
+billboard = 1
+no_depth_test = true
+modulate = Color(1, 0.88, 0.6, 1)
+outline_modulate = Color(0, 0, 0, 1)
+text = "E  Urrar"
+font_size = 40
+outline_size = 10
+
+[node name="Perto" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Perto"]
+position = Vector3(0, 0.6, 0)
+shape = SubResource("SphereShape3D_talk")
+
+[node name="Urro" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("5_roar")
+volume_db = 6.0
+pitch_scale = 0.45
+max_distance = 45.0
+bus = &"SFX"

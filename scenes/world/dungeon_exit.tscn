@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/dungeon_exit.gd" id="1_exit"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_exit"]
+size = Vector3(3.5, 3, 2.5)
+
+[node name="DungeonExit" type="Area3D" node_paths=PackedStringArray("prompt")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_exit")
+prompt = NodePath("Prompt")
+action = "Sair do calabouço"
+reach = 4.0
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.5, 0)
+shape = SubResource("BoxShape3D_exit")
+
+[node name="Prompt" type="Label3D" parent="."]
+position = Vector3(0, 2.2, 0)
+pixel_size = 0.004
+billboard = 1
+outline_modulate = Color(0, 0, 0, 1)
+text = "E  Sair do calabouço"
+font_size = 44
+outline_size = 10

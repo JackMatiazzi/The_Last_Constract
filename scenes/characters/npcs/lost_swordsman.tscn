@@ -1,0 +1,212 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/character.tscn" id="1_character"]
+[ext_resource type="Script" path="res://scripts/characters/npcs/friendly_undead.gd" id="2_npc"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_skeletons/characters/Skeleton_Minion.glb" id="3_skeleton"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_skeletons/accessories/Skeleton_Blade.gltf" id="4_blade"]
+[ext_resource type="Script" path="res://scripts/combat/melee_attack.gd" id="5_attack"]
+[ext_resource type="AudioStream" path="res://resources/audio/swing.tres" id="6_swing"]
+[ext_resource type="Script" path="res://scripts/characters/npcs/companion_brain.gd" id="7_companion"]
+
+[sub_resource type="StandardMaterial3D" id="Material_bandana"]
+albedo_color = Color(0.12, 0.42, 0.18, 1)
+roughness = 0.8
+
+[sub_resource type="TorusMesh" id="Mesh_bandana"]
+material = SubResource("Material_bandana")
+inner_radius = 0.42
+outer_radius = 0.5
+rings = 24
+ring_segments = 8
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_cut"]
+size = Vector3(1.8, 1.8, 1.8)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_talk"]
+radius = 3.0
+
+[node name="EspadachimPerdido" node_paths=PackedStringArray("animation_player", "speech", "lantern", "talk_area", "prompt", "companion", "style_attacks", "drawn_blades", "sheathed_blades") instance=ExtResource("1_character")]
+editor_description = "O espadachim perdido: morto-vivo carismatico que conversa com E, muda de andar junto com o grupo e conta como morto-vivo no contrato. Com a vida baixa saca as espadas da cintura, uma por estilo, e vira semi-boss. Falas no grupo Falas, golpes e limites no grupo Estilos."
+collision_layer = 4
+script = ExtResource("2_npc")
+max_health = 12.0
+animation_player = NodePath("Model/Esqueleto/AnimationPlayer")
+speech = NodePath("Fala")
+lantern = NodePath("Lanterna")
+talk_area = NodePath("Conversa")
+prompt = NodePath("Aviso")
+companion = NodePath("Companheiro")
+invite_line = "O que {você acha|vocês acham} de mais um no grupo? Eu ajudo na briga. E prometo não me perder. Muito."
+accept_line = "Isso! A Companhia da... de alguma coisa, de volta à ativa! Vamos nessa, é por aqui."
+decline_line = "Tudo bem, tudo bem. Eu pergunto de novo lá embaixo. Ou lá em cima. Onde for."
+ally_hurt_line = "Ei! Eu tô do {seu lado|lado de vocês}!"
+trap_line = "Ai! Quem botou isso aqui?! Que lugar mal-educado."
+ahead_line = "Até que enfim! Eu cheguei primeiro, viu? Atalho."
+style_attacks = [NodePath("Model/UmaEspada"), NodePath("Model/DuasEspadas"), NodePath("Model/TresEspadas")]
+drawn_blades = [NodePath("Model/Esqueleto/Rig/Skeleton3D/MaoDireita/Espada"), NodePath("Model/Esqueleto/Rig/Skeleton3D/MaoEsquerda/Espada"), NodePath("Model/Esqueleto/Rig/Skeleton3D/Cabeca/EspadaNaBoca")]
+sheathed_blades = [NodePath("Model/Esqueleto/Rig/Skeleton3D/Cintura/Bainha1"), NodePath("Model/Esqueleto/Rig/Skeleton3D/Cintura/Bainha2"), NodePath("Model/Esqueleto/Rig/Skeleton3D/Cintura/Bainha3")]
+style_lines = PackedStringArray("Tá bom, tá bom... {você pediu|vocês pediram}. Estilo de uma espada!", "Duas espadas! Nada pessoal: é {o seu contrato|o contrato de vocês} contra a minha teimosia!", "Santoryuu! Estilo de três espadas! Agora é pra valer!")
+startle_line = "Uepa! Pra que essa agressividade toda? Vamos com calma."
+introduction = "Ah, gente viva! Que alegria. Eu sou Mayoi Michio. Michio quer dizer homem do caminho. Pode rir, todo mundo ri."
+known_name = "Mayoi Michio"
+floor_lines = Array[PackedStringArray]([PackedStringArray("Faz séculos que eu não converso com alguém que respira. {Conta|Contem} tudo: o sol ainda nasce lá em cima?", "Eu tô procurando a saída. Juro que era pra direita. Ou pra esquerda. Enfim, pra algum lado.", "Três espadas na cintura, sabe? Uma pra cada mão e uma pra boca. A da boca é pra emergência.", "{Você parece forte|Vocês parecem fortes}. {Se cuida|Se cuidem} lá embaixo, que o chão desse lugar tem dente."), PackedStringArray("{Você|Vocês} de novo! Eu sabia que a gente ia se encontrar. Eu também me perdi pra cá.", "Cuidado com os espinhos: eles sobem no ritmo. Conta até três e corre.", "Às vezes eu esqueço que também sou um deles. Mas eu não mordo. Quase nunca.", "Força! Quem chega até aqui já é mais corajoso que metade dos heróis que eu conheci."), PackedStringArray("Lanterna... Companhia da Lanterna. Por que esse nome me dá um aperto no peito? Se é que eu ainda tenho peito.", "Aquele Lorde mandou limpar tudo, não foi? Tudo, tudo mesmo?", "Se um dia {você tiver|vocês tiverem} que fazer o que tem que ser feito, eu vou entender. Só me {deixa|deixem} achar a saída antes.", "Foi bom {te conhecer|conhecer vocês}. Sério. Fazia tempo que eu não me sentia tão vivo.")])
+hurt_lines = PackedStringArray("Ai! Isso doeu no osso.", "Ei, ei! Eu sou do bem!", "Tá bom, tá bom... eu entendi o recado.", "{Você vai|Vocês vão} mesmo fazer isso?")
+death_line = "Tudo bem... o contrato é o contrato. {Acha|Achem} a saída por mim."
+
+[node name="HealthBar3D" parent="." index="2"]
+show_bar = false
+
+[node name="Esqueleto" parent="Model" instance=ExtResource("3_skeleton")]
+
+[node name="MaoDireita" type="BoneAttachment3D" parent="Model/Esqueleto/Rig/Skeleton3D"]
+bone_name = "handslot.r"
+bone_idx = 13
+
+[node name="Espada" parent="Model/Esqueleto/Rig/Skeleton3D/MaoDireita" instance=ExtResource("4_blade")]
+visible = false
+
+[node name="MaoEsquerda" type="BoneAttachment3D" parent="Model/Esqueleto/Rig/Skeleton3D"]
+bone_name = "handslot.l"
+bone_idx = 8
+
+[node name="Espada" parent="Model/Esqueleto/Rig/Skeleton3D/MaoEsquerda" instance=ExtResource("4_blade")]
+visible = false
+
+[node name="Cabeca" type="BoneAttachment3D" parent="Model/Esqueleto/Rig/Skeleton3D"]
+bone_name = "head"
+bone_idx = 14
+
+[node name="EspadaNaBoca" parent="Model/Esqueleto/Rig/Skeleton3D/Cabeca" instance=ExtResource("4_blade")]
+visible = false
+transform = Transform3D(0, -1, 0, 1, 0, 0, 0, 0, 1, 0.14, 0.22, 0.46)
+
+[node name="Bandana" type="MeshInstance3D" parent="Model/Esqueleto/Rig/Skeleton3D/Cabeca"]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1, 0, 0.62, 0)
+mesh = SubResource("Mesh_bandana")
+
+[node name="Cintura" type="BoneAttachment3D" parent="Model/Esqueleto/Rig/Skeleton3D"]
+bone_name = "hips"
+
+[node name="Bainha1" parent="Model/Esqueleto/Rig/Skeleton3D/Cintura" instance=ExtResource("4_blade")]
+transform = Transform3D(1, 0, 0.0, 0, -0.323, 0.946, -0.0, -0.946, -0.323, 0.4, 0.3, 0.12)
+
+[node name="Bainha2" parent="Model/Esqueleto/Rig/Skeleton3D/Cintura" instance=ExtResource("4_blade")]
+transform = Transform3D(1, 0, 0.12, 0, -0.323, 0.946, -0.12, -0.946, -0.323, 0.46, 0.3, -0.02)
+
+[node name="Bainha3" parent="Model/Esqueleto/Rig/Skeleton3D/Cintura" instance=ExtResource("4_blade")]
+transform = Transform3D(1, 0, 0.24, 0, -0.323, 0.946, -0.24, -0.946, -0.323, 0.4, 0.3, -0.16)
+
+[node name="UmaEspada" type="Node3D" parent="Model" node_paths=PackedStringArray("sound")]
+script = ExtResource("5_attack")
+sound = NodePath("Som")
+damage = 1.0
+cooldown = 1.4
+animations = PackedStringArray("1H_Melee_Attack_Chop", "1H_Melee_Attack_Slice_Diagonal")
+impact_delay = 0.4
+recovery = 0.3
+move_factor = 0.0
+
+[node name="Hitbox" type="Area3D" parent="Model/UmaEspada"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Model/UmaEspada/Hitbox"]
+position = Vector3(0, 1.1, 1.1)
+shape = SubResource("BoxShape3D_cut")
+
+[node name="Som" type="AudioStreamPlayer3D" parent="Model/UmaEspada"]
+stream = ExtResource("6_swing")
+max_distance = 30.0
+bus = &"SFX"
+
+[node name="DuasEspadas" type="Node3D" parent="Model" node_paths=PackedStringArray("sound")]
+script = ExtResource("5_attack")
+sound = NodePath("Som")
+damage = 1.0
+cooldown = 1.1
+animations = PackedStringArray("Dualwield_Melee_Attack_Chop", "Dualwield_Melee_Attack_Slice")
+impact_delay = 0.35
+recovery = 0.3
+move_factor = 0.0
+
+[node name="Hitbox" type="Area3D" parent="Model/DuasEspadas"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Model/DuasEspadas/Hitbox"]
+position = Vector3(0, 1.1, 1.1)
+shape = SubResource("BoxShape3D_cut")
+
+[node name="Som" type="AudioStreamPlayer3D" parent="Model/DuasEspadas"]
+stream = ExtResource("6_swing")
+max_distance = 30.0
+bus = &"SFX"
+
+[node name="TresEspadas" type="Node3D" parent="Model" node_paths=PackedStringArray("sound")]
+script = ExtResource("5_attack")
+sound = NodePath("Som")
+damage = 1.5
+cooldown = 0.9
+animations = PackedStringArray("2H_Melee_Attack_Spin", "Dualwield_Melee_Attack_Stab")
+impact_delay = 0.35
+recovery = 0.3
+move_factor = 0.0
+
+[node name="Hitbox" type="Area3D" parent="Model/TresEspadas"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Model/TresEspadas/Hitbox"]
+position = Vector3(0, 1.1, 1.1)
+shape = SubResource("BoxShape3D_cut")
+
+[node name="Som" type="AudioStreamPlayer3D" parent="Model/TresEspadas"]
+stream = ExtResource("6_swing")
+max_distance = 30.0
+bus = &"SFX"
+
+[node name="Companheiro" type="Node" parent="."]
+script = ExtResource("7_companion")
+lost_lines = PackedStringArray("É por aqui! Confia em mim.", "Peraí, esse corredor eu conheço!", "Achei um atalho! Me segue!")
+wait_line = "Ué... cadê {você|todo mundo}? {Você se perdeu|Vocês se perderam} de novo!"
+found_line = "Ah, {você|vocês} aí! Eu tava esperando. Claro."
+
+[node name="Fala" type="Label3D" parent="."]
+position = Vector3(0, 2.5, 0)
+pixel_size = 0.004
+billboard = 1
+modulate = Color(0.9, 0.97, 0.85, 1)
+outline_modulate = Color(0, 0, 0, 1)
+font_size = 42
+outline_size = 10
+width = 640.0
+autowrap_mode = 2
+
+[node name="Aviso" type="Label3D" parent="."]
+position = Vector3(0, 1.95, 0)
+pixel_size = 0.004
+billboard = 1
+no_depth_test = true
+modulate = Color(1, 0.88, 0.6, 1)
+outline_modulate = Color(0, 0, 0, 1)
+text = "E  Conversar"
+font_size = 40
+outline_size = 10
+
+[node name="Lanterna" type="OmniLight3D" parent="."]
+position = Vector3(0, 1.4, 0.5)
+light_color = Color(1, 0.75, 0.45, 1)
+light_energy = 1.3
+omni_range = 5.0
+
+[node name="Conversa" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Conversa"]
+position = Vector3(0, 1, 0)
+shape = SubResource("SphereShape3D_talk")

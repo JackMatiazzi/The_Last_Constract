@@ -1,0 +1,546 @@
+[gd_scene load_steps=28 format=3]
+
+[ext_resource type="MeshLibrary" path="res://resources/mesh_libraries/dungeon_ground.res" id="1_ground"]
+[ext_resource type="MeshLibrary" path="res://resources/mesh_libraries/dungeon_structure.res" id="2_structure"]
+[ext_resource type="MeshLibrary" path="res://resources/mesh_libraries/dungeon_props.res" id="3_props"]
+[ext_resource type="Script" path="res://scripts/world/breakable_props.gd" id="4_breakable"]
+[ext_resource type="PackedScene" path="res://scenes/world/prop_debris.tscn" id="5_debris"]
+[ext_resource type="PackedScene" path="res://scenes/world/dungeon_torch.tscn" id="6_torch"]
+[ext_resource type="PackedScene" path="res://scenes/world/spike_trap.tscn" id="7_spikes"]
+[ext_resource type="PackedScene" path="res://scenes/world/mana_potion.tscn" id="8_mana"]
+[ext_resource type="PackedScene" path="res://scenes/world/health_potion.tscn" id="9_health"]
+[ext_resource type="PackedScene" path="res://scenes/world/chest.tscn" id="10_chest"]
+[ext_resource type="PackedScene" path="res://scenes/world/pendulum_trap.tscn" id="11_pendulum"]
+[ext_resource type="PackedScene" path="res://scenes/world/dart_trap.tscn" id="12_darts"]
+[ext_resource type="PackedScene" path="res://scenes/world/stone_stairs.tscn" id="13_stairs"]
+[ext_resource type="PackedScene" path="res://scenes/world/barrel_trap.tscn" id="14_barrel"]
+[ext_resource type="PackedScene" path="res://scenes/world/skeleton_gamblers.tscn" id="16_gamblers"]
+[ext_resource type="PackedScene" path="res://scenes/world/iron_gate.tscn" id="17_gate"]
+[ext_resource type="PackedScene" path="res://scenes/world/lever.tscn" id="18_lever"]
+[ext_resource type="PackedScene" path="res://scenes/world/readable_note.tscn" id="19_note"]
+[ext_resource type="PackedScene" path="res://scenes/world/drawbridge.tscn" id="20_bridge"]
+[ext_resource type="PackedScene" path="res://scenes/world/spike_pit.tscn" id="21_pit"]
+[ext_resource type="PackedScene" path="res://scenes/world/cracked_wall.tscn" id="22_cracked"]
+[ext_resource type="PackedScene" path="res://scenes/world/arrow_volley_trap.tscn" id="23_volley"]
+[ext_resource type="PackedScene" path="res://scenes/world/remains/fallen_knight.tscn" id="24_knight"]
+[ext_resource type="PackedScene" path="res://scenes/world/remains/fallen_barbarian.tscn" id="25_barbarian"]
+[ext_resource type="PackedScene" path="res://scenes/world/remains/fallen_mage.tscn" id="26_mage"]
+[ext_resource type="PackedScene" path="res://scenes/world/remains/fallen_rogue.tscn" id="27_rogue"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_aviso"]
+size = Vector3(4, 3, 4)
+
+[node name="CalaboucoEscondido" type="Node3D"]
+editor_description = "Calabouco escondido: tres andares descendo (0, -4 e -8 m), cada um numa area propria, ligados por escadarias. Grades: Chao (4 m), Paredes (2 m, caem na borda entre dois pisos, em camadas de 4 m) e Objetos (1 x 0,5 m; barris e caixotes quebram, inclusive a pilha que esconde a sala secreta). Armadilhas, pocoes, baus, tochas, escadas e segredos sao cenas avulsas; os pontos do espadachim ficam em PontosDoEspadachim."
+
+[node name="Chao" type="GridMap" parent="."]
+mesh_library = ExtResource("1_ground")
+cell_size = Vector3(4, 1, 4)
+cell_center_x = false
+cell_center_y = false
+cell_center_z = false
+data = {
+"cells": PackedInt32Array(8, 1, 4, 8, 2, 4, 8, 3, 4, 9, 1, 5, 9, 2, 4, 9, 3, 4, 10, 1, 4, 10, 2, 5, 10, 3, 4, 9, 4, 0, 9, 5, 1, 7, 6, 4, 7, 7, 4, 7, 8, 4, 8, 6, 4, 8, 7, 4, 8, 8, 4, 9, 6, 5, 9, 7, 4, 9, 8, 4, 10, 6, 4, 10, 7, 5, 10, 8, 4, 11, 6, 4, 11, 7, 4, 11, 8, 5, 12, 7, 1, 5, 7, 0, 6, 7, 0, 2, 6, 7, 2, 7, 7, 2, 8, 7, 3, 6, 7, 3, 7, 7, 3, 8, 7, 4, 6, 7, 4, 7, 7, 4, 8, 7, 4294705159, 13, 1, 4294705159, 14, 1, 4294705159, 15, 1, 4294705160, 13, 1, 4294705160, 14, 1, 4294705160, 15, 1, 4294705161, 13, 1, 4294705161, 14, 1, 4294705161, 15, 1, 4294705162, 13, 1, 4294705162, 14, 1, 4294705162, 15, 1, 4294705163, 13, 1, 4294705163, 14, 1, 4294705163, 15, 1, 4294705164, 14, 1, 4294705165, 14, 0, 4294705166, 14, 0, 4294705167, 13, 4, 4294705167, 14, 4, 4294705167, 15, 4, 4294705167, 16, 4, 4294705169, 13, 4, 4294705169, 14, 5, 4294705169, 15, 4, 4294705169, 16, 4, 4294443025, 21, 1, 4294443025, 22, 0, 4294443025, 23, 0, 4294443024, 24, 4, 4294443024, 25, 4, 4294443025, 24, 5, 4294443025, 25, 4, 4294443026, 24, 4, 4294443026, 25, 5, 4294574096, 28, 5, 4294574096, 29, 4, 4294574096, 30, 4, 4294574097, 28, 4, 4294574097, 29, 5, 4294574097, 30, 4, 4294574098, 28, 4, 4294574098, 29, 4, 4294574098, 30, 5, 4294443022, 25, 0, 4294443023, 25, 0, 4294443019, 24, 1, 4294443019, 25, 1, 4294443019, 26, 1, 4294443020, 24, 1, 4294443020, 25, 1, 4294443020, 26, 1, 4294443021, 24, 1, 4294443021, 25, 1, 4294443021, 26, 1, 11, 9, 7, 11, 10, 7, 11, 11, 7, 12, 9, 7, 12, 10, 7, 12, 11, 7, 13, 9, 7, 13, 10, 7, 13, 11, 7, 3, 4, 7, 3, 5, 7, 4294705158, 14, 1, 4294705155, 13, 1, 4294705155, 14, 1, 4294705155, 15, 1, 4294705156, 13, 1, 4294705156, 14, 1, 4294705156, 15, 1, 4294705157, 13, 1, 4294705157, 14, 1, 4294705157, 15, 1, 4294705170, 14, 1, 4294705171, 13, 4, 4294705171, 14, 4, 4294705171, 15, 4, 4294705172, 13, 4, 4294705172, 14, 4, 4294705172, 15, 4, 4294705173, 13, 5, 4294705173, 14, 4, 4294705173, 15, 4, 4294705174, 13, 4, 4294705174, 14, 5, 4294705174, 15, 4, 4294705160, 16, 4, 4294705160, 17, 4, 4294705160, 18, 4, 4294705159, 19, 7, 4294705159, 20, 7, 4294705160, 19, 7, 4294705160, 20, 7, 4294705161, 19, 7, 4294705161, 20, 7, 4294574099, 28, 4, 4294574099, 29, 4, 4294574099, 30, 4, 4294574101, 29, 7, 4294574102, 18, 0, 4294574102, 19, 1, 4294574102, 20, 0, 4294574102, 21, 0, 4294574102, 22, 1, 4294574102, 23, 0, 4294574102, 24, 0, 4294574102, 25, 1, 4294574102, 26, 0, 4294574102, 27, 0, 4294574102, 28, 1, 4294574102, 29, 0)
+}
+
+[node name="Paredes" type="GridMap" parent="."]
+mesh_library = ExtResource("2_structure")
+cell_size = Vector3(2, 4, 2)
+cell_center_x = false
+cell_center_y = false
+cell_center_z = false
+data = {
+"cells": PackedInt32Array(16, 1, 17, 15, 2, 1048593, 15, 4, 1048593, 16, 7, 655377, 15, 6, 1048605, 18, 1, 17, 20, 1, 17, 21, 2, 1441809, 21, 4, 1441809, 20, 7, 655377, 21, 6, 1441809, 19, 8, 1441809, 17, 8, 1048593, 19, 10, 1441821, 17, 10, 1048593, 14, 11, 17, 13, 12, 1048593, 14, 17, 655377, 13, 16, 1048593, 16, 11, 17, 16, 17, 655377, 20, 11, 17, 20, 17, 655377, 22, 11, 29, 23, 12, 1441809, 23, 16, 1441821, 24, 15, 655377, 24, 13, 24, 25, 14, 1441809, 10, 15, 655377, 10, 13, 17, 12, 15, 655389, 12, 13, 17, 4, 11, 17, 3, 12, 1048605, 3, 14, 1048593, 4, 17, 655389, 3, 16, 1048619, 6, 17, 655403, 8, 11, 29, 9, 12, 1441809, 8, 17, 655377, 9, 16, 1441809, 4294901779, 18, 1441809, 19, 18, 1441809, 4294901777, 18, 1048593, 17, 18, 1048593, 4294901779, 20, 1441809, 19, 20, 1441809, 4294901777, 20, 1048593, 17, 20, 1048593, 4294901779, 22, 1441821, 19, 22, 1441809, 4294901777, 22, 1048593, 17, 22, 1048593, 4294901779, 24, 1441809, 19, 24, 1441809, 4294901777, 24, 1048605, 17, 24, 1048593, 4294901774, 25, 17, 4294901773, 26, 1048593, 4294901774, 31, 655377, 4294901773, 30, 1048605, 4294901776, 25, 21, 4294901778, 31, 655377, 4294901780, 25, 29, 4294901780, 31, 655377, 4294901782, 25, 17, 4294901783, 26, 1441821, 4294901782, 31, 655377, 4294901783, 30, 1441813, 4294901784, 29, 655377, 4294901784, 27, 17, 4294901786, 29, 655377, 4294901786, 27, 29, 4294901788, 29, 655377, 4294901788, 27, 17, 4294901790, 25, 17, 4294901789, 26, 1048593, 4294901789, 30, 1048593, 4294901790, 33, 655389, 4294901789, 32, 1048593, 4294901792, 25, 17, 4294901792, 33, 655377, 4294901794, 25, 17, 4294901795, 26, 1441809, 4294901795, 30, 1441821, 4294901795, 32, 1441809, 4294836259, 34, 1441809, 4294901795, 34, 1441809, 4294836257, 34, 1048605, 4294901793, 34, 1048593, 4294836259, 36, 1441809, 4294901795, 36, 1441809, 4294836257, 36, 1048593, 4294901793, 36, 1048593, 4294836259, 38, 1441809, 4294901795, 38, 1441809, 4294836257, 38, 1048593, 4294901793, 38, 1048593, 4294836259, 40, 1441809, 4294901795, 40, 1441809, 4294836257, 40, 1048593, 4294901793, 40, 1048593, 4294836259, 42, 1441821, 4294836257, 42, 1048593, 4294836259, 44, 1441809, 4294836257, 44, 1048605, 4294836259, 46, 1441809, 4294836257, 46, 1048593, 4294836256, 47, 17, 4294836255, 48, 1048605, 4294836256, 51, 655389, 4294836260, 47, 17, 4294836261, 48, 1441809, 4294836260, 51, 655377, 4294836261, 50, 1441821, 4294836259, 52, 1441821, 4294901795, 52, 1441809, 4294836257, 52, 1048593, 4294901793, 52, 1048593, 4294836259, 54, 1441809, 4294901795, 54, 1441809, 4294836257, 54, 1048593, 4294901793, 54, 1048593, 4294836256, 55, 17, 4294901792, 55, 17, 4294836255, 56, 1048593, 4294901791, 56, 1048593, 4294836255, 58, 1048605, 4294901791, 58, 1048593, 4294836256, 61, 655377, 4294901792, 61, 655377, 4294836255, 60, 1048593, 4294901791, 60, 1048593, 4294836258, 61, 655377, 4294901794, 61, 655377, 4294836260, 55, 17, 4294901796, 55, 17, 4294836261, 56, 1048593, 4294901797, 56, 1441809, 4294836260, 61, 655377, 4294901796, 61, 655377, 4294836261, 60, 1048605, 4294901797, 60, 1441809, 4294836252, 51, 655377, 4294836252, 49, 17, 4294836254, 51, 655377, 4294836254, 49, 17, 4294836246, 47, 17, 4294836245, 48, 1048593, 4294836245, 50, 1048600, 4294836246, 53, 655377, 4294836245, 52, 1048605, 4294836248, 47, 17, 4294836248, 53, 655396, 4294836250, 47, 17, 4294836251, 48, 1441809, 4294836250, 53, 655384, 4294836251, 52, 1441816, 21, 18, 1048605, 21, 20, 1048593, 22, 23, 655389, 21, 22, 1048619, 24, 17, 17, 24, 23, 655403, 26, 17, 29, 27, 18, 1441809, 27, 20, 1441821, 26, 23, 655377, 27, 22, 1441809, 6, 7, 17, 7, 8, 1441809, 5, 8, 1048593, 7, 10, 1441809, 5, 10, 1048605, 4294901772, 29, 655377, 4294901772, 27, 29, 4294901766, 25, 29, 4294901765, 26, 1048593, 4294901765, 28, 1048593, 4294901766, 31, 655377, 4294901765, 30, 1048600, 4294901768, 25, 24, 4294901768, 31, 655384, 4294901770, 25, 17, 4294901771, 26, 1441816, 4294901770, 31, 655377, 4294901771, 30, 1441809, 4294901796, 29, 655377, 4294901796, 27, 17, 4294901798, 25, 21, 4294901797, 26, 1048597, 4294901798, 31, 655389, 4294901797, 30, 1048593, 4294901800, 25, 17, 4294901800, 31, 655377, 4294901802, 25, 29, 4294901802, 31, 655377, 4294901804, 25, 17, 4294901805, 26, 1441821, 4294901805, 28, 1441809, 4294901805, 30, 1441813, 4294901777, 32, 1441809, 4294901775, 32, 1048593, 4294901777, 34, 1441809, 4294901775, 34, 1048593, 4294901777, 36, 1441821, 4294901775, 36, 1048593, 4294901774, 37, 17, 4294901773, 38, 1048593, 4294901774, 41, 655377, 4294901773, 40, 1048619, 4294901776, 41, 655377, 4294901778, 37, 17, 4294901779, 38, 1441809, 4294901778, 41, 655377, 4294901779, 40, 1441809, 4294836262, 55, 17, 4294901798, 55, 17, 4294836262, 61, 655377, 4294901798, 61, 655377, 4294836264, 55, 17, 4294901800, 55, 17, 4294836265, 56, 1441809, 4294901801, 56, 1441809, 4294836264, 61, 655389, 4294901800, 61, 655377, 4294836265, 60, 1441809, 4294901801, 60, 1441809, 4294836266, 59, 655389, 4294901802, 59, 655377, 4294836266, 57, 17, 4294901802, 57, 17, 4294836269, 36, 1441809, 4294901805, 36, 1441809, 4294836267, 36, 1048593, 4294901803, 36, 1048593, 4294836269, 38, 1441821, 4294901805, 38, 1441809, 4294836267, 38, 1048593, 4294901803, 38, 1048593, 4294836269, 40, 1441809, 4294901805, 40, 1441809, 4294836267, 40, 1048605, 4294901803, 40, 1048593, 4294836269, 42, 1441809, 4294901805, 42, 1441809, 4294836267, 42, 1048593, 4294901803, 42, 1048593, 4294836269, 44, 1441809, 4294901805, 44, 1441809, 4294836267, 44, 1048593, 4294901803, 44, 1048593, 4294836269, 46, 1441809, 4294901805, 46, 1441809, 4294836267, 46, 1048593, 4294901803, 46, 1048593, 4294836269, 48, 1441821, 4294901805, 48, 1441809, 4294836267, 48, 1048593, 4294901803, 48, 1048593, 4294836269, 50, 1441809, 4294901805, 50, 1441809, 4294836267, 50, 1048593, 4294901803, 50, 1048593, 4294836269, 52, 1441809, 4294901805, 52, 1441809, 4294836267, 52, 1048605, 4294901803, 52, 1048593, 4294836269, 54, 1441809, 4294901805, 54, 1441809, 4294836267, 54, 1048593, 4294901803, 54, 1048593, 4294836269, 56, 1441809, 4294901805, 56, 1441809, 4294836267, 56, 1048593, 4294901803, 56, 1048593, 4294836268, 59, 655377, 4294901804, 59, 655377, 4294836269, 58, 1441809, 4294901805, 58, 1441809, 4294836269, 32, 1441809, 4294901805, 32, 1441809, 4294836267, 32, 1048593, 4294901803, 32, 1048593, 4294836269, 34, 1441809, 4294901805, 34, 1441809, 4294836267, 34, 1048593, 4294901803, 34, 1048593, 15, 1, 0, 15, 7, 0, 17, 7, 0, 21, 1, 0, 19, 7, 0, 21, 7, 0, 19, 11, 0, 17, 11, 0, 13, 11, 0, 13, 13, 0, 13, 17, 0, 13, 15, 0, 4294901777, 17, 0, 17, 17, 0, 4294901779, 17, 0, 19, 17, 0, 21, 17, 0, 23, 11, 0, 23, 13, 0, 23, 15, 0, 23, 17, 0, 25, 15, 0, 25, 13, 0, 9, 15, 0, 9, 13, 0, 3, 11, 0, 5, 11, 0, 3, 17, 0, 7, 11, 0, 9, 11, 0, 9, 17, 0, 4294901779, 25, 0, 19, 25, 0, 4294901777, 25, 0, 17, 25, 0, 4294901773, 25, 0, 4294901773, 27, 0, 4294901773, 31, 0, 4294901775, 31, 0, 4294901773, 29, 0, 4294901777, 31, 0, 4294901783, 25, 0, 4294901783, 27, 0, 4294901783, 31, 0, 4294901783, 29, 0, 4294901789, 29, 0, 4294901789, 27, 0, 4294901789, 25, 0, 4294901789, 33, 0, 4294836257, 33, 0, 4294901793, 33, 0, 4294901795, 25, 0, 4294901795, 27, 0, 4294901795, 29, 0, 4294836259, 47, 0, 4294836257, 47, 0, 4294836255, 47, 0, 4294836255, 49, 0, 4294836257, 51, 0, 4294901793, 51, 0, 4294836261, 47, 0, 4294836259, 51, 0, 4294901795, 51, 0, 4294836261, 51, 0, 4294836259, 55, 0, 4294901795, 55, 0, 4294836257, 55, 0, 4294901793, 55, 0, 4294836255, 55, 0, 4294901791, 55, 0, 4294836255, 61, 0, 4294901791, 61, 0, 4294836261, 55, 0, 4294901797, 55, 0, 4294836261, 61, 0, 4294901797, 61, 0, 4294836251, 51, 0, 4294836251, 49, 0, 4294836245, 47, 0, 4294836245, 53, 0, 4294836251, 47, 0, 4294836251, 53, 0, 21, 23, 0, 27, 17, 0, 27, 23, 0, 5, 7, 0, 7, 7, 0, 4294901771, 29, 0, 4294901771, 27, 0, 4294901765, 25, 0, 4294901765, 31, 0, 4294901771, 25, 0, 4294901771, 31, 0, 4294901797, 29, 0, 4294901797, 27, 0, 4294901797, 25, 0, 4294901797, 31, 0, 4294836267, 31, 0, 4294901803, 31, 0, 4294901805, 25, 0, 4294901777, 37, 0, 4294901775, 37, 0, 4294901773, 37, 0, 4294901773, 41, 0, 4294901779, 37, 0, 4294901779, 41, 0, 4294836265, 55, 0, 4294901801, 55, 0, 4294836265, 57, 0, 4294901801, 57, 0, 4294836265, 61, 0, 4294901801, 61, 0, 4294836265, 59, 0, 4294901801, 59, 0, 4294836267, 57, 0, 4294901803, 57, 0, 4294836269, 59, 0, 4294901805, 59, 0, 17, 13, 0, 21, 13, 0, 17, 15, 0, 21, 15, 0)
+}
+
+[node name="Objetos" type="GridMap" parent="."]
+script = ExtResource("4_breakable")
+mesh_library = ExtResource("3_props")
+debris_scene = ExtResource("5_debris")
+cell_size = Vector3(1, 0.5, 1)
+cell_center_x = false
+cell_center_y = false
+cell_center_z = false
+data = {
+"cells": PackedInt32Array(31, 3, 104, 41, 3, 1048685, 27, 33, 106, 45, 33, 55, 7, 33, 104, 17, 33, 1048685, 17, 23, 108, 4294443035, 51, 58, 4294443053, 61, 58, 4294443048, 61, 76, 4294443035, 61, 54, 4294443077, 56, 104, 4294443067, 65, 108, 4293918783, 101, 104, 4293918793, 101, 1048684, 4293918773, 95, 58, 4294180932, 121, 655421, 4294180933, 121, 63, 4294180937, 116, 64, 4294180928, 111, 65, 4294180927, 111, 58, 4294180937, 121, 58, 11, 16, 1048685, 13, 16, 104, 11, 21, 106, 53, 35, 54, 43, 45, 55, 53, 45, 1048674, 4294443019, 51, 58, 4294443029, 61, 69, 4294443097, 51, 58, 4294443083, 61, 54, 4294443035, 75, 76, 4294443035, 77, 108, 4294443035, 81, 104, 4294180939, 121, 55, 4294180953, 108, 106, 4294180951, 84, 58)
+}
+
+[node name="Escadas" type="Node3D" parent="."]
+
+[node name="Escada1" parent="Escadas" instance=ExtResource("13_stairs")]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 36.0, -2, 42.0)
+
+[node name="Escada2" parent="Escadas" instance=ExtResource("13_stairs")]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 36.0, -4, 50.0)
+
+[node name="Escada3" parent="Escadas" instance=ExtResource("13_stairs")]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 68.0, -6, 74.0)
+
+[node name="Escada4" parent="Escadas" instance=ExtResource("13_stairs")]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 68.0, -8, 82.0)
+
+[node name="Escada5" parent="Escadas" instance=ExtResource("13_stairs")]
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 68.0, -8, 102.0)
+
+[node name="Escada6" parent="Escadas" instance=ExtResource("13_stairs")]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 88.0, -6, 70.0)
+
+[node name="Tochas" type="Node3D" parent="."]
+
+[node name="Tocha1" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, 1.0, 0, 1, 0, -1.0, 0, 0.0, 30.5, 2.4, 4.0)
+
+[node name="Tocha2" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, 1.0, 0, 1, 0, -1.0, 0, 0.0, 30.5, 2.4, 12.0)
+
+[node name="Tocha3" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 36.0, 2.4, 2.5)
+
+[node name="Tocha4" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 41.5, 2.4, 4.0)
+
+[node name="Tocha5" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 41.5, 2.4, 8.0)
+
+[node name="Tocha6" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 41.5, 2.4, 12.0)
+
+[node name="Tocha7" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, 1.0, 0, 1, 0, -1.0, 0, 0.0, 6.5, 2.4, 24.0)
+
+[node name="Tocha8" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, 1.0, 0, 1, 0, -1.0, 0, 0.0, 6.5, 2.4, 28.0)
+
+[node name="Tocha9" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 17.5, 2.4, 24.0)
+
+[node name="Tocha10" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 17.5, 2.4, 32.0)
+
+[node name="Tocha11" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 36.0, -1.6, 61.5)
+
+[node name="Tocha12" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 60.0, -1.6, 50.5)
+
+[node name="Tocha13" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 60.0, -1.6, 65.5)
+
+[node name="Tocha14" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 72.0, -5.6, 94.5)
+
+[node name="Tocha15" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 72.0, -5.6, 101.5)
+
+[node name="Tocha16" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 72.0, -3.6, 110.5)
+
+[node name="Tocha17" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 72.0, -3.6, 121.5)
+
+[node name="Tocha18" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, 1.0, 0, 1, 0, -1.0, 0, 0.0, 42.5, -5.6, 96.0)
+
+[node name="Tocha19" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, 1.0, 0, 1, 0, -1.0, 0, 0.0, 42.5, -5.6, 100.0)
+
+[node name="Tocha20" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, 1.0, 0, 1, 0, -1.0, 0, 0.0, 42.5, -5.6, 104.0)
+
+[node name="Tocha21" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 48.0, -5.6, 94.5)
+
+[node name="Tocha22" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 53.5, -5.6, 96.0)
+
+[node name="Tocha23" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 53.5, -5.6, 104.0)
+
+[node name="Tocha24" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, 1.0, 0, 1, 0, -1.0, 0, 0.0, 42.5, 2.4, 36.0)
+
+[node name="Tocha25" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, 1.0, 0, 1, 0, -1.0, 0, 0.0, 42.5, 2.4, 40.0)
+
+[node name="Tocha26" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 48.0, 2.4, 34.5)
+
+[node name="Tocha27" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 53.5, 2.4, 36.0)
+
+[node name="Tocha28" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 53.5, 2.4, 40.0)
+
+[node name="Tocha29" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 53.5, 2.4, 44.0)
+
+[node name="Tocha30" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 12.0, 2.4, 14.5)
+
+[node name="Tocha31" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 12.0, -1.6, 50.5)
+
+[node name="Tocha32" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 12.0, -1.6, 61.5)
+
+[node name="Tocha33" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 84.0, -1.6, 50.5)
+
+[node name="Tocha34" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 84.0, -1.6, 61.5)
+
+[node name="Tocha35" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 89.5, -1.6, 52.0)
+
+[node name="Tocha36" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 89.5, -1.6, 56.0)
+
+[node name="Tocha37" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 89.5, -1.6, 60.0)
+
+[node name="Tocha38" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 36.0, -1.6, 74.5)
+
+[node name="Tocha39" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 36.0, -1.6, 81.5)
+
+[node name="Tocha40" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 84.0, -3.6, 117.5)
+
+[node name="Tocha41" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 84.0, -3.6, 114.5)
+
+[node name="Tocha42" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 89.5, -3.6, 72.0)
+
+[node name="Tocha43" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 89.5, -3.6, 76.0)
+
+[node name="Tocha44" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 89.5, -3.6, 80.0)
+
+[node name="Tocha45" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 89.5, -3.6, 84.0)
+
+[node name="Tocha46" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 89.5, -3.6, 88.0)
+
+[node name="Tocha47" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 89.5, -3.6, 92.0)
+
+[node name="Tocha48" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 89.5, -3.6, 96.0)
+
+[node name="Tocha49" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 89.5, -3.6, 100.0)
+
+[node name="Tocha50" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 89.5, -3.6, 104.0)
+
+[node name="Tocha51" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 89.5, -3.6, 108.0)
+
+[node name="Tocha52" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 89.5, -3.6, 112.0)
+
+[node name="Tocha53" parent="Tochas" instance=ExtResource("6_torch")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 89.5, -3.6, 116.0)
+
+[node name="Armadilhas" type="Node3D" parent="."]
+
+[node name="Espinhos1" parent="Armadilhas" instance=ExtResource("7_spikes")]
+position = Vector3(64.0, -4.0, 52.0)
+cycle_offset = 0.0
+
+[node name="Espinhos2" parent="Armadilhas" instance=ExtResource("7_spikes")]
+position = Vector3(64.0, -4.0, 56.0)
+cycle_offset = 1.0
+
+[node name="Espinhos3" parent="Armadilhas" instance=ExtResource("7_spikes")]
+position = Vector3(64.0, -4.0, 60.0)
+cycle_offset = 2.0
+
+[node name="Espinhos4" parent="Armadilhas" instance=ExtResource("7_spikes")]
+position = Vector3(64.0, -4.0, 64.0)
+cycle_offset = 3.0
+
+[node name="Lamina1" parent="Armadilhas" instance=ExtResource("11_pendulum")]
+position = Vector3(48.0, -4.0, 56.0)
+cycle_offset = 0.0
+
+[node name="Lamina2" parent="Armadilhas" instance=ExtResource("11_pendulum")]
+position = Vector3(56.0, -4.0, 56.0)
+cycle_offset = 1.3
+
+[node name="Dardos" parent="Armadilhas" instance=ExtResource("12_darts")]
+position = Vector3(68.0, -8.0, 88.0)
+
+[node name="BarrilRolante" parent="Armadilhas" instance=ExtResource("14_barrel")]
+position = Vector3(68.0, -6, 110.0)
+
+[node name="Interativos" type="Node3D" parent="."]
+
+[node name="PocaoMana1" parent="Interativos" instance=ExtResource("8_mana")]
+position = Vector3(59.0, -4.0, 51.0)
+
+[node name="PocaoMana2" parent="Interativos" instance=ExtResource("8_mana")]
+position = Vector3(69.0, -4.0, 65.0)
+
+[node name="PocaoMana3" parent="Interativos" instance=ExtResource("8_mana")]
+position = Vector3(64.0, -6.0, 116.0)
+
+[node name="PocaoMana4" parent="Interativos" instance=ExtResource("8_mana")]
+position = Vector3(72.0, -6.0, 115.0)
+
+[node name="PocaoMana5" parent="Interativos" instance=ExtResource("8_mana")]
+position = Vector3(52.8, -8.0, 104.8)
+
+[node name="PocaoMana6" parent="Interativos" instance=ExtResource("8_mana")]
+position = Vector3(48.8, 0.0, 35.2)
+
+[node name="PocaoMana7" parent="Interativos" instance=ExtResource("8_mana")]
+position = Vector3(51.2, 0.0, 43.2)
+
+[node name="PocaoVida1" parent="Interativos" instance=ExtResource("9_health")]
+position = Vector3(12.8, 0.0, 29.0)
+
+[node name="PocaoVida2" parent="Interativos" instance=ExtResource("9_health")]
+position = Vector3(45.2, 0.0, 22.8)
+
+[node name="PocaoVida3" parent="Interativos" instance=ExtResource("9_health")]
+position = Vector3(73.0, -8.0, 95.0)
+
+[node name="PocaoVida4" parent="Interativos" instance=ExtResource("9_health")]
+position = Vector3(12.0, 0.0, 16.8)
+
+[node name="PocaoVida5" parent="Interativos" instance=ExtResource("9_health")]
+position = Vector3(35.2, -4.0, 75.2)
+
+[node name="PocaoVida6" parent="Interativos" instance=ExtResource("9_health")]
+position = Vector3(16.8, -4.0, 60.8)
+
+[node name="PocaoVida7" parent="Interativos" instance=ExtResource("9_health")]
+position = Vector3(80.0, -4.0, 51.0)
+
+[node name="PocaoVida8" parent="Interativos" instance=ExtResource("9_health")]
+position = Vector3(88.0, -6.0, 92.0)
+
+[node name="BauDoTesouro" parent="Interativos" instance=ExtResource("10_chest")]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 72.0, -6, 121.4)
+loot_scene = ExtResource("8_mana")
+
+[node name="BauSecreto" parent="Interativos" instance=ExtResource("10_chest")]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 52.0, -8, 105.3)
+loot_scene = ExtResource("9_health")
+
+[node name="BauBiblioteca" parent="Interativos" instance=ExtResource("10_chest")]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 48.0, 0, 45.3)
+loot_scene = ExtResource("8_mana")
+
+[node name="BauArsenal" parent="Interativos" instance=ExtResource("10_chest")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 37.3, -4, 80.0)
+loot_scene = ExtResource("9_health")
+
+[node name="BauAdega" parent="Interativos" instance=ExtResource("10_chest")]
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 12.0, 0, 14.7)
+loot_scene = ExtResource("9_health")
+
+[node name="Mecanismos" type="Node3D" parent="."]
+
+[node name="PortaoBiblioteca" parent="Mecanismos" instance=ExtResource("17_gate")]
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 44, 0, 34)
+editor_description = "Grade da biblioteca: na camada grades, segura o corpo mas deixa passar a mira, os tiros e o portal do Mage."
+
+[node name="Grade" parent="Mecanismos/PortaoBiblioteca"]
+collision_layer = 8
+
+[node name="PortaoDosSelos" parent="Mecanismos" instance=ExtResource("17_gate")]
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 68, -4, 66)
+required = 2
+
+[node name="AlavancaBiblioteca" parent="Mecanismos" node_paths=PackedStringArray("targets") instance=ExtResource("18_lever")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 53.2, 0, 40.0)
+targets = [NodePath("../PortaoBiblioteca")]
+
+[node name="SeloOeste" parent="Mecanismos" node_paths=PackedStringArray("targets") instance=ExtResource("18_lever")]
+transform = Transform3D(0.0, 0, 1.0, 0, 1, 0, -1.0, 0, 0.0, 10.8, -4, 56.0)
+targets = [NodePath("../PortaoDosSelos")]
+
+[node name="SeloLeste" parent="Mecanismos" node_paths=PackedStringArray("targets") instance=ExtResource("18_lever")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 89.2, -4, 56.0)
+targets = [NodePath("../PortaoDosSelos")]
+
+[node name="AlavancaArsenal" parent="Mecanismos" node_paths=PackedStringArray("targets") instance=ExtResource("18_lever")]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 37.2, -4, 76.0)
+targets = [NodePath("../CorredorDeFlechas")]
+
+[node name="CorredorDeFlechas" parent="Mecanismos" instance=ExtResource("23_volley")]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 32, -4, 82)
+
+[node name="PonteDoAbismo" parent="Mecanismos" instance=ExtResource("20_bridge")]
+transform = Transform3D(0.0, 0, 1.0, 0, 1, 0, -1.0, 0, 0.0, 82, -6, 116)
+
+[node name="Corda" parent="Mecanismos/PonteDoAbismo" node_paths=PackedStringArray("targets")]
+targets = [NodePath(".."), NodePath("../../FossoDeLaminas2")]
+
+[node name="FossoDeLaminas1" parent="Mecanismos" instance=ExtResource("21_pit")]
+position = Vector3(80.0, -6.0, 112.0)
+cycle_offset = 0.0
+
+[node name="FossoDeLaminas2" parent="Mecanismos" instance=ExtResource("21_pit")]
+position = Vector3(80.0, -6.0, 116.0)
+cycle_offset = 0.2
+
+[node name="FossoDeLaminas3" parent="Mecanismos" instance=ExtResource("21_pit")]
+position = Vector3(80.0, -6.0, 120.0)
+cycle_offset = 0.4
+
+[node name="ParedeDaSalaSecreta" parent="Mecanismos" instance=ExtResource("22_cracked")]
+transform = Transform3D(0.0, 0, 1.0, 0, 1, 0, -1.0, 0, 0.0, 62, -8, 100)
+
+[node name="ParedeDaAdega" parent="Mecanismos" instance=ExtResource("22_cracked")]
+transform = Transform3D(1.0, 0, 0.0, 0, 1, 0, -0.0, 0, 1.0, 12, 0, 22)
+
+[node name="Historia" type="Node3D" parent="."]
+
+[node name="RestosDaMaga" parent="Historia" instance=ExtResource("26_mage")]
+transform = Transform3D(-0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, -0.939693, 52.5, 0, 41.2)
+
+[node name="RestosDoCavaleiro" parent="Historia" instance=ExtResource("24_knight")]
+transform = Transform3D(0.866025, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866025, 32.6, -4, 80.4)
+
+[node name="RestosDoBarbaro" parent="Historia" instance=ExtResource("25_barbarian")]
+transform = Transform3D(-0.5, 0, 0.866025, 0, 1, 0, -0.866025, 0, -0.5, 12.2, 0, 19.6)
+
+[node name="RestosDaLadina" parent="Historia" instance=ExtResource("27_rogue")]
+transform = Transform3D(0.173648, 0, 0.984808, 0, 1, 0, -0.984808, 0, 0.173648, 75.6, -6, 112.2)
+
+[node name="OrdemDoLorde" parent="Historia" instance=ExtResource("19_note")]
+position = Vector3(37.4, 0.0, 8.6)
+text = "Ordem do Lorde, selada.\n\nLimpem o calabouço sob a vila. Pagamento na saída.\nCláusula única: nenhum morto-vivo fica de pé.\nQuem sair devendo um morto-vivo, deve a cabeça."
+
+[node name="DiarioDia1" parent="Historia" instance=ExtResource("19_note")]
+position = Vector3(30.8, 0.0, 29.2)
+text = "Diário de Sir Aldren, Companhia da Lanterna.\n\nDia 1. Somos cinco: eu, Brakka, Maelis, Wren e o espadachim que se perde até em corredor reto.\nO Lorde pagou adiantado. Lorde nenhum paga adiantado."
+
+[node name="BilheteMaelis" parent="Historia" instance=ExtResource("19_note")]
+position = Vector3(47.0, 0.0, 40.8)
+text = "Maelis, da Lanterna.\n\nEntrei pelo portal e a grade desceu atrás de mim. A alavanca abre por dentro, mas não tenho mais força.\nOs livros dizem: quem morre aqui levanta. O Lorde sabia. Ele não quer o calabouço limpo, quer a gente nele."
+
+[node name="BilheteBrakka" parent="Historia" instance=ExtResource("19_note")]
+position = Vector3(12.8, 0.0, 20.2)
+text = "Brakka.\n\nA parede rachou no primeiro giro. Achei a adega do Lorde e bebi tudo. Valeu cada gole.\nSe vier outro bárbaro: o giro pesado derruba o que o resto do mundo chama de parede."
+
+[node name="BilheteOssuario" parent="Historia" instance=ExtResource("19_note")]
+position = Vector3(17.2, -4.0, 51.0)
+text = "Contei os crânios. Quase todos têm marca de contrato no osso da testa.\nNão são aldeões. São os que vieram antes."
+
+[node name="BilheteCapela" parent="Historia" instance=ExtResource("19_note")]
+position = Vector3(84.0, -4.0, 61.2)
+text = "Wren, da Lanterna.\n\nUm selo aqui no altar, outro entre os ossos. Os dois juntos abrem a descida.\nAldren foi pelas flechas, Maelis pela grade. Eu fico com as cordas: nada amarrado resiste a um bom virote."
+
+[node name="DiarioArsenal" parent="Historia" instance=ExtResource("19_note")]
+position = Vector3(29.2, -4.0, 76.8)
+text = "Diário de Sir Aldren, último dia.\n\nO escudo aguentou as flechas até a alavanca. O resto de mim não aguentou o que veio depois.\nSe você carrega escudo, desligue a armadilha para os seus. Deixei o que sobrou do arsenal."
+
+[node name="BilheteWren" parent="Historia" instance=ExtResource("19_note")]
+position = Vector3(74.8, -6.0, 116.0)
+text = "Wren.\n\nA ponte só desce se cortarem a corda lá no alto. Meu último virote errou.\nDo outro lado há uma galeria que sobe de volta à capela. Atalho para quem sobreviver. O seu não vai errar."
+
+[node name="BilheteGaleria" parent="Historia" instance=ExtResource("19_note")]
+position = Vector3(88.0, -6.0, 88.0)
+text = "Riscado na pedra:\n\nSaída dos contratados. Quem chega aqui volta mais cedo para casa. Se ainda tiver casa."
+
+[node name="UltimaPagina" parent="Historia" instance=ExtResource("19_note")]
+position = Vector3(48.8, -8.0, 100.8)
+text = "Última página de Sir Aldren.\n\nO espadachim foi para o lado errado de novo. Sempre volta. Desta vez voltou sem pulso, rindo como sempre.\nA cláusula não abre exceção. Se o encontrar, faça o que eu não tive coragem."
+
+[node name="Segredos" type="Node3D" parent="."]
+
+[node name="JogadoresDeDados" parent="Segredos" instance=ExtResource("16_gamblers")]
+transform = Transform3D(0.0, 0, 1.0, 0, 1, 0, -1.0, 0, 0.0, 12.0, 0, 28.0)
+
+[node name="InscricaoEntrada" type="Label3D" parent="Segredos"]
+transform = Transform3D(0.0, 0, 1.0, 0, 1, 0, -1.0, 0, 0.0, 30.55, 2.4, 8.0)
+pixel_size = 0.004
+modulate = Color(0.95, 0.88, 0.7, 1)
+outline_modulate = Color(0.04, 0.03, 0.02, 1)
+text = "O contrato não perdoa:\nnenhum morto-vivo fica de pé."
+font_size = 56
+outline_size = 16
+
+[node name="InscricaoCripta" type="Label3D" parent="Segredos"]
+transform = Transform3D(0.0, 0, 1.0, 0, 1, 0, -1.0, 0, 0.0, 26.55, -1.7000000000000002, 52.0)
+pixel_size = 0.004
+modulate = Color(0.95, 0.88, 0.7, 1)
+outline_modulate = Color(0.04, 0.03, 0.02, 1)
+text = "Aqui jaz o último aventureiro\nque confiou no Lorde."
+font_size = 56
+outline_size = 16
+
+[node name="InscricaoPortao" type="Label3D" parent="Segredos"]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 48.0, -4.8, 105.45)
+pixel_size = 0.004
+modulate = Color(0.95, 0.88, 0.7, 1)
+outline_modulate = Color(0.04, 0.03, 0.02, 1)
+text = "Além deste portão,\noutro calabouço espera."
+font_size = 56
+outline_size = 16
+
+[node name="InscricaoSelos" type="Label3D" parent="Segredos"]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 64.0, -1.6, 65.45)
+pixel_size = 0.004
+modulate = Color(0.95, 0.88, 0.7, 1)
+outline_modulate = Color(0.04, 0.03, 0.02, 1)
+text = "Dois selos guardam a descida:\num entre os ossos, outro aos pés do altar."
+font_size = 56
+outline_size = 16
+
+[node name="PontosDoEspadachim" type="Node3D" parent="."]
+
+[node name="Andar1" type="Marker3D" parent="PontosDoEspadachim"]
+transform = Transform3D(0.0, 0, -1.0, 0, 1, 0, 1.0, 0, 0.0, 49.0, 0.1, 28.0)
+
+[node name="Andar2" type="Marker3D" parent="PontosDoEspadachim"]
+transform = Transform3D(-1.0, 0, 0.0, 0, 1, 0, -0.0, 0, -1.0, 69.2, -3.9, 50.8)
+
+[node name="Andar3" type="Marker3D" parent="PontosDoEspadachim"]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 63.0, -7.9, 95.0)
+
+[node name="AvisoAndar2" type="Area3D" parent="PontosDoEspadachim"]
+position = Vector3(36.0, -2.5, 52.0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="PontosDoEspadachim/AvisoAndar2"]
+shape = SubResource("BoxShape3D_aviso")
+
+[node name="AvisoAndar3" type="Area3D" parent="PontosDoEspadachim"]
+position = Vector3(68.0, -6.5, 84.0)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="PontosDoEspadachim/AvisoAndar3"]
+shape = SubResource("BoxShape3D_aviso")
+
+[node name="PlayerSpots" type="Node3D" parent="."]
+
+[node name="Player1" type="Marker3D" parent="PlayerSpots"]
+position = Vector3(36.0, 0.2, 8.0)
+
+[node name="SaidaSpot" type="Marker3D" parent="."]
+position = Vector3(36.0, 0.0, 4.0)
+
+[node name="CryptSpot" type="Marker3D" parent="."]
+position = Vector3(36.0, -3.9, 56.0)
+
+[node name="GuardSpot" type="Marker3D" parent="."]
+position = Vector3(68.0, -5.9, 116.0)
+
+[node name="PatrolSpot" type="Marker3D" parent="."]
+position = Vector3(68.0, -7.9, 96.0)
+
+[node name="MimicSpot" type="Marker3D" parent="."]
+position = Vector3(64.0, -6.0, 120.0)

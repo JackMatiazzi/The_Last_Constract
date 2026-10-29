@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/kaykit_skeletons/characters/Skeleton_Rogue.glb" id="1_bones"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_dungeon/models/bottle_A_brown.gltf" id="2_prop"]
+
+[node name="Restos" type="Node3D"]
+editor_description = "Restos de um membro da Companhia da Lanterna, que veio antes do grupo. Ficou deitado de vez: nao levanta e nao conta na clausula."
+
+[node name="Ossos" parent="." instance=ExtResource("1_bones")]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+
+[node name="AnimationPlayer" parent="Ossos"]
+autoplay = &"Skeletons_Inactive_Floor_Pose"
+
+[node name="Pertence" parent="." instance=ExtResource("2_prop")]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0.9, 0, 0.6)

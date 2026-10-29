@@ -20,12 +20,12 @@ func _chest_at(position: Vector3) -> Chest:
 
 
 func _potions() -> Array[Node]:
-	return arena.root.find_children("*", "HealthPotion", true, false)
+	return arena.root.find_children("*", "Potion", true, false)
 
 
 # quem esta perto ja pega a pocao: conta a do chao e a do inventario
 func _dropped_for(adventurer: Adventurer) -> int:
-	var on_ground := _potions().filter(func(potion: HealthPotion) -> bool: return potion.model.visible).size()
+	var on_ground := _potions().filter(func(potion: Potion) -> bool: return potion.model.visible).size()
 	return on_ground + adventurer.inventory.count_of(HEALTH_POTION)
 
 
@@ -79,8 +79,8 @@ func test_chest_opens_only_once() -> void:
 	assert_int(_dropped_for(knight)).is_equal(1)
 
 
-func _potion_at(position: Vector3) -> HealthPotion:
-	var potion := POTION.instantiate() as HealthPotion
+func _potion_at(position: Vector3) -> Potion:
+	var potion := POTION.instantiate() as Potion
 	potion.position = position
 	arena.root.add_child(potion)
 	return potion

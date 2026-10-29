@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Material_stone"]
+albedo_color = Color(0.36, 0.34, 0.31, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="Mesh_step"]
+material = SubResource("Material_stone")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ramp"]
+size = Vector3(4, 0.3, 8.2462)
+
+[node name="StoneStairs" type="StaticBody3D"]
+editor_description = "Escadaria de 8 degraus que sobe 2 m em 8 m na direcao +Z; a rampa invisivel por cima deixa aventureiros e barris subirem e descerem sem engasgar."
+
+[node name="Ramp" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.970143, 0.242536, 0, -0.242536, 0.970143, 0, 0.8545, 4.0364)
+shape = SubResource("BoxShape3D_ramp")
+
+[node name="Degrau1" type="MeshInstance3D" parent="."]
+transform = Transform3D(4, 0, 0, 0, 0.2500, 0, 0, 0, 1.0000, 0, 0.1250, 0.5000)
+mesh = SubResource("Mesh_step")
+
+[node name="Degrau2" type="MeshInstance3D" parent="."]
+transform = Transform3D(4, 0, 0, 0, 0.5000, 0, 0, 0, 1.0000, 0, 0.2500, 1.5000)
+mesh = SubResource("Mesh_step")
+
+[node name="Degrau3" type="MeshInstance3D" parent="."]
+transform = Transform3D(4, 0, 0, 0, 0.7500, 0, 0, 0, 1.0000, 0, 0.3750, 2.5000)
+mesh = SubResource("Mesh_step")
+
+[node name="Degrau4" type="MeshInstance3D" parent="."]
+transform = Transform3D(4, 0, 0, 0, 1.0000, 0, 0, 0, 1.0000, 0, 0.5000, 3.5000)
+mesh = SubResource("Mesh_step")
+
+[node name="Degrau5" type="MeshInstance3D" parent="."]
+transform = Transform3D(4, 0, 0, 0, 1.2500, 0, 0, 0, 1.0000, 0, 0.6250, 4.5000)
+mesh = SubResource("Mesh_step")
+
+[node name="Degrau6" type="MeshInstance3D" parent="."]
+transform = Transform3D(4, 0, 0, 0, 1.5000, 0, 0, 0, 1.0000, 0, 0.7500, 5.5000)
+mesh = SubResource("Mesh_step")
+
+[node name="Degrau7" type="MeshInstance3D" parent="."]
+transform = Transform3D(4, 0, 0, 0, 1.7500, 0, 0, 0, 1.0000, 0, 0.8750, 6.5000)
+mesh = SubResource("Mesh_step")
+
+[node name="Degrau8" type="MeshInstance3D" parent="."]
+transform = Transform3D(4, 0, 0, 0, 2.0000, 0, 0, 0, 1.0000, 0, 1.0000, 7.5000)
+mesh = SubResource("Mesh_step")

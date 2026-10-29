@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/barrel_trap.gd" id="1_trap"]
+[ext_resource type="PackedScene" path="res://scenes/world/rolling_barrel.tscn" id="2_barrel"]
+[ext_resource type="AudioStream" path="res://resources/audio/block.tres" id="3_release"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
+size = Vector3(4, 2, 3)
+
+[node name="BarrelTrap" type="Node3D" node_paths=PackedStringArray("trigger", "spawn", "release_sound")]
+editor_description = "Fica no topo de uma escada; o gatilho fica no meio dela, a 4 m para -Z, e o barril sai do topo rolando para -Z."
+script = ExtResource("1_trap")
+barrel_scene = ExtResource("2_barrel")
+trigger = NodePath("Trigger")
+spawn = NodePath("Spawn")
+release_sound = NodePath("ReleaseSound")
+
+[node name="Trigger" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Trigger"]
+position = Vector3(0, -1, -4)
+shape = SubResource("BoxShape3D_trigger")
+
+[node name="Spawn" type="Marker3D" parent="."]
+position = Vector3(0, 0.8, 1.5)
+
+[node name="ReleaseSound" type="AudioStreamPlayer3D" parent="."]
+position = Vector3(0, 1, 1.5)
+stream = ExtResource("3_release")
+max_distance = 30.0
+bus = &"SFX"

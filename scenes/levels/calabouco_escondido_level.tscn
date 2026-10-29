@@ -1,0 +1,252 @@
+[gd_scene load_steps=38 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/maps/calabouco_escondido.tscn" id="1_map"]
+[ext_resource type="PackedScene" path="res://scenes/characters/enemies/groups/guard_post.tscn" id="2_guard"]
+[ext_resource type="PackedScene" path="res://scenes/characters/enemies/groups/sleepers.tscn" id="10_sleepers"]
+[ext_resource type="PackedScene" path="res://scenes/characters/enemies/groups/patrol.tscn" id="11_patrol"]
+[ext_resource type="PackedScene" path="res://scenes/ui/victory_screen.tscn" id="12_victory"]
+[ext_resource type="Script" path="res://scripts/game/undead_census.gd" id="13_census"]
+[ext_resource type="PackedScene" path="res://scenes/world/dungeon_exit.tscn" id="14_exit"]
+[ext_resource type="PackedScene" path="res://scenes/characters/npcs/lost_swordsman.tscn" id="15_swordsman"]
+[ext_resource type="PackedScene" path="res://scenes/characters/enemies/mimic.tscn" id="16_mimic"]
+[ext_resource type="PackedScene" path="res://scenes/ui/death_screen.tscn" id="3_death"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="4_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="5_pause"]
+[ext_resource type="Script" path="res://scripts/game/game_session.gd" id="6_session"]
+[ext_resource type="Script" path="res://scripts/audio/music_cue.gd" id="7_cue"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/village_night_ambient.ogg" id="8_track"]
+[ext_resource type="NavigationMesh" path="res://resources/navigation/calabouco_navmesh.res" id="9_navmesh"]
+
+[ext_resource type="Script" path="res://scripts/characters/npcs/dialogue_topic.gd" id="17_topic"]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/npcs/bone_kid.tscn" id="18_kid"]
+
+[sub_resource type="Resource" id="DialogueTopic_1"]
+script = ExtResource("17_topic")
+watch = NodePath("../Navigation/Calabouco/Mecanismos/PortaoBiblioteca")
+property = &"is_open"
+at_least = 1
+below = -1
+lines = PackedStringArray("Aquela grade da biblioteca... Maelis. Maelis! Uma moça que brigava com os livros e ganhava. Acho que eu lembro dela.", "Ela me chamava de Michio-sem-norte. Eu achava carinhoso.")
+
+[sub_resource type="Resource" id="DialogueTopic_2"]
+script = ExtResource("17_topic")
+watch = NodePath("../Navigation/Calabouco/Mecanismos/ParedeDaAdega")
+property = &"is_broken"
+at_least = 1
+below = -1
+lines = PackedStringArray("Cheiro de cerveja velha... Brakka? Um grandalhão que abria parede no giro. Ele me devia uma rodada. Ou eu devia pra ele.")
+
+[sub_resource type="Resource" id="DialogueTopic_3"]
+script = ExtResource("17_topic")
+watch = NodePath("../Navigation/Calabouco/Mecanismos/CorredorDeFlechas")
+property = &"is_armed"
+at_least = 0
+below = 1
+lines = PackedStringArray("As flechas pararam? Aldren segurava essas rajadas no escudo e ainda reclamava do meu senso de direção.", "Sir Aldren sempre ia na frente. Por que eu não fui com ele?")
+
+[sub_resource type="Resource" id="DialogueTopic_4"]
+script = ExtResource("17_topic")
+watch = NodePath("../Navigation/Calabouco/Mecanismos/PonteDoAbismo/Corda")
+property = &"is_cut"
+at_least = 1
+below = -1
+lines = PackedStringArray("A ponte desceu! Wren dizia que nada amarrado resiste a um bom virote. Ela me achava no escuro pelo barulho das espadas.")
+
+[sub_resource type="Resource" id="DialogueTopic_5"]
+script = ExtResource("17_topic")
+watch = NodePath("../Navigation/Calabouco/Mecanismos/ParedeDaSalaSecreta")
+property = &"is_broken"
+at_least = 1
+below = -1
+lines = PackedStringArray("{Você achou|Vocês acharam} a última página do Aldren, não {achou|acharam}? Está na {sua cara|cara de vocês}. Tudo bem. Eu também ia ler.")
+
+[sub_resource type="Resource" id="DialogueTopic_6"]
+script = ExtResource("17_topic")
+watch = NodePath("../Navigation/Calabouco/Mecanismos/PortaoDosSelos")
+property = &"activations"
+at_least = 0
+below = 1
+lines = PackedStringArray("Aquele portão lá embaixo, perto dos espinhos, tem dois selos. Um fede a osso, o outro a incenso. Eu fui pros dois lados. Por engano.")
+
+[sub_resource type="Resource" id="DialogueTopic_7"]
+script = ExtResource("17_topic")
+watch = NodePath("../Navigation/Calabouco/Mecanismos/PortaoDosSelos")
+property = &"activations"
+at_least = 1
+below = 2
+lines = PackedStringArray("Um selo já foi! Falta o outro. Se um estava nos ossos, o outro deve estar onde se reza. Eu acho.")
+
+[sub_resource type="Resource" id="DialogueTopic_8"]
+script = ExtResource("17_topic")
+watch = NodePath("../Navigation/Calabouco/Mecanismos/PortaoDosSelos")
+property = &"activations"
+at_least = 2
+below = -1
+lines = PackedStringArray("A descida abriu! Lá embaixo eu me perdi feio. Mais do que o normal.")
+
+[sub_resource type="Resource" id="DialogueTopic_9"]
+script = ExtResource("17_topic")
+watch = NodePath("../Mimico")
+property = &"is_dead"
+at_least = 1
+below = -1
+lines = PackedStringArray("{Você matou|Vocês mataram} o baú que mordia? Passei semanas pedindo desculpa pra ele achando que era um baú normal.")
+
+[sub_resource type="Resource" id="DialogueTopic_10"]
+script = ExtResource("17_topic")
+watch = NodePath("../Navigation/Calabouco/Interativos/BauDoTesouro")
+property = &"is_open"
+at_least = 1
+below = -1
+lines = PackedStringArray("{Achou|Acharam} o tesouro? O Lorde vai querer a parte dele. Ele sempre quer. Até da gente.")
+
+[sub_resource type="Resource" id="DialogueTopic_11"]
+script = ExtResource("17_topic")
+watch = NodePath("../Navigation/Calabouco/Mecanismos/PortaoBiblioteca")
+property = &"is_open"
+at_least = 0
+below = 1
+lines = PackedStringArray("Tem uma biblioteca trancada perto do salão. Uma amiga minha entrava lá sem abrir porta nenhuma. Coisa de maga. Como era o nome dela...")
+
+[sub_resource type="Resource" id="DialogueTopic_12"]
+script = ExtResource("17_topic")
+watch = NodePath("../Navigation/Calabouco/Mecanismos/ParedeDaAdega")
+property = &"is_broken"
+at_least = 0
+below = 1
+lines = PackedStringArray("Na sala da guarda tem uma parede rachada que cheira a cerveja. Espada não resolve. Machado girando, talvez.")
+
+[sub_resource type="Resource" id="DialogueTopic_13"]
+script = ExtResource("17_topic")
+watch = NodePath("../Navigation/Calabouco/Mecanismos/CorredorDeFlechas")
+property = &"is_armed"
+at_least = 1
+below = -1
+lines = PackedStringArray("Aquele corredor que cospe flecha, ao lado da cripta? Só passa quem tem escudo e paciência. Eu não tenho nenhum dos dois.")
+
+[sub_resource type="Resource" id="DialogueTopic_14"]
+script = ExtResource("17_topic")
+watch = NodePath("../Navigation/Calabouco/Mecanismos/PonteDoAbismo/Corda")
+property = &"is_cut"
+at_least = 0
+below = 1
+lines = PackedStringArray("Lá no fundo tem uma ponte erguida, presa por uma corda bem alta. Alta pra espada, sabe? Baixa pra uma besta.")
+
+[sub_resource type="Resource" id="DialogueTopic_15"]
+script = ExtResource("17_topic")
+watch = NodePath("../Contagem")
+property = &"remaining"
+at_least = 12
+below = -1
+lines = PackedStringArray("Tem muito osso de pé ainda. Uns {valor}, se eu contei direito. Eu nunca conto direito.")
+
+[sub_resource type="Resource" id="DialogueTopic_16"]
+script = ExtResource("17_topic")
+watch = NodePath("../Contagem")
+property = &"remaining"
+at_least = 2
+below = 6
+lines = PackedStringArray("Faltam {valor} mortos-vivos. Engraçado: toda vez que eu conto, sobra um que eu não acho.")
+
+[sub_resource type="Resource" id="DialogueTopic_17"]
+script = ExtResource("17_topic")
+watch = NodePath("../Contagem")
+property = &"remaining"
+at_least = 1
+below = 2
+lines = PackedStringArray("Só falta um? Quem será... Olha, se for eu, não me conta agora.")
+
+[sub_resource type="Resource" id="DialogueTopic_18"]
+script = ExtResource("17_topic")
+watch = NodePath("../Contagem")
+property = &"remaining"
+at_least = 1
+below = -1
+lines = PackedStringArray("O Lorde disse nenhum morto-vivo de pé. Nenhum, é? Regra rígida, essa.")
+
+[sub_resource type="Environment" id="Environment_dungeon"]
+background_mode = 1
+background_color = Color(0.01, 0.012, 0.012, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.2, 0.24, 0.2, 1)
+ambient_light_energy = 0.35
+tonemap_mode = 2
+glow_enabled = true
+glow_intensity = 0.6
+glow_bloom = 0.08
+fog_enabled = true
+fog_light_color = Color(0.05, 0.08, 0.05, 1)
+fog_density = 0.03
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.025
+volumetric_fog_albedo = Color(0.55, 0.65, 0.5, 1)
+volumetric_fog_length = 64.0
+
+[node name="CalaboucoEscondidoLevel" type="Node3D"]
+
+[node name="Ambiente" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dungeon")
+
+[node name="Navigation" type="NavigationRegion3D" parent="."]
+navigation_mesh = ExtResource("9_navmesh")
+
+[node name="Calabouco" parent="Navigation" instance=ExtResource("1_map")]
+
+[node name="AdormecidosDoOssuario" parent="." instance=ExtResource("10_sleepers")]
+position = Vector3(16, -3.9, 56)
+
+[node name="PatrulhaDoSalao" parent="." instance=ExtResource("11_patrol")]
+position = Vector3(36, 0.1, 28)
+
+[node name="PatrulhaDaCripta" parent="." instance=ExtResource("11_patrol")]
+position = Vector3(36, -3.9, 56)
+
+[node name="GuardasDaCapela" parent="." instance=ExtResource("2_guard")]
+position = Vector3(80, -3.9, 56)
+
+[node name="Patrulha" parent="." instance=ExtResource("11_patrol")]
+position = Vector3(68, -7.9, 96)
+
+[node name="Guardas" parent="." instance=ExtResource("2_guard")]
+position = Vector3(68, -5.9, 116)
+
+[node name="EspadachimPerdido" parent="." node_paths=PackedStringArray("spots", "floor_triggers") instance=ExtResource("15_swordsman")]
+topics = Array[ExtResource("17_topic")]([SubResource("DialogueTopic_1"), SubResource("DialogueTopic_2"), SubResource("DialogueTopic_3"), SubResource("DialogueTopic_4"), SubResource("DialogueTopic_5"), SubResource("DialogueTopic_6"), SubResource("DialogueTopic_7"), SubResource("DialogueTopic_8"), SubResource("DialogueTopic_9"), SubResource("DialogueTopic_10"), SubResource("DialogueTopic_11"), SubResource("DialogueTopic_12"), SubResource("DialogueTopic_13"), SubResource("DialogueTopic_14"), SubResource("DialogueTopic_15"), SubResource("DialogueTopic_16"), SubResource("DialogueTopic_17"), SubResource("DialogueTopic_18")])
+spots = [NodePath("../Navigation/Calabouco/PontosDoEspadachim/Andar1"), NodePath("../Navigation/Calabouco/PontosDoEspadachim/Andar2"), NodePath("../Navigation/Calabouco/PontosDoEspadachim/Andar3")]
+floor_triggers = [NodePath("../Navigation/Calabouco/PontosDoEspadachim/AvisoAndar2"), NodePath("../Navigation/Calabouco/PontosDoEspadachim/AvisoAndar3")]
+
+[node name="Esqueletinho" parent="." instance=ExtResource("18_kid")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 8, 0.1, 24.5)
+
+[node name="Mimico" parent="." instance=ExtResource("16_mimic")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 64, -6, 121.4)
+
+[node name="DeathScreen" parent="." instance=ExtResource("3_death")]
+
+[node name="Hud" parent="." instance=ExtResource("4_hud")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("5_pause")]
+
+[node name="VictoryScreen" parent="." instance=ExtResource("12_victory")]
+
+[node name="Contagem" type="Node" parent="." node_paths=PackedStringArray("hud")]
+script = ExtResource("13_census")
+hud = NodePath("../Hud")
+
+[node name="Saida" parent="." node_paths=PackedStringArray("census", "session") instance=ExtResource("14_exit")]
+position = Vector3(36, 0, 4.5)
+census = NodePath("../Contagem")
+session = NodePath("../GameSession")
+
+[node name="GameSession" type="Node" parent="." node_paths=PackedStringArray("player_spawn", "pause_menu", "death_screen", "hud", "victory_screen")]
+script = ExtResource("6_session")
+player_spawn = NodePath("../Navigation/Calabouco/PlayerSpots/Player1")
+pause_menu = NodePath("../PauseMenu")
+death_screen = NodePath("../DeathScreen")
+hud = NodePath("../Hud")
+victory_screen = NodePath("../VictoryScreen")
+
+[node name="MusicCue" type="Node" parent="."]
+script = ExtResource("7_cue")
+track = ExtResource("8_track")

@@ -1,0 +1,142 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/gate.gd" id="1_gate"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/world/chest_open.ogg" id="2_creak"]
+
+[sub_resource type="StandardMaterial3D" id="Material_iron"]
+albedo_color = Color(0.2, 0.19, 0.18, 1)
+metallic = 0.7
+roughness = 0.45
+
+[sub_resource type="CylinderMesh" id="Mesh_bar"]
+material = SubResource("Material_iron")
+top_radius = 0.05
+bottom_radius = 0.05
+height = 4.0
+radial_segments = 8
+
+[sub_resource type="BoxMesh" id="Mesh_cross"]
+material = SubResource("Material_iron")
+size = Vector3(3.8, 0.1, 0.12)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gate"]
+size = Vector3(4, 4, 0.3)
+
+[sub_resource type="Animation" id="Animation_open"]
+resource_name = "abrir"
+length = 2.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Grade:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 3.7, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Som")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{"args": [], "method": &"play"}]
+}
+
+[sub_resource type="Animation" id="Animation_reset"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Grade:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gate"]
+_data = {
+&"RESET": SubResource("Animation_reset"),
+&"abrir": SubResource("Animation_open")
+}
+
+[node name="Portao" type="Node3D" node_paths=PackedStringArray("animation_player")]
+editor_description = "Portao de grades que sobe ao ser acionado. A grade fica na camada mundo; para a grade que deixa passar a mira e o portal (so o corpo fica preso), troque a camada da Grade para grades."
+script = ExtResource("1_gate")
+animation_player = NodePath("AnimationPlayer")
+
+[node name="Grade" type="AnimatableBody3D" parent="."]
+
+[node name="Shape" type="CollisionShape3D" parent="Grade"]
+position = Vector3(0, 2, 0)
+shape = SubResource("BoxShape3D_gate")
+
+[node name="Barra1" type="MeshInstance3D" parent="Grade"]
+position = Vector3(-1.7, 2, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="Barra2" type="MeshInstance3D" parent="Grade"]
+position = Vector3(-1.275, 2, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="Barra3" type="MeshInstance3D" parent="Grade"]
+position = Vector3(-0.85, 2, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="Barra4" type="MeshInstance3D" parent="Grade"]
+position = Vector3(-0.425, 2, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="Barra5" type="MeshInstance3D" parent="Grade"]
+position = Vector3(0.0, 2, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="Barra6" type="MeshInstance3D" parent="Grade"]
+position = Vector3(0.425, 2, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="Barra7" type="MeshInstance3D" parent="Grade"]
+position = Vector3(0.85, 2, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="Barra8" type="MeshInstance3D" parent="Grade"]
+position = Vector3(1.275, 2, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="Barra9" type="MeshInstance3D" parent="Grade"]
+position = Vector3(1.7, 2, 0)
+mesh = SubResource("Mesh_bar")
+
+[node name="Travessa1" type="MeshInstance3D" parent="Grade"]
+position = Vector3(0, 0.6, 0)
+mesh = SubResource("Mesh_cross")
+
+[node name="Travessa2" type="MeshInstance3D" parent="Grade"]
+position = Vector3(0, 2.2, 0)
+mesh = SubResource("Mesh_cross")
+
+[node name="Travessa3" type="MeshInstance3D" parent="Grade"]
+position = Vector3(0, 3.7, 0)
+mesh = SubResource("Mesh_cross")
+
+[node name="Som" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_creak")
+pitch_scale = 0.45
+max_distance = 40.0
+bus = &"SFX"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_gate")
+}

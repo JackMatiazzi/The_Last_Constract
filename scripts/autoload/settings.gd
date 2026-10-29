@@ -9,7 +9,7 @@ const PATH := "user://settings.cfg"
 const MOUSE_SWITCH_DISTANCE := 4.0
 const SECTION := "settings"
 const GAMEPLAY_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "attack", "secondary",
-		"run", "look_left", "look_right", "look_up", "look_down", "interact", "scoreboard",
+		"run", "look_left", "look_right", "look_up", "look_down", "interact", "decline", "scoreboard",
 		"next_ability", "next_item"]
 
 var master_volume := 1.0

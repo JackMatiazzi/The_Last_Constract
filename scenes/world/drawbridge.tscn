@@ -1,0 +1,117 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/gate.gd" id="1_gate"]
+[ext_resource type="Script" path="res://scripts/world/rope.gd" id="2_rope"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_dungeon/models/floor_wood_large.gltf" id="3_planks"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/undead/bones_fall_1.ogg" id="4_thud"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bridge"]
+size = Vector3(4, 0.2, 4)
+
+[sub_resource type="StandardMaterial3D" id="Material_rope"]
+albedo_color = Color(0.55, 0.42, 0.25, 1)
+roughness = 1.0
+emission_enabled = true
+emission = Color(0.4, 0.28, 0.12, 1)
+emission_energy_multiplier = 0.3
+
+[sub_resource type="CylinderMesh" id="Mesh_rope"]
+material = SubResource("Material_rope")
+top_radius = 0.05
+bottom_radius = 0.05
+height = 2.4
+radial_segments = 6
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rope"]
+size = Vector3(0.5, 0.5, 2.4)
+
+[sub_resource type="Animation" id="Animation_open"]
+resource_name = "abrir"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Ponte:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1.5708, 0, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Som")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1.1),
+"transitions": PackedFloat32Array(1),
+"values": [{"args": [], "method": &"play"}]
+}
+
+[sub_resource type="Animation" id="Animation_reset"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Ponte:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1.5708, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bridge"]
+_data = {
+&"RESET": SubResource("Animation_reset"),
+&"abrir": SubResource("Animation_open")
+}
+
+[node name="PonteLevadica" type="Node3D" node_paths=PackedStringArray("animation_player")]
+editor_description = "Ponte levadica: a dobradica fica na origem e, erguida, a ponte e uma parede de 4 m. Baixada, cobre os 4 m a frente (-Z). A Corda vai do alto da ponte ao gancho na parede da frente, alta demais para a lamina: so o virote da besta corta."
+script = ExtResource("1_gate")
+animation_player = NodePath("AnimationPlayer")
+
+[node name="Ponte" type="AnimatableBody3D" parent="."]
+rotation = Vector3(1.5708, 0, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="Ponte"]
+position = Vector3(0, 0.1, -2)
+shape = SubResource("BoxShape3D_bridge")
+
+[node name="Tabuas" parent="Ponte" instance=ExtResource("3_planks")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, -2)
+
+[node name="TabuasPorBaixo" parent="Ponte" instance=ExtResource("3_planks")]
+transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, 0.08, -2)
+
+[node name="Corda" type="StaticBody3D" parent="." node_paths=PackedStringArray("targets", "visual")]
+transform = Transform3D(1, 0, 0, 0, 0.96, -0.29, 0, 0.29, 0.96, 0, 4.35, -1.15)
+script = ExtResource("2_rope")
+targets = [NodePath("..")]
+visual = NodePath("Fio")
+
+[node name="Shape" type="CollisionShape3D" parent="Corda"]
+shape = SubResource("BoxShape3D_rope")
+
+[node name="Fio" type="MeshInstance3D" parent="Corda"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("Mesh_rope")
+
+[node name="Som" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_thud")
+pitch_scale = 0.6
+max_distance = 40.0
+bus = &"SFX"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_bridge")
+}

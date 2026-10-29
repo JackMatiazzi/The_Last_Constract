@@ -13,11 +13,15 @@ const PORTAL_EXIT_NUDGE := 0.05
 @export var max_distance := 20.0
 @export var pierce := false
 @export var impact_scene: PackedScene
+# so o virote da besta corta corda
+@export var cuts_ropes := false
 
 var damage := 0.0
 # so o disparo pesado quebra barris e caixotes
 var breaks_props := false
 var _shooter: Character
+# sem atirador (dardo de armadilha) o historico de dano mostra esta causa
+var _cause: Node3D
 var _direction := Vector3.FORWARD
 var _travelled := 0.0
 var _already_hit: Array[Character] = []
@@ -31,8 +35,9 @@ func _ready() -> void:
 
 
 # a frente da cena do projetil e -Z
-func launch(shooter: Character, origin: Vector3, direction: Vector3, hit_damage: float, target_layers: int) -> void:
+func launch(shooter: Character, origin: Vector3, direction: Vector3, hit_damage: float, target_layers: int, cause: Node3D = null) -> void:
 	_shooter = shooter
+	_cause = cause
 	_direction = direction
 	damage = hit_damage
 	collision_mask = target_layers
@@ -53,6 +58,8 @@ func _physics_process(delta: float) -> void:
 	if not hit.is_empty():
 		if breaks_props and hit.collider is BreakableProps and _shooter_owns_the_hit():
 			(hit.collider as BreakableProps).break_near(hit.position, BREAK_RADIUS)
+		if cuts_ropes and hit.collider is Rope and _shooter_owns_the_hit():
+			(hit.collider as Rope).request_cut()
 		_leave_impact(hit.position, hit.normal)
 		queue_free()
 		return
@@ -90,7 +97,7 @@ func _on_body_entered(body: Node3D) -> void:
 	_already_hit.append(target)
 	if not is_instance_valid(_shooter):
 		if multiplayer.is_server():
-			target.take_damage(damage)
+			target.take_damage(damage, _cause)
 	elif _shooter.is_multiplayer_authority():
 		target.take_damage(damage, _shooter)
 	if not pierce:
@@ -101,10 +108,10 @@ func _on_body_entered(body: Node3D) -> void:
 
 # so o tiro de quem atirou quebra; nas outras maquinas o projetil so some
 func _on_area_entered(area: Area3D) -> void:
-	if not area is HealthPotion:
+	if not area is Potion:
 		return
 	if _shooter_owns_the_hit():
-		(area as HealthPotion).shatter()
+		(area as Potion).shatter()
 	if not pierce:
 		_leave_impact(global_position, -_direction)
 		queue_free()

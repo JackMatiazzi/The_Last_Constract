@@ -122,7 +122,7 @@ func take_damage(amount: float, source: Node3D = null) -> void:
 	if not is_multiplayer_authority():
 		_request_damage.rpc_id(get_multiplayer_authority(), amount, source.get_path() if source else NodePath())
 		return
-	if source and _blocks(source):
+	if _can_be_parried(source) and _blocks(source):
 		_play(block_sound)
 		blocked.emit()
 		return
@@ -165,8 +165,13 @@ func get_display_name() -> String:
 
 func _note_attacker(source: Node3D, amount: float) -> void:
 	var attacker := source as Character
-	if attacker == null or attacker == self:
+	if attacker == self:
 		damage_log.note_hit(DamageLog.UNKNOWN_CAUSE, amount)
+		return
+	if attacker == null:
+		# armadilha e afins tem nome proprio; sem origem nenhuma vira ferimento
+		var cause: String = source.get_display_name() if source and source.has_method("get_display_name") else DamageLog.UNKNOWN_CAUSE
+		damage_log.note_hit(cause, amount)
 		return
 	var attacker_name := attacker.get_display_name()
 	var is_player := attacker is Adventurer
@@ -283,6 +288,11 @@ func _can_flinch() -> bool:
 
 func _blocks(_source: Node3D) -> bool:
 	return false
+
+
+# golpe de personagem ou dardo de armadilha vem de frente e da para aparar; espinho sobe do chao
+func _can_be_parried(source: Node3D) -> bool:
+	return source is Character or source is DartTrap
 
 
 func _begin_action(move_factor: float, cancel_after: float, holding: bool) -> void:

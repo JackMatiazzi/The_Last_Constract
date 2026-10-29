@@ -8,6 +8,9 @@ const CHEST_HEIGHT := 1.0
 # alcance do golpe pesado contra barris e caixotes, a partir do centro da hitbox
 const BREAK_RADIUS := 1.4
 
+# so o giro pesado do Barbarian derruba parede rachada
+@export var breaks_walls := false
+
 var _wall_query := PhysicsRayQueryParameters3D.new()
 
 @onready var hitbox: Area3D = $Hitbox
@@ -22,10 +25,12 @@ func _perform(attacker: Character, total_damage: float, heavy: bool) -> void:
 		if body is Character and body != attacker and _has_clear_line(attacker, body):
 			body.take_damage(total_damage, attacker)
 	for area in hitbox.get_overlapping_areas():
-		if area is HealthPotion:
+		if area is Potion:
 			area.shatter()
 	if heavy:
 		get_tree().call_group(BreakableProps.GROUP, "break_near", _strike_center(), BREAK_RADIUS)
+		if breaks_walls:
+			get_tree().call_group(CrackedWall.GROUP, "break_near", _strike_center(), BREAK_RADIUS)
 
 
 func _has_clear_line(attacker: Character, target: Character) -> bool:

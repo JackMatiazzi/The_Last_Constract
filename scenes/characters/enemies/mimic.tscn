@@ -1,0 +1,370 @@
+[gd_scene load_steps=23 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/character.tscn" id="1_character"]
+[ext_resource type="Script" path="res://scripts/characters/enemies/mimic.gd" id="2_mimic"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_dungeon/models/chest.gltf" id="3_chest"]
+[ext_resource type="Script" path="res://scripts/combat/melee_attack.gd" id="4_attack"]
+[ext_resource type="PackedScene" path="res://scenes/world/health_potion.tscn" id="5_loot"]
+[ext_resource type="AudioStream" path="res://resources/audio/hit.tres" id="6_bite"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_body"]
+size = Vector3(1.5, 1.1, 1.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bite"]
+size = Vector3(1.8, 1.4, 1.6)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_reach"]
+radius = 2.0
+
+[sub_resource type="StandardMaterial3D" id="Material_tooth"]
+albedo_color = Color(0.92, 0.88, 0.78, 1)
+
+[sub_resource type="PrismMesh" id="Mesh_tooth"]
+material = SubResource("Material_tooth")
+size = Vector3(0.14, 0.18, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="Material_tongue"]
+albedo_color = Color(0.62, 0.1, 0.16, 1)
+roughness = 0.4
+
+[sub_resource type="CapsuleMesh" id="Mesh_tongue"]
+material = SubResource("Material_tongue")
+radius = 0.13
+height = 0.9
+
+[sub_resource type="Animation" id="Animation_0"]
+resource_name = "Idle"
+length = 6.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Model/Bau/chest/chest_lid:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 4.6, 4.8, 5.1, 6.0),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(-0.06, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_1"]
+resource_name = "Jump_Idle"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Model/Bau/chest/chest_lid:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.3, 0, 0), Vector3(-0.3, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_2"]
+resource_name = "Walking_A"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Model/Bau:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.3, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Model/Bau/chest/chest_lid:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.2, 0, 0), Vector3(-0.8, 0, 0), Vector3(-0.2, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_3"]
+resource_name = "Running_A"
+length = 0.45
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Model/Bau:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.22, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.45, 0), Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Model/Bau/chest/chest_lid:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.22, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.3, 0, 0), Vector3(-1.1, 0, 0), Vector3(-0.3, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_4"]
+resource_name = "Bite"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Model/Bau/chest/chest_lid:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.32, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.3, 0, 0), Vector3(-1.7, 0, 0), Vector3(0, 0, 0), Vector3(-0.3, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Model/Bau:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.32, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0.1, -0.15), Vector3(0, 0, 0.45), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_5"]
+resource_name = "Hit_A"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Model/Bau:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1.15, 0.8, 1.15), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_6"]
+resource_name = "Death_A"
+length = 1.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Model/Bau:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6, 1.0),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 1.3), Vector3(0, 0, 1.57)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Model/Bau/chest/chest_lid:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.3, 0, 0), Vector3(-1.9, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_7"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Model/Bau:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Model/Bau:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Model/Bau:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Model/Bau/chest/chest_lid:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mimic"]
+_data = {
+&"Idle": SubResource("Animation_0"),
+&"Jump_Idle": SubResource("Animation_1"),
+&"Walking_A": SubResource("Animation_2"),
+&"Running_A": SubResource("Animation_3"),
+&"Bite": SubResource("Animation_4"),
+&"Hit_A": SubResource("Animation_5"),
+&"Death_A": SubResource("Animation_6"),
+&"RESET": SubResource("Animation_7")
+}
+
+[node name="Mimico" node_paths=PackedStringArray("animation_player", "attack", "prompt", "open_area", "mouth") instance=ExtResource("1_character")]
+editor_description = "Mimico: um bau comum ate alguem abrir ou bater; entao mostra os dentes e persegue aos pulos. A pista e a tampa que abre uma fresta de vez em quando. A boca fica escondida ate acordar."
+collision_layer = 4
+script = ExtResource("2_mimic")
+max_health = 14.0
+walk_speed = 3.0
+run_speed = 5.5
+animation_player = NodePath("AnimationPlayer")
+attack = NodePath("Model/Mordida")
+prompt = NodePath("Prompt")
+open_area = NodePath("Abrir")
+mouth = NodePath("Model/Bau/chest/Boca")
+loot_scene = ExtResource("5_loot")
+
+[node name="CollisionShape3D" parent="." index="0"]
+position = Vector3(0, 0.55, 0)
+shape = SubResource("BoxShape3D_body")
+
+[node name="Model" parent="." index="1"]
+scale = Vector3(1, 1, 1)
+
+[node name="HealthBar3D" parent="." index="2"]
+position = Vector3(0, 1.9, 0)
+
+[node name="Bau" parent="Model" instance=ExtResource("3_chest")]
+
+[node name="Boca" type="Node3D" parent="Model/Bau/chest"]
+visible = false
+
+[node name="Lingua" type="MeshInstance3D" parent="Model/Bau/chest/Boca"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0.62, 0.25)
+mesh = SubResource("Mesh_tongue")
+
+[node name="Dente1" type="MeshInstance3D" parent="Model/Bau/chest/Boca"]
+position = Vector3(-0.6, 0.69, 0.55)
+mesh = SubResource("Mesh_tooth")
+
+[node name="Dente2" type="MeshInstance3D" parent="Model/Bau/chest/Boca"]
+position = Vector3(-0.4, 0.69, 0.55)
+mesh = SubResource("Mesh_tooth")
+
+[node name="Dente3" type="MeshInstance3D" parent="Model/Bau/chest/Boca"]
+position = Vector3(-0.2, 0.69, 0.55)
+mesh = SubResource("Mesh_tooth")
+
+[node name="Dente4" type="MeshInstance3D" parent="Model/Bau/chest/Boca"]
+position = Vector3(0.0, 0.69, 0.55)
+mesh = SubResource("Mesh_tooth")
+
+[node name="Dente5" type="MeshInstance3D" parent="Model/Bau/chest/Boca"]
+position = Vector3(0.2, 0.69, 0.55)
+mesh = SubResource("Mesh_tooth")
+
+[node name="Dente6" type="MeshInstance3D" parent="Model/Bau/chest/Boca"]
+position = Vector3(0.4, 0.69, 0.55)
+mesh = SubResource("Mesh_tooth")
+
+[node name="Dente7" type="MeshInstance3D" parent="Model/Bau/chest/Boca"]
+position = Vector3(0.6, 0.69, 0.55)
+mesh = SubResource("Mesh_tooth")
+
+[node name="Mordida" type="Node3D" parent="Model" node_paths=PackedStringArray("sound")]
+script = ExtResource("4_attack")
+sound = NodePath("Som")
+damage = 2.0
+cooldown = 1.6
+animations = PackedStringArray("Bite")
+impact_delay = 0.3
+recovery = 0.35
+move_factor = 0.0
+
+[node name="Hitbox" type="Area3D" parent="Model/Mordida"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Model/Mordida/Hitbox"]
+position = Vector3(0, 0.6, 1.1)
+shape = SubResource("BoxShape3D_bite")
+
+[node name="Som" type="AudioStreamPlayer3D" parent="Model/Mordida"]
+stream = ExtResource("6_bite")
+max_distance = 25.0
+bus = &"SFX"
+
+[node name="Abrir" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Abrir"]
+position = Vector3(0, 0.8, 0.6)
+shape = SubResource("SphereShape3D_reach")
+
+[node name="Prompt" type="Label3D" parent="."]
+position = Vector3(0, 1.9, 0)
+billboard = 1
+no_depth_test = true
+modulate = Color(1, 0.88, 0.6, 1)
+outline_modulate = Color(0, 0, 0, 1)
+text = "E  Abrir"
+font_size = 48
+outline_size = 12
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_mimic")
+}

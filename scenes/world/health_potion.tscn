@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3]
 
-[ext_resource type="Script" path="res://scripts/world/health_potion.gd" id="1_potion"]
+[ext_resource type="Script" path="res://scripts/world/potion.gd" id="1_potion"]
 [ext_resource type="PackedScene" path="res://assets/kaykit_dungeon/models/bottle_A_labeled_green.gltf" id="2_bottle"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/world/potion.ogg" id="3_sound"]
 [ext_resource type="Resource" path="res://resources/items/health_potion.tres" id="4_item"]

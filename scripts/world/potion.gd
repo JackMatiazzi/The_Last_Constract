@@ -1,8 +1,9 @@
-class_name HealthPotion
+class_name Potion
 extends Area3D
 
-# vai para o inventario de quem passa por cima e quebra com golpe ou projetil. Em grupo o host
-# decide quem pegou: dois jogadores na mesma pocao nao levam uma cada
+# vai para o inventario de quem passa por cima e consegue usar (a de mana so para quem tem mana) e
+# quebra com golpe ou projetil. Em grupo o host decide quem pegou: dois jogadores na mesma pocao nao
+# levam uma cada
 
 const PICK_UP_REACH := 3.0
 
@@ -23,6 +24,8 @@ func _ready() -> void:
 func _try_pick_up(body: Node3D) -> void:
 	var adventurer := body as Adventurer
 	if adventurer == null or adventurer.is_dead or not adventurer.is_multiplayer_authority() or _consumed:
+		return
+	if not adventurer.can_use(item):
 		return
 	if adventurer.inventory.count_of(item) >= item.max_carried:
 		if not adventurer.inventory.changed.is_connected(_try_pick_up):

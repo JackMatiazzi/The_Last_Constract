@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/rolling_barrel.gd" id="1_barrel"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_dungeon/models/barrel_large.gltf" id="2_model"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_rolling"]
+friction = 0.9
+bounce = 0.15
+
+[sub_resource type="CylinderShape3D" id="Shape_barrel"]
+height = 1.45
+radius = 0.65
+
+[node name="RollingBarrel" type="RigidBody3D"]
+mass = 40.0
+physics_material_override = SubResource("PhysicsMaterial_rolling")
+contact_monitor = true
+max_contacts_reported = 4
+script = ExtResource("1_barrel")
+
+[node name="Model" parent="." instance=ExtResource("2_model")]
+transform = Transform3D(-4.371139e-08, -0.75, 0, 0.75, -3.278354e-08, 0, 0, 0, 0.75, 0.75, 0, 0)
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
+shape = SubResource("Shape_barrel")

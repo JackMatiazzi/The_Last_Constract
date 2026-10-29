@@ -1,0 +1,135 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/lever.gd" id="1_lever"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/world/chest_open.ogg" id="2_clunk"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_reach"]
+radius = 2.2
+
+[sub_resource type="StandardMaterial3D" id="Material_stone"]
+albedo_color = Color(0.3, 0.29, 0.27, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="Mesh_base"]
+material = SubResource("Material_stone")
+size = Vector3(0.7, 0.35, 0.45)
+
+[sub_resource type="StandardMaterial3D" id="Material_iron"]
+albedo_color = Color(0.24, 0.22, 0.2, 1)
+metallic = 0.6
+roughness = 0.5
+
+[sub_resource type="CylinderMesh" id="Mesh_handle"]
+material = SubResource("Material_iron")
+top_radius = 0.045
+bottom_radius = 0.045
+height = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Material_knob"]
+albedo_color = Color(0.55, 0.12, 0.1, 1)
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="Mesh_knob"]
+material = SubResource("Material_knob")
+radius = 0.09
+height = 0.18
+
+[sub_resource type="Animation" id="Animation_pull"]
+resource_name = "puxar"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivo:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.35),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.6, 0, 0), Vector3(0.6, 0, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Som")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{"args": [], "method": &"play"}]
+}
+
+[sub_resource type="Animation" id="Animation_reset"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pivo:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.6, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lever"]
+_data = {
+&"RESET": SubResource("Animation_reset"),
+&"puxar": SubResource("Animation_pull")
+}
+
+[node name="Alavanca" type="Area3D" node_paths=PackedStringArray("prompt", "animation_player")]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_lever")
+prompt = NodePath("Prompt")
+action = "Puxar a alavanca"
+animation_player = NodePath("AnimationPlayer")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.8, 0)
+shape = SubResource("SphereShape3D_reach")
+
+[node name="Base" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.175, 0)
+mesh = SubResource("Mesh_base")
+
+[node name="Pivo" type="Node3D" parent="."]
+position = Vector3(0, 0.3, 0)
+rotation = Vector3(-0.6, 0, 0)
+
+[node name="Haste" type="MeshInstance3D" parent="Pivo"]
+position = Vector3(0, 0.45, 0)
+mesh = SubResource("Mesh_handle")
+
+[node name="Punho" type="MeshInstance3D" parent="Pivo"]
+position = Vector3(0, 0.9, 0)
+mesh = SubResource("Mesh_knob")
+
+[node name="Som" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_clunk")
+pitch_scale = 0.7
+max_distance = 30.0
+bus = &"SFX"
+
+[node name="Prompt" type="Label3D" parent="."]
+position = Vector3(0, 1.7, 0)
+pixel_size = 0.004
+billboard = 1
+no_depth_test = true
+modulate = Color(1, 0.88, 0.6, 1)
+outline_modulate = Color(0, 0, 0, 1)
+text = "E  Puxar a alavanca"
+font_size = 44
+outline_size = 10
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_lever")
+}

@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/cracked_wall.gd" id="1_wall"]
+[ext_resource type="PackedScene" path="res://assets/kaykit_dungeon/models/wall_cracked.gltf" id="2_model"]
+[ext_resource type="PackedScene" path="res://scenes/world/prop_debris.tscn" id="3_debris"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/undead/bones_fall_2.ogg" id="4_crash"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall"]
+size = Vector3(4, 4, 1)
+
+[node name="ParedeRachada" type="StaticBody3D" node_paths=PackedStringArray("visual", "sound")]
+editor_description = "Parede rachada: so o golpe pesado marcado com breaks_walls (o giro do Barbarian) derruba. Fica no lugar de uma parede da grade, na borda entre dois pisos."
+script = ExtResource("1_wall")
+visual = NodePath("Modelo")
+debris_scene = ExtResource("3_debris")
+sound = NodePath("Som")
+
+[node name="Shape" type="CollisionShape3D" parent="."]
+position = Vector3(0, 2, 0)
+shape = SubResource("BoxShape3D_wall")
+
+[node name="Modelo" parent="." instance=ExtResource("2_model")]
+
+[node name="Som" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_crash")
+pitch_scale = 0.5
+max_distance = 40.0
+bus = &"SFX"

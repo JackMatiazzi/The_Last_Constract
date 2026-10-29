@@ -21,6 +21,7 @@ var _corpse_timeline: Tween
 func _ready() -> void:
 	super()
 	assert(profile, "%s: aponte um EnemyProfile no Inspector" % name)
+	add_to_group(UndeadCensus.GROUP)
 	died.connect(brain.change_state.bind("Dead"))
 	died.connect(_clean_up_corpse)
 	health_bar.visible = not start_dormant

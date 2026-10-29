@@ -1,50 +1,83 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene format=3 uid="uid://j0feu1ci26v"]
 
 [ext_resource type="PackedScene" path="res://scenes/characters/enemies/enemy.tscn" id="1_enemy"]
-[ext_resource type="PackedScene" path="res://assets/kaykit_skeletons/characters/Skeleton_Minion.glb" id="2_model"]
-[ext_resource type="PackedScene" path="res://assets/kaykit_skeletons/accessories/Skeleton_Blade.gltf" id="3_weapon"]
-[ext_resource type="Resource" path="res://resources/enemies/skeleton_minion.tres" id="4_profile"]
-[ext_resource type="Script" path="res://scripts/combat/melee_attack.gd" id="5_attack"]
+[ext_resource type="PackedScene" uid="uid://d1o2x58nonay2" path="res://assets/kaykit_skeletons/characters/Skeleton_Minion.glb" id="2_model"]
+[ext_resource type="PackedScene" uid="uid://d3n7v8fla80ba" path="res://assets/kaykit_skeletons/accessories/Skeleton_Blade.gltf" id="3_weapon"]
+[ext_resource type="Resource" uid="uid://c4x0qq3hhpyvs" path="res://resources/enemies/skeleton_minion.tres" id="4_profile"]
+[ext_resource type="Script" uid="uid://dtnceoyc8wht5" path="res://scripts/combat/melee_attack.gd" id="5_attack"]
 [ext_resource type="AudioStream" path="res://resources/audio/swing.tres" id="snd_swing"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hitbox"]
 size = Vector3(1.6, 1.8, 1.6)
 
-[node name="SkeletonMinion" node_paths=PackedStringArray("animation_player", "attack") instance=ExtResource("1_enemy")]
+[sub_resource type="ViewportTexture" id="ViewportTexture_v8e38"]
+viewport_path = NodePath("SubViewport")
+
+[node name="SkeletonMinion" unique_id=830849520 node_paths=PackedStringArray("animation_player", "attack") instance=ExtResource("1_enemy")]
+profile = ExtResource("4_profile")
+ai_enabled = true
+start_dormant = false
+start_rising = false
+corpse_time = 6.0
+sink_time = 1.5
 animation_player = NodePath("Model/Skeleton_Minion/AnimationPlayer")
 attack = NodePath("Model/MeleeAttack")
-profile = ExtResource("4_profile")
 
-[node name="Skeleton_Minion" parent="Model" instance=ExtResource("2_model")]
+[node name="CollisionShape3D" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 
-[node name="handslot_r" type="BoneAttachment3D" parent="Model/Skeleton_Minion/Rig/Skeleton3D"]
+[node name="Model" parent="." index="1"]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 0, 0, 0)
+
+[node name="Skeleton_Minion" parent="Model" index="0" unique_id=1400117198 instance=ExtResource("2_model")]
+
+[node name="handslot_r" type="BoneAttachment3D" parent="Model/Skeleton_Minion/Rig/Skeleton3D" parent_id_path=PackedInt32Array(1400117198, 2013447615) index="9" unique_id=1051167347]
+transform = Transform3D(-0.999999, 4.6839318e-07, 4.573103e-07, 3.9779994e-07, -5.8875344e-07, 0.99999946, 3.9761645e-07, 0.99999946, 5.358822e-07, -0.8831323, 1.0492611, -7.275953e-07)
 bone_name = "handslot.r"
 bone_idx = 13
 
-[node name="Skeleton_Blade" parent="Model/Skeleton_Minion/Rig/Skeleton3D/handslot_r" instance=ExtResource("3_weapon")]
+[node name="Skeleton_Blade" parent="Model/Skeleton_Minion/Rig/Skeleton3D/handslot_r" index="0" unique_id=18533206 instance=ExtResource("3_weapon")]
 
-[node name="MeleeAttack" type="Node3D" parent="Model" node_paths=PackedStringArray("sound")]
+[node name="MeleeAttack" type="Node3D" parent="Model" index="1" unique_id=1888412837 node_paths=PackedStringArray("sound")]
 script = ExtResource("5_attack")
-sound = NodePath("Sound")
 cooldown = 1.8
-animations = PackedStringArray("1H_Melee_Attack_Chop", "1H_Melee_Attack_Slice_Diagonal")
 impact_delay = 0.6
 recovery = 0.25
 move_factor = 0.0
+sound = NodePath("Sound")
 
-[node name="Hitbox" type="Area3D" parent="Model/MeleeAttack"]
+[node name="Hitbox" type="Area3D" parent="Model/MeleeAttack" index="0" unique_id=153476406]
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Model/MeleeAttack/Hitbox"]
-position = Vector3(0, 1.1, 1.1)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Model/MeleeAttack/Hitbox" index="0" unique_id=1164105505]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 1.1)
 shape = SubResource("BoxShape3D_hitbox")
 
-[editable path="Model/Skeleton_Minion"]
-
-[node name="Sound" type="AudioStreamPlayer3D" parent="Model/MeleeAttack"]
+[node name="Sound" type="AudioStreamPlayer3D" parent="Model/MeleeAttack" index="1" unique_id=156377255]
 stream = ExtResource("snd_swing")
 pitch_scale = 0.9
 max_distance = 30.0
 bus = &"SFX"
+
+[node name="HealthBar3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.15, 0)
+texture = SubResource("ViewportTexture_v8e38")
+
+[node name="Footsteps" parent="Sounds" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Hurt" parent="Sounds" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Death" parent="Sounds" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Block" parent="Sounds" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Rise" parent="Sounds" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[editable path="Model/Skeleton_Minion"]

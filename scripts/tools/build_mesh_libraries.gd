@@ -26,6 +26,18 @@ const LIBRARIES := {
 		{"dir": DUNGEON, "prefixes": ["crates_stacked"], "scale": 0.6},
 		{"dir": DUNGEON, "prefixes": ["barrel_large", "barrel_small_stack"], "scale": 0.55},
 	],
+	# calabouco: grade de 4 m no chao e de 2 m nas paredes, que caem na borda entre dois pisos
+	"dungeon_ground": [
+		{"dir": DUNGEON, "prefixes": ["floor_tile_large", "floor_tile_big_grate", "floor_dirt_large", "floor_wood_large"], "flat_top": 0.05},
+	],
+	"dungeon_structure": [
+		{"dir": DUNGEON, "prefixes": ["wall", "pillar", "stairs"]},
+	],
+	"dungeon_props": [
+		{"dir": DUNGEON, "prefixes": ["torch", "candle", "banner", "bottle", "shelf", "table", "chair", "stool",
+				"chest", "trunk", "rubble", "column", "sword_shield", "keyring", "coin", "bed"]},
+		{"dir": DUNGEON, "prefixes": ["keg", "crates_stacked", "barrel_large", "barrel_small"], "scale": 0.55},
+	],
 }
 
 
