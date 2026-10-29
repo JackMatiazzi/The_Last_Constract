@@ -13,7 +13,7 @@ monitorable = false
 script = ExtResource("1_projectile")
 impact_scene = ExtResource("3_impact")
 speed = 30.0
-max_distance = 24.0
+max_distance = 6.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_bolt")

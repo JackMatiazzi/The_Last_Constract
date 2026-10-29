@@ -216,14 +216,14 @@ Regras: cada buff acumula até 3 vezes; os dois sorteados são sempre diferentes
 \subsection{Energia: estamina e mana}
 \label{sec:energia}
 
-Todo aventureiro tem uma barra de estamina de 100; o Mage tem também uma de mana. Gastar pausa a recarga (0,6\,s na estamina, 1\,s na mana); depois a barra volta sozinha. A recarga parte de uma velocidade base comum a todos (30 por segundo) e cada classe tem um multiplicador próprio. Correr ou segurar o escudo gasta estamina continuamente e impede a recarga enquanto dura. Quem zera a estamina correndo volta a andar e só corre de novo com a barra em 30\%.
+Todo aventureiro tem uma barra de estamina de 100; o Mage tem também uma de mana. Gastar pausa a recarga (0,6\,s na estamina, 1\,s na mana); depois a barra volta sozinha. A recarga parte de uma velocidade base comum a todos (30 por segundo) e cada classe tem um multiplicador próprio. Correr ou segurar o escudo gasta estamina continuamente e impede a recarga enquanto dura. Barbarian, Mage e Rogue, quando zeram a estamina ou a mana, já começam a recarregar na hora, sem a pausa; o Knight mantém a pausa. Quem zera a estamina correndo volta a andar e só corre de novo com a barra em 30\%.
 
 \begin{tabularx}{\textwidth}{@{}lccccX@{}}
 \toprule
 \textbf{Aventureiro} & \textbf{Paga com} & \textbf{Rápido} & \textbf{Pesado} & \textbf{Recarga} & \textbf{Outros gastos} \\
 \midrule
 Knight    & estamina & 15 & 35 & 1$\times$ & escudo: 6 por segundo e 12 por golpe defendido \\
-Barbarian & estamina & 20 & 40 & 1$\times$ & --- \\
+Barbarian & estamina & 20 & 50 & 1$\times$ & --- \\
 Rogue     & estamina & 12 & 30 & 1$\times$ & --- \\
 Mage      & mana     & 20 & 45 & mana 1,5$\times$, estamina 0,5$\times$ & --- \\
 \bottomrule
@@ -265,9 +265,9 @@ Regras comuns de ataque, pensadas para o controle não ficar pesado:
 \textbf{Aventureiro} & \textbf{Alcance} & \textbf{Estilo de combate} \\
 \midrule
 Knight & Corpo a corpo & Espada e escudo de torre. \textbf{Combo de três golpes} (vertical, diagonal, horizontal) que segue enquanto o jogador continua atacando e reinicia após uma pausa; acerta só à frente; recarga de 0,6\,s. \textbf{Pesado}: golpe de cima com as duas mãos, dano dobrado. \textbf{Escudo} (botão direito): enquanto segura, bloqueia golpes e projéteis que chegam pela frente (arco de 140°), fica parado (gira com a câmera) e não ataca; gasta estamina e, sem estamina, a guarda quebra; o bloqueio aparece como ``Bloqueado'' sobre a barra de vida \\
-Barbarian & Corpo a corpo & Dois machados. \textbf{Giro}: acerta todos os mortos-vivos em volta; recarga de 1,6\,s. \textbf{Pesado}: giro mais lento, dano dobrado. \textbf{Segundo machado} (botão direito): golpe rápido só à frente, recarga de 0,5\,s, para finalizar um alvo sem esperar o giro \\
-Mage & Longo alcance & Cajado, usa mana. \textbf{Projétil mágico}: mais lento (14\,m/s), alcance de 18\,m e \emph{atravessa} os inimigos em linha; recarga de 1,0\,s. \textbf{Pesado}: feitiço longo, 2,5$\times$ o dano. \textbf{Portal} (troca na roda do mouse): abre um par de portais para o grupo atravessar \\
-Rogue & Longo alcance & Besta. \textbf{Virote}: rápido (30\,m/s), alcance de 24\,m, para no primeiro inimigo; recarga de 0,7\,s. \textbf{Pesado}: disparo mais lento, dano dobrado \\
+Barbarian & Corpo a corpo & Dois machados. \textbf{Giro}: acerta todos os mortos-vivos em volta; recarga de 1,6\,s. \textbf{Pesado}: giro mais lento, dano dobrado, custa metade da estamina. \textbf{Segundo machado} (botão direito): golpe rápido só à frente, recarga de 0,5\,s, para finalizar um alvo sem esperar o giro \\
+Mage & Longo alcance & Cajado, usa mana. \textbf{Projétil mágico}: mais lento (14\,m/s), alcance de 6,91\,m e \emph{atravessa} os inimigos em linha; recarga de 1,0\,s. \textbf{Pesado}: feitiço longo, 2,5$\times$ o dano. \textbf{Portal} (troca na roda do mouse): abre um par de portais para o grupo atravessar \\
+Rogue & Longo alcance & Besta. \textbf{Virote}: rápido (30\,m/s), alcance de 6\,m (um pouco menos que o Mage), para no primeiro inimigo; recarga de 0,7\,s. É o mais rápido: anda a 4,8\,m/s e corre a 9\,m/s, 20\% acima dos outros. \textbf{Pesado}: disparo mais lento, dano dobrado \\
 \bottomrule
 \end{tabularx}
 
@@ -282,13 +282,13 @@ Os mortos-vivos não se limitam a andar e bater: eles percebem, reagem com atras
     \item \textbf{Adormecido}: deitado no chão; não enxerga, mas desperta com o jogador a 7\,m, com barulho ou ao ser atingido. Enquanto dorme não mostra barra de vida; ela aparece quando a animação de despertar avisa que o perigo começou. Atingido deitado, começa a levantar na hora. Deitado ou levantando, leva o dano normalmente mas não se encolhe com o golpe, então a animação de levantar nunca é cortada.
     \item \textbf{Em guarda}: ao perceber o jogador, espera 0,3\,s antes de agir, para não parecer onisciente.
     \item \textbf{Perseguição}: segue o jogador pela navegação, contornando paredes; corre quando está longe.
-    \item \textbf{Ataque}: só golpeia quase de frente para o jogador, com aviso de 0,6\,s entre o início do golpe e o impacto (tempo para esquivar ou cortar o golpe); recarga de 1,8\,s.
+    \item \textbf{Ataque}: só golpeia quase de frente para o jogador, com aviso de 0,6\,s entre o início do golpe e o impacto (tempo para esquivar ou cortar o golpe); recarga de 1,35\,s.
     \item \textbf{Busca}: ao perder o jogador, vai até a última posição conhecida, procura por 2,5\,s e volta à guarda.
     \item \textbf{Corpo}: o morto-vivo derrubado fica caído por 6\,s, afunda no chão e sai da cena, deixando só uma mancha escura onde caiu. Mantém a vila limpa e reduz o que precisa ser desenhado.
     \item \textbf{Elite}: mortos-vivos podem formar um grupo. Quando o último do grupo cai, os corpos ficam parados por 2\,s, deslizam até o ponto do grupo, afundam juntos e dali se levanta um esqueleto elite: maior, com elmo de chifres e aura roxa, 15 de vida, golpe de 2 de dano, visão e audição maiores. Ele já levanta sabendo onde o jogador está e vai atrás dele. Limpar uma área tem um último confronto, e o elite serve de base para o boss. Para montar um grupo na fase, basta colocar os mortos-vivos como filhos de um nó \texttt{EnemyGroup}: cada um só pode ter um pai, então grupos não se misturam. O elite nasce no ponto onde o nó do grupo foi colocado; só os corpos a até 8\,m desse ponto são puxados (quem caiu longe some como um corpo comum), e o editor mostra um aviso se algum membro for posicionado longe demais.
 \end{itemize}
 
-\textbf{Boss: o Necromante.} Um esqueleto mago maior, com cajado e aura verde, 30 de vida. Surge na praça, levantando do chão, quando o último grupo da vila cai. Usa o mesmo cérebro dos outros mortos-vivos, mas com alcance de 11\,m: fica longe e dispara rajadas mágicas (2 de dano, recarga de 2\,s). A cada 9\,s de caça levanta dois esqueletos ao seu redor, com no máximo quatro vivos; quando ele morre, os invocados desabam junto. A HUD mostra uma barra de vida grande com o nome dele.
+\textbf{Boss: o Necromante.} Um esqueleto mago maior, com cajado e aura verde, 30 de vida. Surge na praça, levantando do chão, quando o último grupo da vila cai. Usa o mesmo cérebro dos outros mortos-vivos, mas com alcance de 14\,m, mais que o dos aventureiros a distância: fica longe e dispara rajadas mágicas (2 de dano, recarga de 2\,s). A cada 9\,s de caça levanta dois esqueletos ao seu redor, com no máximo quatro vivos; quando ele morre, os invocados desabam junto. A HUD mostra uma barra de vida grande com o nome dele.
 
 \textbf{Próximas fases.}
 \begin{enumerate}

@@ -26,7 +26,7 @@ bone_idx = 13
 [node name="MeleeAttack" type="Node3D" parent="Model" node_paths=PackedStringArray("sound")]
 script = ExtResource("5_attack")
 sound = NodePath("Sound")
-cooldown = 1.8
+cooldown = 1.35
 animations = PackedStringArray("1H_Melee_Attack_Chop", "1H_Melee_Attack_Slice_Diagonal")
 impact_delay = 0.6
 recovery = 0.25

@@ -12,6 +12,7 @@
 size = Vector3(1.6, 1.8, 1.6)
 
 [node name="Knight" node_paths=PackedStringArray("animation_player", "attack", "block") instance=ExtResource("1_adventurer")]
+recovers_when_empty = false
 animation_player = NodePath("Model/Knight/AnimationPlayer")
 attack = NodePath("Model/MeleeAttack")
 block = NodePath("Block")

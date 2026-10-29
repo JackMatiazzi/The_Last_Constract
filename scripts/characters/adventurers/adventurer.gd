@@ -41,6 +41,8 @@ const RUN_RECOVER_FRACTION := 0.3
 @export var mana_regen_multiplier := 1.0
 @export var stamina_regen_delay := 0.6
 @export var mana_regen_delay := 1.0
+# estamina e mana que zeram ja comecam a voltar, sem a pausa (o Knight desliga)
+@export var recovers_when_empty := true
 # custo do ataque, pago da mana se o aventureiro usa mana, senao da estamina
 @export var quick_cost := 15.0
 @export var heavy_cost := 35.0
@@ -96,8 +98,10 @@ func _ready() -> void:
 	if abilities.is_empty() and attack:
 		abilities.append(attack)
 	stamina = EnergyPool.new(MAX_ENERGY, BASE_REGEN * stamina_regen_multiplier, stamina_regen_delay)
+	stamina.recovers_when_empty = recovers_when_empty
 	if uses_mana:
 		mana = EnergyPool.new(MAX_ENERGY, BASE_REGEN * mana_regen_multiplier, mana_regen_delay)
+		mana.recovers_when_empty = recovers_when_empty
 	_aim_query.collision_mask = AIM_LAYERS
 	camera_pivot.global_position = global_position + Vector3.UP * CAMERA_HEIGHT
 	if not is_multiplayer_authority():

@@ -190,10 +190,11 @@ func test_awakened_skeleton_reengages_after_player_returns() -> void:
 	assert_array(["Chase", "Attack"]).contains([skeleton.brain.current_state_name])
 
 
-func test_shot_from_far_away_makes_skeleton_hunt_the_shooter() -> void:
+# o virote alcanca 6 m: o tiro vem de perto, mas pelas costas, fora da vista
+func test_shot_from_behind_makes_skeleton_hunt_the_shooter() -> void:
 	await arena.bake_navigation()
 	var skeleton := _spawn_skeleton(Vector3.ZERO)
-	var rogue := arena.spawn(TestArena.ROGUE, Vector3(0, 0, -20)) as Adventurer
+	var rogue := arena.spawn(TestArena.ROGUE, Vector3(0, 0, -5.5)) as Adventurer
 	await arena.wait_seconds(0.5)
 	assert_str(skeleton.brain.current_state_name).is_equal("Idle")
 

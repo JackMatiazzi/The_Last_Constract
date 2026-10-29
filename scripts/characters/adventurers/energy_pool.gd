@@ -12,6 +12,8 @@ var current: float
 var maximum: float
 var regen_per_second: float
 var regen_delay: float
+# zerada, volta sem esperar a pausa
+var recovers_when_empty := false
 
 var _wait := 0.0
 
@@ -25,7 +27,7 @@ func _init(max_value: float, regen: float, delay: float) -> void:
 
 func spend(amount: float) -> void:
 	current = maxf(current - amount, 0.0)
-	_wait = regen_delay
+	_wait = 0.0 if recovers_when_empty and current == 0.0 else regen_delay
 	changed.emit(current, maximum)
 
 

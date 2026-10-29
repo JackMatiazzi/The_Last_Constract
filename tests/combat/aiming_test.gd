@@ -33,18 +33,18 @@ func test_looking_up_shoots_upward() -> void:
 	await arena.wait_seconds(rogue.attack.impact_delay + 0.05)
 	var bolt := _first_projectile()
 	var start_height := bolt.global_position.y
-	await arena.wait_seconds(0.3)
+	await arena.wait_seconds(0.1)
 
-	assert_float(bolt.global_position.y).is_greater(start_height + 1.0)
+	assert_bool(is_instance_valid(bolt)).is_true()
+	assert_float(bolt.global_position.y).is_greater(start_height + 0.8)
 
 
 func test_bolt_hits_enemy_under_the_crosshair() -> void:
 	var rogue := arena.spawn(TestArena.ROGUE, Vector3.ZERO) as Adventurer
 	await arena.wait_physics(5)
 	var center := rogue.get_viewport().get_visible_rect().size / 2.0
-	var ray_origin := rogue.camera.project_ray_origin(center)
 	var ray_line := rogue.camera.project_ray_normal(center).slide(Vector3.UP).normalized()
-	var skeleton := arena.spawn(TestArena.SKELETON, ray_origin.slide(Vector3.UP) + ray_line * 9.0)
+	var skeleton := arena.spawn(TestArena.SKELETON, rogue.global_position + ray_line * 4.0)
 	await arena.wait_physics(3)
 
 	rogue.attack_toward_camera()

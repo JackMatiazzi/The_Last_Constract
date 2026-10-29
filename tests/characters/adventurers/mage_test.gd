@@ -41,7 +41,7 @@ func test_shows_staff_only() -> void:
 func test_bolt_pierces_three_enemies_in_line() -> void:
 	var mage := arena.spawn(SCENE, Vector3.ZERO) as Adventurer
 	var line: Array[Character] = []
-	for distance in [4.0, 7.0, 10.0]:
+	for distance in [1.5, 3.5, 5.5]:
 		line.append(arena.spawn(TestArena.SKELETON, Vector3(0, 0, distance)))
 	await arena.wait_physics(3)
 

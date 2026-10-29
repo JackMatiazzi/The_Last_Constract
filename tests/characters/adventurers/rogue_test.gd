@@ -38,9 +38,9 @@ func test_shows_two_handed_crossbow_only() -> void:
 	assert_array(checks.visible_weapons(rogue)).is_equal(["2H_Crossbow"])
 
 
-func test_bolt_reaches_long_range() -> void:
+func test_bolt_reaches_the_end_of_its_range() -> void:
 	var rogue := arena.spawn(SCENE, Vector3.ZERO) as Adventurer
-	var far := arena.spawn(TestArena.SKELETON, Vector3(0, 0, 22))
+	var far := arena.spawn(TestArena.SKELETON, Vector3(0, 0, 5.5))
 	await arena.wait_physics(3)
 
 	rogue.attack.try_attack(rogue)
