@@ -14,8 +14,12 @@ func before_test() -> void:
 	await await_idle_frame()
 
 
+# solta o espaco, que tambem e a tecla de correr
 func after_test() -> void:
 	RunState.adventurer = null
+	var release := InputEventKey.new()
+	release.physical_keycode = KEY_SPACE
+	Input.parse_input_event(release)
 
 
 func _animation() -> Animation:

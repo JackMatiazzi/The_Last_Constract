@@ -1,21 +1,23 @@
 class_name Projectile
 extends Area3D
-
-# a area so pega personagens; parede e checada por raio para nao atravessar em alta velocidade
+## a area so pega personagens; parede e checada por raio para nao atravessar em alta velocidade
 
 const WORLD_LAYER := 1
 const STICK_DEPTH := 0.15
 const BREAK_RADIUS := 0.9
-# sai um pouco a frente do outro portal para nao contar a passagem de novo
+## sai um pouco a frente do outro portal para nao contar a passagem de novo
 const PORTAL_EXIT_NUDGE := 0.05
 
 @export var speed := 15.0
+## alcance; passou disso, some
 @export var max_distance := 20.0
+## atravessa os inimigos em vez de parar no primeiro
 @export var pierce := false
+## marca deixada onde ele para
 @export var impact_scene: PackedScene
 
 var damage := 0.0
-# so o disparo pesado quebra barris e caixotes
+## so o disparo pesado quebra barris e caixotes
 var breaks_props := false
 var _shooter: Character
 var _direction := Vector3.FORWARD
@@ -30,7 +32,7 @@ func _ready() -> void:
 	_world_query.collision_mask = WORLD_LAYER
 
 
-# a frente da cena do projetil e -Z
+## a frente da cena do projetil e -Z
 func launch(shooter: Character, origin: Vector3, direction: Vector3, hit_damage: float, target_layers: int) -> void:
 	_shooter = shooter
 	_direction = direction

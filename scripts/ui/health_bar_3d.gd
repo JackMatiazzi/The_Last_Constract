@@ -1,7 +1,6 @@
 class_name HealthBar3D
 extends Sprite3D
-
-# so redesenha quando a vida muda ou o rastro anima: com muitos inimigos pesaria
+## so redesenha quando a vida muda ou o rastro anima: com muitos inimigos pesaria
 
 const TRAIL_DELAY := 0.35
 const TRAIL_DURATION := 0.45
@@ -9,7 +8,7 @@ const DAMAGE_NUMBER_HEIGHT := 0.35
 const BLOCKED_COLOR := Color(0.75, 0.85, 1.0)
 
 @export var character: Character
-# falso no jogador, a vida dele fica na HUD
+## falso no jogador, a vida dele fica na HUD
 @export var show_bar := true
 @export var fill_color := Color(0.82, 0.16, 0.13)
 @export var damage_number_color := Color(1.0, 0.95, 0.8)
@@ -37,7 +36,7 @@ func _ready() -> void:
 		_on_health_changed(character.health, character.get_max_health())
 
 
-# a barra do aliado aparece em grupo; a do proprio jogador continua na HUD
+## a barra do aliado aparece em grupo; a do proprio jogador continua na HUD
 func set_bar_visible(shown: bool) -> void:
 	show_bar = shown
 	visible = shown and not character.is_dead

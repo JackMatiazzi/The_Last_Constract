@@ -3,9 +3,9 @@ extends Node
 
 @export var animation := "Blocking"
 @export var icon: Texture2D
-# a pose do escudo e parada; andar com ela deslizaria ate o tronco ter animacao propria
+## a pose do escudo nao tem passada: andar com ela deslizaria
 @export var move_factor := 0.0
-# graus, a frente do personagem
+## graus, a frente do personagem
 @export var arc_degrees := 140.0
 
 

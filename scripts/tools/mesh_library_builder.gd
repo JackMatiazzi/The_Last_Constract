@@ -1,10 +1,14 @@
 @tool
 class_name MeshLibraryBuilder
 extends RefCounted
-
+## Utilitário de Editor para construção dinâmica de recursos 'MeshLibrary' para 'GridMap'.
+## Converte modelos .gltf em itens de MeshLibrary, mesclando múltiplas superfícies/malhas,
+## aplicando escala personalizada por regra e gerando colisores trimesh automaticamente.
 # regra: {dir, prefixes, scale opcional}; scale porque o GridMap nao escala por celula
 
 
+## Constrói uma nova MeshLibrary com base na lista de regras fornecida.
+## Cada regra é um Dictionary contendo: {"dir": String, "prefixes": Array, "scale": float (opcional)}.
 static func build(rules: Array) -> MeshLibrary:
 	var library := MeshLibrary.new()
 	for rule: Dictionary in rules:
@@ -12,7 +16,7 @@ static func build(rules: Array) -> MeshLibrary:
 			_add_item(library, rule["dir"].path_join(file), rule.get("scale", 1.0))
 	return library
 
-
+## Procura e ordena os arquivos .gltf do diretório que correspondem aos prefixos da regra.
 static func _matching_files(rule: Dictionary) -> Array[String]:
 	var result: Array[String] = []
 	for file in DirAccess.get_files_at(rule["dir"]):
@@ -21,11 +25,11 @@ static func _matching_files(rule: Dictionary) -> Array[String]:
 	result.sort()
 	return result
 
-
+## Retorna true se o texto começar com qualquer um dos prefixos passados no array.
 static func _starts_with_any(text: String, prefixes: Array) -> bool:
 	return prefixes.any(func(prefix: String) -> bool: return text.begins_with(prefix))
 
-
+## Instancia a cena 3D do modelo, mescla as malhas, cria o colisor e adiciona o item à biblioteca.
 static func _add_item(library: MeshLibrary, path: String, scale: float) -> void:
 	var root := (load(path) as PackedScene).instantiate()
 	var mesh := _merge_meshes(root, Transform3D.IDENTITY.scaled(Vector3.ONE * scale))
@@ -51,7 +55,7 @@ static func _merge_meshes(root: Node, base: Transform3D) -> ArrayMesh:
 					mesh_instance.mesh.surface_get_material(surface))
 	return merged
 
-
+## Calcula a matriz de transformação (Transform3D) relativa de um nó em relação ao nó raiz.
 static func _transform_relative_to(node: Node3D, root: Node) -> Transform3D:
 	var xform := node.transform
 	var parent := node.get_parent()

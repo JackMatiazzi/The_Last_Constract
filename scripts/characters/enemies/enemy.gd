@@ -2,11 +2,17 @@ class_name Enemy
 extends Character
 
 @export var profile: EnemyProfile
+## desligado, o cerebro nao decide nada (cenas paradas e testes)
 @export var ai_enabled := true
+## nasce deitado e so levanta quando acorda
 @export var start_dormant := false
+## nasce levantando do chao
 @export var start_rising := false
+## tempo que o corpo fica caido antes de afundar
 @export var corpse_time := 6.0
+## tempo afundando no chao
 @export var sink_time := 1.5
+## mancha deixada onde o corpo sumiu
 @export var remains_scene: PackedScene
 @export var rise_sound: AudioStreamPlayer3D
 

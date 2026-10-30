@@ -17,6 +17,8 @@ const SHORT_FLASH := Color(1.0, 0.35, 0.3)
 @onready var health_label: Label = %HealthLabel
 @onready var stamina_bar: ProgressBar = %StaminaBar
 @onready var mana_bar: ProgressBar = %ManaBar
+@onready var stamina_ticks: CostTicks = %StaminaTicks
+@onready var mana_ticks: CostTicks = %ManaTicks
 @onready var ability_icon: TextureRect = %AbilityIcon
 @onready var ability_cost: Label = %AbilityCost
 @onready var ability_name: Label = %AbilityName
@@ -61,7 +63,7 @@ func _process(_delta: float) -> void:
 	score_layer.visible = holding
 
 
-# ligar duas vezes no mesmo jogador dobraria cada sinal
+## ligar duas vezes no mesmo jogador dobraria cada sinal
 func bind(new_player: Character) -> void:
 	if new_player == _bound_player:
 		return
@@ -116,12 +118,15 @@ func _bind_quickbar(adventurer: Adventurer) -> void:
 	_show_secondary(adventurer)
 
 
-# o custo aparece em % da barra: da para usar a vontade, mas a barra mostra o peso
+# o custo aparece em % da barra, e a barra marca um bloco por golpe
 func _show_ability(adventurer: Adventurer) -> void:
 	var pool := adventurer.attack_pool()
 	var source := "mana" if pool == adventurer.mana else "estamina"
 	ability_icon.texture = adventurer.attack.icon
-	ability_cost.text = "%d%%" % roundi(adventurer.cost_of(adventurer.attack) / pool.maximum * 100.0)
+	var step := adventurer.cost_of(adventurer.attack) / pool.maximum
+	ability_cost.text = "%d%%" % roundi(step * 100.0)
+	stamina_ticks.set_step(step if pool == adventurer.stamina else 0.0)
+	mana_ticks.set_step(step if pool == adventurer.mana else 0.0)
 	ability_name.text = "%s\n%s" % [adventurer.attack.title, source]
 	crosshair.visible = adventurer.attack is RangedAttack or adventurer.attack is PortalSpell
 

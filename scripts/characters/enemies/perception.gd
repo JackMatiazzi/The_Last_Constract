@@ -10,7 +10,7 @@ var target: Character
 var can_see := false
 var last_known_position := Vector3.ZERO
 var time_since_aware := INF
-# desligada deitado: so proximidade, barulho e dano acordam
+## desligada deitado: so proximidade, barulho e dano acordam
 var sight_enabled := true
 
 var _sight_query := PhysicsRayQueryParameters3D.new()
@@ -89,4 +89,3 @@ func _has_clear_line(candidate: Character) -> bool:
 func _hears(candidate: Character) -> bool:
 	var distance := distance_to_target()
 	return distance <= enemy.profile.hearing_range and candidate.is_making_noise()
-

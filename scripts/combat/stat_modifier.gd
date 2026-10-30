@@ -1,7 +1,6 @@
 class_name StatModifier
 extends Resource
-
-# DAMAGE e MAX_HEALTH em pontos; SPEED e ATTACK_COOLDOWN em fracao (0.2 = +20%)
+## DAMAGE e MAX_HEALTH em pontos; SPEED e ATTACK_COOLDOWN em fracao (0.2 = +20%)
 
 enum Stat { DAMAGE, MAX_HEALTH, SPEED, ATTACK_COOLDOWN }
 

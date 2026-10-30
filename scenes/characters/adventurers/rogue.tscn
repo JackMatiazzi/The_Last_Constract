@@ -10,6 +10,8 @@
 [node name="Rogue" node_paths=PackedStringArray("animation_player", "attack") instance=ExtResource("1_adventurer")]
 quick_cost = 12.0
 heavy_cost = 30.0
+walk_speed = 4.8
+run_speed = 9.0
 animation_player = NodePath("Model/Rogue/AnimationPlayer")
 attack = NodePath("Model/CrossbowAttack")
 
