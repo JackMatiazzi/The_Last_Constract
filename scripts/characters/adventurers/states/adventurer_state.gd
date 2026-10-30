@@ -1,7 +1,6 @@
 class_name AdventurerState
 extends Node
-
-# o nome do no e o usado em machine.change_state()
+## o nome do no e o usado em machine.change_state()
 
 var machine: AdventurerStateMachine
 var adventurer: Adventurer
@@ -19,7 +18,7 @@ func next_state(direction: Vector3) -> String:
 	return machine.locomotion_state(direction)
 
 
-# sem animacao propria: quem toca e a acao em curso (golpe, reacao, guarda)
+## sem animacao propria: quem toca e a acao em curso (golpe, reacao, guarda)
 func play(_direction: Vector3) -> void:
 	pass
 

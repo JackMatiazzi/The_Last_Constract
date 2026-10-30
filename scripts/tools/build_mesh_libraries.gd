@@ -1,8 +1,7 @@
 @tool
 extends EditorScript
-
-# Rodar pelo Script Editor (File > Run) sempre que mudar uma regra ou um asset.
-# Telhados ficam por ultimo para nao mudar os ids das paredes ja pintadas no mapa.
+## Rodar pelo Script Editor (File > Run) sempre que mudar uma regra ou um asset.
+## Telhados ficam por ultimo para nao mudar os ids das paredes ja pintadas no mapa.
 
 const VILLAGE := "res://assets/quaternius_village/models"
 const DUNGEON := "res://assets/kaykit_dungeon/models"

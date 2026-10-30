@@ -90,7 +90,7 @@ func test_dormant_skeleton_creaks_when_it_rises() -> void:
 	assert_bool(skeleton.rise_sound.playing).is_true()
 
 
-# espera a condicao com limite de tempo: no CI os quadros atrasam e uma espera fixa nao basta
+# espera a condicao, com limite de tempo
 func _until(condition: Callable, seconds: float) -> bool:
 	var limit := Time.get_ticks_msec() + roundi(seconds * 1000)
 	while Time.get_ticks_msec() < limit:

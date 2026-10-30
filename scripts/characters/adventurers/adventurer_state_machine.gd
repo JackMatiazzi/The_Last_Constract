@@ -1,7 +1,6 @@
 class_name AdventurerStateMachine
 extends Node
-
-# roda dentro de _update_animation do aventureiro: estado e animacao mudam no mesmo quadro
+## roda dentro de _update_animation do aventureiro: estado e animacao mudam no mesmo quadro
 
 const MAX_CHAINED_TRANSITIONS := 4
 
@@ -32,7 +31,7 @@ func change_state(state_name: String) -> void:
 	current_state.enter()
 
 
-# um estado pode levar a outro que tambem quer trocar (Block solto vira Action do golpe)
+## um estado pode levar a outro que tambem quer trocar (Block solto vira Action do golpe)
 func step(direction: Vector3) -> void:
 	for i in MAX_CHAINED_TRANSITIONS:
 		var next := current_state.next_state(direction)

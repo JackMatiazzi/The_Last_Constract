@@ -1,8 +1,8 @@
 extends AdventurerState
-
-# Idle, Walk, Run e Air so mudam a animacao; a passada acompanha a velocidade em Walk e Run
+## Idle, Walk, Run e Air so mudam a animacao; a passada acompanha a velocidade em Walk e Run
 
 @export var animation := Character.ANIM_IDLE
+## a passada acompanha a velocidade real
 @export var follows_stride := false
 
 

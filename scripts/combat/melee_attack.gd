@@ -1,11 +1,10 @@
 class_name MeleeAttack
 extends Attack
-
-# a hitbox atravessa parede, entao cada alvo precisa de linha livre ate o atacante
+## a hitbox atravessa parede, entao cada alvo precisa de linha livre ate o atacante
 
 const WORLD_LAYER := 1
 const CHEST_HEIGHT := 1.0
-# alcance do golpe pesado contra barris e caixotes, a partir do centro da hitbox
+## alcance do golpe pesado contra barris e caixotes, a partir do centro da hitbox
 const BREAK_RADIUS := 1.4
 
 var _wall_query := PhysicsRayQueryParameters3D.new()

@@ -1,11 +1,12 @@
 class_name EnemyBrain
 extends Node
-
-# pensa a cada think_interval, mas segue o caminho todo quadro para nao andar travado
+## pensa a cada think_interval, mas segue o caminho todo quadro para nao andar travado
 
 const MAX_CHAINED_TRANSITIONS := 4
 
+## intervalo entre as decisoes do cerebro
 @export var think_interval := 0.15
+## a esta distancia do destino conta como chegou
 @export var arrive_distance := 0.4
 
 var enemy: Enemy
@@ -32,7 +33,7 @@ func _ready() -> void:
 			_states[String(child.name)] = child
 
 
-# o estado novo ja decide na hora, sem esperar o proximo think
+## o estado novo ja decide na hora, sem esperar o proximo think
 func change_state(state_name: String) -> void:
 	if current_state:
 		current_state.exit()

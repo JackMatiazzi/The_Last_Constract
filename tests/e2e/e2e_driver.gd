@@ -1,8 +1,7 @@
 extends Node
 
-# base dos testes de ponta a ponta: o jogo roda de verdade, da cena principal em diante, e o
-# teste aperta os mesmos botoes que o jogador. Sai com codigo 1 se alguma conferencia falhar.
-# O driver sai da cena de teste para a raiz, senao a primeira troca de cena o apagaria
+# base dos testes de ponta a ponta: o jogo roda do menu em diante, com os botoes do jogador,
+# e sai com codigo 1 se alguma conferencia falhar. O driver fica na raiz para sobreviver as trocas de cena
 
 const STEP_TIMEOUT := 20.0
 const TOTAL_TIMEOUT := 120.0
@@ -112,8 +111,7 @@ func session() -> GameSession:
 	return get_tree().current_scene.get_node("GameSession") as GameSession
 
 
-# sem tela nao da para capturar o mouse; com controle o jogo aceita os comandos assim mesmo.
-# Muda so a variavel, sem gravar nas configuracoes de quem roda o teste
+# sem tela nao captura o mouse; no modo controle os comandos valem igual (sem gravar a configuracao)
 func play_with_gamepad() -> void:
 	Settings.input_device = Settings.InputDevice.GAMEPAD
 

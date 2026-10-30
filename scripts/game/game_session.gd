@@ -3,11 +3,11 @@ extends Node
 
 const EXECUTION := "res://scenes/cutscenes/execution.tscn"
 const MAIN_MENU := "res://scenes/ui/main_menu.tscn"
-# espera a animacao de morte do boss
+## espera a animacao de morte do boss
 const VICTORY_DELAY := 2.5
 const PLAYER_SPACING := 1.5
 
-# so nas cenas de teste; com encounters o ponto e sorteado
+## so nas cenas de teste; com encounters o ponto e sorteado
 @export var player_spawn: Marker3D
 @export var encounters: EncounterSpawner
 @export var pause_menu: PauseMenu
@@ -16,7 +16,7 @@ const PLAYER_SPACING := 1.5
 @export var boss_scene: PackedScene
 @export var victory_screen: VictoryScreen
 
-# o jogador desta maquina; em grupo os outros ficam em players
+## o jogador desta maquina; em grupo os outros ficam em players
 var player: Adventurer
 var players: Array[Adventurer] = []
 var boss: Enemy
@@ -154,7 +154,7 @@ func _on_party_down() -> void:
 		_start_vote()
 
 
-# democracia: cada jogador vota numa das bencaos sorteadas pelo host; empate e sorteado
+# cada jogador vota numa das bencaos sorteadas pelo host; empate e sorteado
 func _start_vote() -> void:
 	var paths := PackedStringArray()
 	for buff in RunState.roll_choices():
@@ -208,7 +208,7 @@ func _try_close_vote() -> void:
 	_net_restart.rpc(_vote_paths[winner] if winner >= 0 else "", randi())
 
 
-# empatados voltam todos; quem chama sorteia entre eles
+## empatados voltam todos; quem chama sorteia entre eles
 static func most_voted(votes: Dictionary) -> Array:
 	var tally := {}
 	for index: int in votes.values():
@@ -217,7 +217,7 @@ static func most_voted(votes: Dictionary) -> Array:
 	return tally.keys().filter(func(index: int) -> bool: return tally[index] == best)
 
 
-# o caminho vem do host pela rede: so bencaos da pasta de bencaos
+## o caminho vem do host pela rede: so bencaos da pasta de bencaos
 static func buff_at(path: String) -> Buff:
 	if not path.begins_with(RunState.BUFF_DIR + "/") or not path.ends_with(".tres") or ".." in path:
 		return null

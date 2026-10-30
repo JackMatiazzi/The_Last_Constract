@@ -1,8 +1,7 @@
 @tool
 class_name MeshLibraryBuilder
 extends RefCounted
-
-# regra: {dir, prefixes, scale opcional}; scale porque o GridMap nao escala por celula
+## regra: {dir, prefixes, scale opcional}; scale porque o GridMap nao escala por celula
 
 
 static func build(rules: Array) -> MeshLibrary:

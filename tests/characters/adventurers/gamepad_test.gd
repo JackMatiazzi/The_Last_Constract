@@ -34,7 +34,7 @@ func _button(button: JoyButton, pressed := true) -> void:
 	Input.parse_input_event(event)
 
 
-# espera ate o efeito aparecer: num runner lento o numero de quadros ate o evento chegar varia
+# espera ate o efeito aparecer
 func _until(condition: Callable, seconds := 0.5) -> bool:
 	for i in ceili(seconds * Engine.physics_ticks_per_second):
 		if condition.call():

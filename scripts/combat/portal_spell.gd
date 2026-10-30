@@ -1,8 +1,7 @@
 class_name PortalSpell
 extends Attack
-
-# o primeiro uso abre a entrada onde a mira aponta, o segundo abre a saida;
-# um par novo fecha o anterior
+## o primeiro uso abre a entrada onde a mira aponta, o segundo abre a saida;
+## um par novo fecha o anterior
 
 const MAX_DISTANCE := 15.0
 const GROUND_PROBE := 4.0

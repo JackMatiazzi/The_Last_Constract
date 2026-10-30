@@ -11,7 +11,7 @@ func before_test() -> void:
 	await await_idle_frame()
 
 
-# espera as animacoes acabarem: no CI os quadros atrasam e o tempo de relogio nao basta
+# espera as animacoes acabarem
 func _choose(index: int) -> void:
 	screen.picker.select(index)
 	var limit := Time.get_ticks_msec() + 3000

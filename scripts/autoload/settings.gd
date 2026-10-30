@@ -5,7 +5,7 @@ signal input_device_changed
 enum InputDevice { KEYBOARD_MOUSE, GAMEPAD, AUTOMATIC }
 
 const PATH := "user://settings.cfg"
-# tremida do mouse na mesa nao tira do modo controle
+## tremida do mouse na mesa nao tira do modo controle
 const MOUSE_SWITCH_DISTANCE := 4.0
 const SECTION := "settings"
 const GAMEPLAY_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "attack", "secondary",

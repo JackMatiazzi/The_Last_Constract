@@ -51,22 +51,45 @@ func test_heavy_attack_hits_harder_than_quick() -> void:
 	assert_float(skeleton.health).is_equal_approx(5.0 - knight.attack.damage * knight.attack.heavy_damage_multiplier, 0.01)
 
 
-func test_damage_follows_the_energy_actually_spent() -> void:
-	knight.stamina.current = knight.quick_cost * 0.5
+func test_without_the_full_cost_the_attack_does_not_happen() -> void:
+	knight.stamina.current = knight.quick_cost * 0.9
+	var signals := monitor_signals(knight, false)
+
+	assert_bool(knight.attack_toward_camera()).is_false()
+	await arena.wait_seconds(knight.attack.impact_delay + 0.1)
+
+	assert_bool(knight.is_busy).is_false()
+	assert_float(skeleton.health).is_equal(5.0)
+	assert_float(knight.stamina.current).is_greater(0.0)
+	await assert_signal(signals).is_emitted("energy_short", [knight.stamina])
+
+
+func test_a_click_without_stamina_does_not_fire_once_the_bar_refills() -> void:
+	knight.stamina.current = knight.quick_cost * 0.9
+
+	knight.request_attack()
+	knight.stamina.current = knight.stamina.maximum
+	await arena.wait_seconds(Adventurer.ATTACK_BUFFER + 0.1)
+
+	assert_bool(knight.is_busy).is_false()
+	assert_float(knight.stamina.current).is_equal(knight.stamina.maximum)
+
+
+func test_exactly_the_cost_is_enough_for_a_full_attack() -> void:
+	knight.stamina.current = knight.quick_cost
 
 	assert_bool(knight.attack_toward_camera()).is_true()
 	await arena.wait_seconds(knight.attack.impact_delay + 0.1)
 
-	assert_float(skeleton.health).is_equal_approx(5.0 - knight.attack.damage * 0.5, 0.01)
+	assert_float(skeleton.health).is_equal_approx(5.0 - knight.attack.damage, 0.01)
 	assert_float(knight.stamina.current).is_equal_approx(0.0, 0.01)
 
 
-func test_too_little_energy_refuses_the_attack() -> void:
-	knight.stamina.current = knight.quick_cost * (EnergyPool.MIN_FRACTION * 0.5)
-	var signals := monitor_signals(knight, false)
+func test_a_heavy_attack_needs_the_heavy_cost() -> void:
+	knight.stamina.current = knight.heavy_cost - 1.0
 
-	assert_bool(knight.attack_toward_camera()).is_false()
-	await assert_signal(signals).is_emitted("energy_short", [knight.stamina])
+	assert_bool(knight.heavy_attack()).is_false()
+	assert_bool(knight.is_busy).is_false()
 
 
 func test_energy_refills_after_a_pause() -> void:

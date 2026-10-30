@@ -5,24 +5,34 @@ const HEAVY_FALLBACK_SLOWDOWN := 0.7
 
 @export var title := ""
 @export var icon: Texture2D
-# custo proprio da habilidade (rapido e pesado); negativo = usa o custo do aventureiro
+## custo proprio da habilidade (rapido e pesado); negativo = usa o custo do aventureiro
 @export var cost_override := -1.0
 @export var damage := 1.0
+## tempo minimo entre dois golpes
 @export var cooldown := 0.8
+## uma por golpe do combo, em ordem
 @export var animations: PackedStringArray = ["1H_Melee_Attack_Chop"]
+## depois da recarga, tempo para o golpe seguinte continuar o combo
 @export var combo_window := 0.6
 @export var animation_speed := 1.0
+## do inicio do golpe ate o acerto
 @export var impact_delay := 0.4
+## depois do acerto, tempo ate andar cancelar a animacao
 @export var recovery := 0.12
+## fracao da velocidade enquanto golpeia
 @export var move_factor := 0.3
 @export var sound: AudioStreamPlayer3D
 
-# segurar o botao: golpe mais lento e mais forte; vazio usa a animacao do combo mais devagar
+## segurar o botao: golpe mais lento e mais forte; vazio usa a animacao do combo mais devagar
 @export_group("Pesado")
 @export var heavy_animation := ""
+## 0 usa a velocidade do rapido, mais devagar
 @export var heavy_animation_speed := 0.0
+## 0 usa o tempo do rapido, mais devagar
 @export var heavy_impact_delay := 0.0
+## dano do pesado em relacao ao rapido
 @export var heavy_damage_multiplier := 2.0
+## recarga do pesado em relacao ao rapido
 @export var heavy_cooldown_multiplier := 1.5
 
 var _ready_at := 0.0
@@ -38,8 +48,7 @@ func effective_cooldown(attacker: Character) -> float:
 	return cooldown * maxf(factor, Character.MIN_STAT_FACTOR)
 
 
-# power: fracao do custo de energia que o atacante conseguiu pagar
-func try_attack(attacker: Character, heavy := false, power := 1.0) -> bool:
+func try_attack(attacker: Character, heavy := false) -> bool:
 	if not can_attack(attacker):
 		return false
 	var continues_combo := not heavy and _now() - _ready_at <= combo_window
@@ -53,7 +62,7 @@ func try_attack(attacker: Character, heavy := false, power := 1.0) -> bool:
 		speed = heavy_animation_speed if heavy_animation_speed > 0.0 else animation_speed * HEAVY_FALLBACK_SLOWDOWN
 		delay = heavy_impact_delay if heavy_impact_delay > 0.0 else impact_delay / HEAVY_FALLBACK_SLOWDOWN
 	attacker.play_action(animation, speed, move_factor, delay + recovery)
-	_impact_after_delay(attacker, attacker.action_id, _damage_for(attacker, heavy) * power, delay, heavy)
+	_impact_after_delay(attacker, attacker.action_id, _damage_for(attacker, heavy), delay, heavy)
 	return true
 
 
