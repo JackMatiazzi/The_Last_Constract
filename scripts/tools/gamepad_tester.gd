@@ -1,7 +1,10 @@
 extends Control
-
+## Ferramenta de teste e diagnóstico de controles/gamepads.
+## Usada para verificar a resposta de botões, eixos analógicos, gatilhos
+## e mapeamento de ações do InputMap em tempo real durante a execução da cena.
 # rodar a cena (F6) e apertar o controle para ver o que o Godot recebe
 
+## Mapeamento de constantes do JoyButton para nomes amigáveis na interface.
 const BUTTON_NAMES := {
 	JOY_BUTTON_A: "A", JOY_BUTTON_B: "B", JOY_BUTTON_X: "X", JOY_BUTTON_Y: "Y",
 	JOY_BUTTON_BACK: "View", JOY_BUTTON_GUIDE: "Guia", JOY_BUTTON_START: "Menu (Start)",
@@ -10,6 +13,7 @@ const BUTTON_NAMES := {
 	JOY_BUTTON_DPAD_UP: "Cima", JOY_BUTTON_DPAD_DOWN: "Baixo", JOY_BUTTON_DPAD_LEFT: "Esquerda",
 	JOY_BUTTON_DPAD_RIGHT: "Direita", JOY_BUTTON_MISC1: "Compartilhar",
 }
+## Mapeamento de ações do InputMap do projeto para nomes descritivos de exibição.
 const ACTION_NAMES := {
 	"move_forward": "Mover", "move_back": "Mover", "move_left": "Mover", "move_right": "Mover",
 	"look_left": "Câmera", "look_right": "Câmera", "look_up": "Câmera", "look_down": "Câmera",
@@ -17,8 +21,9 @@ const ACTION_NAMES := {
 	"ui_accept": "Confirmar (menu)", "ui_cancel": "Voltar (menu)",
 	"menu_previous": "Aba/opção anterior", "menu_next": "Próxima aba/opção",
 }
+## Quantidade máxima de linhas mantidas no histórico de eventos da tela.
 const LOG_SIZE := 8
-
+## Histórico rotativo de texto com as últimas entradas detectadas.
 var _log: PackedStringArray = []
 
 @onready var device_label: Label = %DeviceLabel
@@ -39,20 +44,25 @@ func _process(_delta: float) -> void:
 	var names := PackedStringArray()
 	for id in pads:
 		names.append("%d: %s" % [id, Input.get_joy_name(id)])
+	# Lê variável de ambiente do driver do controle se configurada no SO
 	var hidapi_8bitdo := OS.get_environment("SDL_JOYSTICK_HIDAPI_8BITDO")
 	device_label.text = "Controles: %s\nModo do jogo: %s   ·   SDL_JOYSTICK_HIDAPI_8BITDO = %s" % [
 		", ".join(names), "Controle" if Settings.uses_gamepad() else "Teclado e mouse",
 		hidapi_8bitdo if hidapi_8bitdo else "(não definida)"]
+	# Exibe os eixos X e Y dos dois analógicos
 	sticks_label.text = "Analógico esquerdo  x %+.2f  y %+.2f\nAnalógico direito   x %+.2f  y %+.2f" % [
 		Input.get_joy_axis(pad, JOY_AXIS_LEFT_X), Input.get_joy_axis(pad, JOY_AXIS_LEFT_Y),
 		Input.get_joy_axis(pad, JOY_AXIS_RIGHT_X), Input.get_joy_axis(pad, JOY_AXIS_RIGHT_Y)]
+	# Atualiza o valor das barras de progresso dos gatilhos (0.0 a 1.0)
 	left_trigger.value = Input.get_joy_axis(pad, JOY_AXIS_TRIGGER_LEFT)
 	right_trigger.value = Input.get_joy_axis(pad, JOY_AXIS_TRIGGER_RIGHT)
+	# Checa e exibe quais botões físicos estão sendo pressionados
 	var pressed := PackedStringArray()
 	for button: JoyButton in BUTTON_NAMES:
 		if Input.is_joy_button_pressed(pad, button):
 			pressed.append(BUTTON_NAMES[button])
 	buttons_label.text = "Botões: " + (", ".join(pressed) if pressed else "nenhum")
+	# Checa e exibe quais ações do InputMap do jogo estão ativas
 	var actions := PackedStringArray()
 	for action: String in ACTION_NAMES:
 		var name: String = ACTION_NAMES[action]
