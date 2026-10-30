@@ -27,7 +27,7 @@ var attempt := 1
 var adventurer: AdventurerInfo
 ## Lista de buffs acumulados ao longo da partida.
 var buffs: Array[Buff] = []
-# peer_id -> {kills, assists, deaths, last_death}; dura o contrato inteiro, atravessa os reviveres
+## peer_id -> {kills, assists, deaths, last_death}; dura o contrato inteiro, atravessa os reviveres
 var stats := {}
 ## Pool interno contendo todos os buffs carregados do disco.
 var _pool: Array[Buff] = []
@@ -48,7 +48,7 @@ func roll_choices() -> Array[Buff]:
 	return choices
 
 
-# buff vem null quando todos ja estao no limite
+## buff vem null quando todos ja estao no limite
 func start_next_attempt(buff: Buff) -> void:
 	if buff:
 		buffs.append(buff)
@@ -62,7 +62,7 @@ func roster() -> Array[AdventurerInfo]:
 	return infos
 
 
-# cena aberta direto no editor: ninguem escolheu, usa o primeiro
+## cena aberta direto no editor: ninguem escolheu, usa o primeiro
 func current_adventurer() -> AdventurerInfo:
 	if adventurer == null:
 		adventurer = load(ADVENTURERS[0])
@@ -83,7 +83,7 @@ func stats_of(peer_id: int) -> Dictionary:
 	return stats.get(peer_id, {"kills": 0, "assists": 0, "deaths": 0, "last_death": ""})
 
 
-# quem tem autoridade sobre a vitima conta ao host, que fecha a conta e avisa todo mundo
+## quem tem autoridade sobre a vitima conta ao host, que fecha a conta e avisa todo mundo
 func record_death(victim: Character) -> void:
 	var report := {
 		"victim_peer": victim.get_multiplayer_authority() if victim is Adventurer else 0,
@@ -106,7 +106,7 @@ func _report_death(report: Dictionary) -> void:
 		count_reported_fall(multiplayer.get_remote_sender_id(), str(report.get("cause", "")))
 
 
-# so conta quem esta no grupo, caido de fato, e uma vez por queda
+## so conta quem esta no grupo, caido de fato, e uma vez por queda
 func count_reported_fall(sender: int, raw_cause: String) -> void:
 	var victim := Adventurer.of_peer(get_tree(), sender)
 	if not Net.is_player(sender) or victim == null or not victim.is_dead or victim.fall_counted:

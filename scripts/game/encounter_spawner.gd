@@ -4,11 +4,16 @@ extends Node3D
 ## Responsável por selecionar aleatoriamente locais de nascimento e instanciar
 ## os grupos de inimigos garantindo uma distância mínima em relação à posição inicial dos jogadores.
 
+## pontos possiveis de nascimento do jogador
 @export var player_spots: Node3D
+## pontos possiveis dos grupos de inimigos
 @export var group_spots: Node3D
+## onde o boss surge
 @export var boss_spot: Marker3D
 @export var group_scenes: Array[PackedScene] = []
+## grupos sorteados por tentativa
 @export var group_count := 5
+## os grupos nascem pelo menos a esta distancia do jogador
 @export var min_distance_from_player := 16.0
 
 ## Escolhe aleatoriamente um dos marcadores de posição reservados para os jogadores.

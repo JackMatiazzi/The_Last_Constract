@@ -1,7 +1,6 @@
 class_name EnemyState
 extends Node
-
-# o nome do no e o usado em brain.change_state()
+## o nome do no e o usado em brain.change_state()
 
 var brain: EnemyBrain
 var enemy: Enemy

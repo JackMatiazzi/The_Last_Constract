@@ -9,7 +9,7 @@ signal input_device_changed
 enum InputDevice { KEYBOARD_MOUSE, GAMEPAD, AUTOMATIC }
 ## Caminho do arquivo de configuração do usuário no disco.
 const PATH := "user://settings.cfg"
-# tremida do mouse na mesa nao tira do modo controle
+## tremida do mouse na mesa nao tira do modo controle
 const MOUSE_SWITCH_DISTANCE := 4.0
 const SECTION := "settings"
 ## Mapeamento de ações de entrada usadas na jogabilidade que serão reconfiguradas no InputMap.

@@ -10,7 +10,7 @@ var target: Character
 var can_see := false
 var last_known_position := Vector3.ZERO
 var time_since_aware := INF
-# desligada deitado: so proximidade, barulho e dano acordam
+## desligada deitado: so proximidade, barulho e dano acordam
 var sight_enabled := true
 
 var _sight_query := PhysicsRayQueryParameters3D.new()

@@ -16,7 +16,7 @@ radius = 2.1
 
 [node name="Barbarian" node_paths=PackedStringArray("animation_player", "attack", "secondary_attack") instance=ExtResource("1_adventurer")]
 quick_cost = 20.0
-heavy_cost = 40.0
+heavy_cost = 50.0
 animation_player = NodePath("Model/Barbarian/AnimationPlayer")
 attack = NodePath("Model/SpinAttack")
 secondary_attack = NodePath("Model/OffhandChop")

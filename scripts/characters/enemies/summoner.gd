@@ -2,11 +2,16 @@ class_name Summoner
 extends Node3D
 
 @export var minion_scene: PackedScene
+## tempo entre as invocacoes
 @export var interval := 9.0
+## lacaios por invocacao
 @export var per_cast := 2
+## maximo de lacaios vivos ao mesmo tempo
 @export var max_alive := 4
+## distancia dos lacaios em volta de quem invoca
 @export var radius := 2.5
 @export var animation := "Spellcast_Summon"
+## espera entre o gesto e os lacaios aparecerem
 @export var raise_delay := 0.7
 @export var sound: AudioStreamPlayer3D
 
@@ -69,8 +74,9 @@ func _is_hunting() -> bool:
 	return owner_enemy.brain.current_state_name in ["Chase", "Attack"]
 
 
+# o lacaio caido some do jogo depois de afundar, mas continua na lista ate aqui
 func _alive_count() -> int:
-	minions = minions.filter(func(m: Enemy) -> bool: return is_instance_valid(m) and not m.is_dead)
+	minions.assign(minions.filter(func(minion: Variant) -> bool: return is_instance_valid(minion) and not (minion as Enemy).is_dead))
 	return minions.size()
 
 

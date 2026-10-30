@@ -29,9 +29,9 @@ func test_projectile_is_freed_after_max_distance() -> void:
 	await arena.wait_physics(5)
 
 	rogue.attack.try_attack(rogue)
-	await arena.wait_seconds(0.6)
+	await arena.wait_seconds(rogue.attack.impact_delay + 0.05)
 	assert_int(arena.root.find_children("*", "Projectile", true, false).size()).is_equal(1)
-	await arena.wait_seconds(2.0)
+	await arena.wait_seconds(1.0)
 
 	assert_int(arena.root.find_children("*", "Projectile", true, false).size()).is_equal(0)
 

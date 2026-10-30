@@ -24,7 +24,7 @@ monitorable = false
 script = ExtResource("1_projectile")
 impact_scene = ExtResource("2_impact")
 speed = 14.0
-max_distance = 18.0
+max_distance = 6.91
 pierce = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

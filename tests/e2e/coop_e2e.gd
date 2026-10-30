@@ -45,8 +45,7 @@ func _damage_crosses_the_network(host: Adventurer, guest: Adventurer) -> void:
 		check(true, "golpe de um jogador chega na maquina do outro")
 
 
-# o cliente tenta ferir um inimigo mandando o pedido direto, sem atacar. A rede entrega em ordem:
-# quando o marco chega no host, o pedido forjado ja foi processado
+# o cliente manda um pedido de dano forjado; quando o marco chega ao host, ele ja foi processado
 func _forged_damage_is_ignored() -> void:
 	var enemy := get_tree().current_scene.find_children("*", "Enemy", true, false)[0] as Enemy
 	if role == "client":
@@ -94,8 +93,7 @@ func _everyone_falls_and_votes() -> void:
 	check(RunState.stats_of(guest_peer).deaths == 1, "placar: cliente caiu uma vez")
 
 
-# quem sai primeiro derrubaria a conexao do outro no meio das conferencias: o cliente avisa que
-# terminou, o host libera, e so entao o cliente fecha (fechar logo apos avisar perderia o aviso)
+# o cliente avisa que terminou e so fecha depois que o host libera
 func _leave_together() -> void:
 	if role == "client":
 		mark("fim")

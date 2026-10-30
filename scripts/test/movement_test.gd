@@ -1,6 +1,5 @@
 extends Node3D
-
-# K causa dano no jogador para testar morte e buffs
+## K causa dano no jogador para testar morte e buffs
 
 const TEST_DAMAGE := 3.0
 

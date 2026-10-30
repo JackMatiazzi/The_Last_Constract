@@ -1,8 +1,11 @@
 class_name ProjectileImpact
 extends Node3D
 
+## quanto tempo a marca fica
 @export var lifetime := 5.0
+## tempo sumindo, no fim
 @export var fade_time := 0.6
+## encosta a marca na superficie atingida
 @export var align_to_surface := true
 @export var flash: OmniLight3D
 

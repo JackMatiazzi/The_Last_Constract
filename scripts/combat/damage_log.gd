@@ -1,20 +1,19 @@
 class_name DamageLog
 extends RefCounted
-
-# dano e cura de uma vida, na ordem: vira o resumo da tela de morte e a conta do placar
+## dano e cura de uma vida, na ordem: vira o resumo da tela de morte e a conta do placar
 
 const UNKNOWN_CAUSE := "Ferimentos"
 const MAX_SHOWN := 8
 
 var last_attacker_name := ""
 var last_attacker_peer := 0
-# jogadores que acertaram nesta vida; o ultimo leva o abate, os outros a assistencia
+## jogadores que acertaram nesta vida; o ultimo leva o abate, os outros a assistencia
 var player_hitters: Array[int] = []
 
 var _entries: Array[Dictionary] = []
 
 
-# golpe sem atacante conhecido nao herda o atacante anterior
+## golpe sem atacante conhecido nao herda o atacante anterior
 func note_hit(cause: String, amount: float, attacker_name := "", attacker_peer := 0) -> void:
 	last_attacker_name = attacker_name
 	last_attacker_peer = attacker_peer
@@ -41,7 +40,7 @@ func death_cause() -> String:
 	return UNKNOWN_CAUSE
 
 
-# golpes seguidos da mesma origem viram uma linha so
+## golpes seguidos da mesma origem viram uma linha so
 func recap(max_health: float, ended_dead: bool) -> String:
 	var steps: Array[Dictionary] = []
 	var taken := 0.0

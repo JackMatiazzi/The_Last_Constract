@@ -9,11 +9,13 @@ signal finished
 ## Caminho da próxima cena (.tscn) a ser carregada após o fim da cutscene.
 @export_file("*.tscn") var next_scene := ""
 @export var timeline: AnimationPlayer
+## onde cada ator fica
 @export var actor_spots: Array[Marker3D] = []
-# mesma ordem de actor_spots
+## mesma ordem de actor_spots
 @export var actor_animations := PackedStringArray()
-# em grupo os aliados entram aqui; vazio = a cutscene nao espera ninguem
+## em grupo os aliados entram aqui; vazio = a cutscene nao espera ninguem
 @export var party_spots: Array[Marker3D] = []
+## animacao dos aliados entrando
 @export var party_animation := Character.ANIM_WALK
 @export var party_status: Label
 @export var skip_hint: Control
@@ -59,7 +61,7 @@ func _add_party() -> void:
 	_show_status(0)
 
 
-# chamado pelas trilhas de metodo; blend > 0 parte da pose atual (tombar ajoelhado)
+## chamado pelas trilhas de metodo; blend > 0 parte da pose atual (tombar ajoelhado)
 func play_actor(index: int, animation: String, blend := -1.0) -> void:
 	(actors[index].get_node("AnimationPlayer") as AnimationPlayer).play(animation, blend)
 

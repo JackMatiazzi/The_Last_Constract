@@ -1,14 +1,14 @@
 class_name Chest
 extends StaticBody3D
-
-# drop_loot e chamado por uma trilha de metodo da animacao open
+## drop_loot e chamado por uma trilha de metodo da animacao open
 
 signal opened
 
-# um pouco alem da area de interacao: a posicao do jogador chega atrasada pela rede
+## um pouco alem da area de interacao: a posicao do jogador chega atrasada pela rede
 const OPEN_REACH := 4.0
 
 @export var loot_scene: PackedScene
+## onde o item cai
 @export var loot_spot: Marker3D
 @export var interact_area: Area3D
 @export var prompt: Label3D

@@ -9,5 +9,5 @@ sight_range = 28.0
 hearing_range = 16.0
 memory_time = 12.0
 reaction_time = 0.2
-attack_range = 11.0
+attack_range = 14.0
 chase_run_distance = 99.0
